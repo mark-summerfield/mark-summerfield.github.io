@@ -1,0 +1,58 @@
+/* =navigation */
+#nav{
+	font-weight:bold;
+	color:#666;
+	list-style-type:none;	
+	background:url(navshadow.gif) no-repeat 8px 100% #fff;
+	padding-bottom:21px;
+	margin-top: 15px;
+	margin-bottom: 20px;
+}
+html>body #nav{
+	margin-left:8px;
+	background:url(navshadow.gif) no-repeat 4px 100% #fff;
+}
+#nav li{
+	list-style-type:none;
+	float:left;
+	margin:0 0 0 4px;
+	padding:0 0 0 10px ;
+	border-bottom:1px solid #999;
+	background:url(tabgrey.gif) #c0c0c0 top left no-repeat;
+}
+#nav li a{
+	color:#666;	
+	background:url(tabgrey.gif) transparent top right no-repeat;
+	display:block;
+	padding:0 10px 0 0;
+}
+#nav li a:link,
+#nav li a:visited{
+	color:#000;
+	text-decoration:none;
+}
+#nav li a:hover,
+#nav li a:active{
+	color:#fff;
+	text-decoration:none;
+}
+#nav li.cur,
+#nav li.over,
+#nav li:hover
+{
+	background:url(tabblue.gif) #3375b2 top left no-repeat;
+	border-bottom:1px solid #036;
+}
+#nav li strong,
+ul#nav li.cur a,
+ul#nav li.over a,
+ul#nav li:hover a
+{
+	display:block;
+	color:#fff;
+	padding:0 10px 0 0;
+	text-decoration:none;
+	background:url(tabblue.gif) transparent top right no-repeat;
+}
+
+iframe[seamless] { border: none; }

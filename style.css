@@ -1,0 +1,436 @@
+/* Reset */
+html, body, h1, h2, h3, h4, h5, h6, p, pre, code, address, variable, form, fieldset, blockquote {
+ padding: 0;
+ margin: 0;
+ font-size: 100%;
+ font-weight: normal;
+}
+table { border-collapse: collapse; border-spacing: 0; }
+td, th, caption { font-weight: normal; text-align: left; }
+img, fieldset { border: 0; }
+q:before, q:after { content:''; }
+
+/* Qtrac.eu */
+body {
+    background-color: white;
+    font: 100% helvetica, sans-serif, tahoma, arial;
+    text-align: left;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+a:link {
+    color: #007700;
+}
+
+a:link[href^="https://"] {
+    color: #007700;
+    text-shadow: 1px 1px lightgray;
+}
+
+a:link[href^="http://"] {
+    color: #007700;
+    text-shadow: 1px 1px lightgray;
+}
+
+a:visited {
+    color: #551A8B;
+}
+
+a:visited[href^="https://"] {
+    color: #551A8B;
+    text-shadow: 1px 1px lightgray;
+}
+
+a:visited[href^="http://"] {
+    color: #551A8B;
+    text-shadow: 1px 1px lightgray;
+}
+
+
+a:link[href^="http://www.qtrac.eu"] {
+    color: #551A8B;
+    background-image: none;
+    padding-left: 0px;
+}
+
+a:link[href^="http://diffpdf.appspot.com"] {
+    color: #551A8B;
+    background-image: none;
+    padding-left: 0px;
+}
+
+a:link[href^="https://shopper.mycommerce.com"] {
+    color: #551A8B;
+    background-image: none;
+    padding-left: 0px;
+}
+
+   
+a:visited[href^="http://www.qtrac.eu"] {
+    color: #551A8B;
+    background-image: none;
+    padding-left: 0px;
+}
+
+a:visited[href^="http://diffpdf.appspot.com"] {
+    color: #551A8B;
+    background-image: none;
+    padding-left: 0px;
+}
+
+a:visited[href^="https://shopper.mycommerce.com"] {
+    color: #551A8B;
+    background-image: none;
+    padding-left: 0px;
+}
+
+   
+h1 {
+    ;color: #191970;
+    font-size: 2em; 
+    font-weight: bold;
+    margin-bottom: 1em;
+    margin-top: 7px;
+    text-align: left;
+}
+
+h2 {
+    color: #000080;
+    font-size: 1.5em;
+    font-weight: normal;
+    margin-bottom: 1em;
+    margin-top: 1em;
+    text-align: left;
+}
+
+h3 {
+    color: #000080;
+    font-size: 1.2em;
+    font-weight: normal;
+    margin-bottom: 0.5em;
+    margin-top: 0.75em;
+    text-align: left;
+}
+
+h4 {
+    color: #000080;
+    font-size: 1.1em;
+    font-weight: normal;
+    margin-bottom: 0.25em;
+    margin-top: 0.5em;
+    text-align: left;
+}
+
+h6 {
+    color: #006060;
+    font-size: 1em;
+    margin-bottom: 0.25em;
+    margin-top: 0.25em;
+    text-align: center;
+}
+
+p {
+    line-height: 1.2em;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+    text-align: left;
+}
+
+hr {
+    width: 100%;
+}
+ 
+table {
+    border: 0.5em;
+    border-color: navy;
+    margin: 0.2em;
+    padding: 0.2em;
+}
+
+
+code {
+    font-size: 1em;
+    font-family: "dejavu sans mono", consolas, monaco, monospace;
+}
+
+pre {
+    font-size: 1em;
+    font-family: "dejavu sans mono", consolas, monaco, monospace;
+}
+
+tt {
+    font-size: 1em;
+    font-family: "dejavu sans mono", consolas, monaco, monospace;
+}
+
+
+ul {
+    list-style-type: disc;
+    margin: 0.25em;
+    padding-left: 1.5em;
+}
+
+dl {}
+
+dt {
+    font-weight: bold;
+    color: #000080;
+}
+
+
+.toc {
+    list-style-type: none;
+}
+
+.toptoc {
+    list-style-type: none;
+    padding-left: 0.2em;
+}
+
+.navbar {
+    background-color:#e6e6e6;
+    padding-left: 0.75em;
+    padding-right: 0.5em;
+    padding-bottom: 0.25em;
+    padding-top: 0.25em;
+    margin-bottom: 0px;
+    margin-left: -0.5em;
+    margin-right: -0.5em;
+    margin-top: 0px;
+}
+
+.navbar2 {
+    background-color:#f3f3f3;
+    padding-left: 0.75em;
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+    padding-right: 0.5em;
+    margin-left: -0.5em;
+    margin-right: -0.5em;
+    margin-bottom: 0px;
+}
+
+.navbar3 {
+    background-color:#ebebeb;
+    padding-left: 0.75em;
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+    padding-right: 0.5em;
+    margin-left: -0.5em;
+    margin-right: -0.5em;
+    margin-bottom: 0px;
+}
+
+.nav-caption {
+    color: #0000CD;
+    list-style-type: none;
+}
+
+.nav-caption-first {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.nav-book {
+    list-style-type: none;
+}
+
+.nav-link {
+    font-style: normal;
+    list-style-type: none;
+}
+
+.nav-link-sub {
+    font-style: normal;
+    list-style-type: none;
+}
+
+.nav-link-sub-sub {
+    font-style: normal;
+    list-style-type: none;
+}
+
+.nav-here {
+    color: #008b8b;
+    list-style-type: none;
+}
+
+.nav-here-sub {
+    color: #008b8b;
+    list-style-type: none;
+}
+
+.nav-here-sub-sub {
+    color: #008b8b;
+    list-style-type: none;
+}
+
+.nav-dead-sub {
+    color: gray;
+    font-style: italic;
+    list-style-type: none;
+}
+
+.copyright {
+    display: block;
+    font-size: 1em !important;
+    border: 5px;
+    margin: 5px;
+}
+
+.captiondiv {
+    padding: 0;
+    margin-left: -0.5em;
+    margin-right: -0.5em;
+    margin-bottom: 0px;
+}
+
+.title {
+    color: white;
+    background-color:navy;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0.35em;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.subtitle {
+    background-color:#b3b3b3;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0.5em;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.subtitle2 {
+    background-color:#c0c0c0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0.4em;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.subsubtitle {
+    background-color:#dadada;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0.5em;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.deprecated {
+    color: #9a9a9a;
+    background-color: white;
+}
+
+.unsupported {
+    color: blueviolet;
+    font-weight: bold;
+    font-style: italic
+}
+
+.console {
+    color: navy;
+    background-color: #e6e6e6;
+    font-size: 1em;
+    font-family: "dejavu sans mono", consolas, monaco, monospace;
+    margin: 0.5em;
+    padding: 0.2em;
+}
+
+.tall {
+    margin-bottom: 0.5em;
+}
+
+.dev {
+    color: red;
+    font-style: italic;
+}
+
+.dontshout {
+    font-size: 1em;
+}
+
+.sale {
+    color: blue;
+    font-size: 1.05em;
+}
+
+.shout {
+    color: navy;
+    font-size: 1.05em;
+}
+
+.warn {
+    color: red;
+    font-size: 1.05em;
+}
+
+.eucra {
+    color: #681A1A;
+    font-size: 1.05em;
+}
+
+.praise1 {
+    margin: 5px;
+    background-color: #f3f3f3;
+    font-weight: normal;
+    font-size: 1em;
+}
+
+.praise2 {
+    color: navy;
+    font-weight: normal;
+    font-style: italic;
+    font-size: 1em;
+}
+
+.praise3 {
+    color: black;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1em;
+}
+
+.biblio {
+    margin-top: 1.75em;
+    color: #6b238e;
+    font-size: 1.1em;
+    margin-left: 0.5em;
+    text-align: left;
+}
+
+.biblio2 {
+    font-size: 1em;
+    margin-left: 1.5em;
+    color: #892db7;
+    margin-top: 0.34em;
+}
+
+.highlight {
+    background-color: #EEEEFF;
+    padding: 4px;
+}
+
+.notice {
+    color: #009090;
+    background-color: #FFF5F5;
+    padding: 4px;
+}
+
+.eth {
+    background-color: lightcyan;
+    border: 1px solid gray;
+}
+
+.etd {
+    background-color: white;
+    border: 1px solid gray;
+    margin: auto;
+    vertical-align: top;
+}
