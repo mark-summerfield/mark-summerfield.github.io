@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="asciidoctor-default.css" rel="stylesheet" type="text/css" />
+    <link href="coderay-asciidoctor.css" rel="stylesheet" type="text/css" />
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Eliminating All Whitespace</title>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Python Programing Tips</h1>
+<h2 class="subtitle">Eliminating All Whitespace</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link-sub"><a href="pytips.html">Python Programming Tips</a></span>
+</div>
+
+<!-- Body -->
+
+<div class="sect1">
+<h2 id="_eliminating_all_whitespace">Eliminating All Whitespace</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="shout">One problem that frequently arises in practice is the need to
+take a string, and return a copy of it with all whitespace&#8212;&#8203;leading,
+trailing, and internal&#8212;&#8203;removed.</span></p>
+</div>
+<div class="paragraph">
+<p>Most languages support stripping whitespace from the ends
+out-of-the-box; for example, Python&#8217;s <code>str.strip()</code> method. But fewer
+languages directly support the complete whitespace removal required
+here.</p>
+</div>
+<div class="paragraph">
+<p>According to <em>The Zen of Python</em>, “There should be one&#8212;&#8203;and preferably
+only one&#8212;&#8203;obvious way to do it”. But that was written many years ago,
+and in modern Python, it is easy to solve this problem in more than half
+a dozen different ways.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_a_non_pythonic_approach_1_of_9">A Non-Pythonic Approach (1 of 9)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This version shows how someone coming to Python from a procedural
+language might tackle the problem.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">def</span> <span class="function">nows_indexing</span>(s):
+    t = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="predefined">range</span>(<span class="predefined">len</span>(s)):
+        <span class="keyword">if</span> <span class="keyword">not</span> s[i].isspace():
+            t += s[i]
+    <span class="keyword">return</span> t</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Notice that for every non-space character, <em>two</em> index lookups into the
+string are needed. Also, this approach uses string concatenation (<code>+=</code>).
+In older Python versions this was very slow, but more modern Pythons
+seem to have put a lot of effort into optimizing it. Even so, in
+performance terms this weighs in at around <strong>248</strong> units of time on our
+test machine. This is about 10<em>x</em> slower than the best function we&#8217;ll
+see.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_a_python_learners_approach_2_of_9">A Python Learner&#8217;s Approach (2 of 9)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Python newcomers usually learn how to iterate over collections and
+strings, so they might create a function like this one.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">def</span> <span class="function">nows_iadd</span>(s):
+    t = <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>
+    <span class="keyword">for</span> c <span class="keyword">in</span> s:
+        <span class="keyword">if</span> <span class="keyword">not</span> c.isspace():
+            t += c
+    <span class="keyword">return</span> t</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In modern Python&#8217;s this isn&#8217;t quite as bad as some of the other
+functions, typically taking around <strong>177</strong> units of time.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_an_old_style_functional_approach_3_of_9">An Old-Style Functional Approach (3 of 9)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Here&#8217;s an approach that might be considered by real old-timers when they
+first learnt about functional-style programming:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">def</span> <span class="function">nows_filter</span>(s):
+    <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>.join(<span class="predefined">filter</span>(<span class="keyword">lambda</span> c: <span class="keyword">not</span> c.isspace(), s))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The best that can be said about this is that it is short.
+Performance-wise it typically takes about <strong>267</strong> units of time and is the
+slowest of all the examples shown. The best we&#8217;ll see is more than
+10<em>x</em> faster!</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_classic_approach_4_of_9">The Classic Approach (4 of 9)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Many textbooks recommend doing this kind of thing by adding each wanted
+character to a list and then joining the list at the end.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">def</span> <span class="function">nows_list_append_join</span>(s):
+    t = []
+    <span class="keyword">for</span> c <span class="keyword">in</span> s:
+        <span class="keyword">if</span> <span class="keyword">not</span> c.isspace():
+            t.append(c)
+    <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>.join(t)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Many Python programmers would expect this to be faster than using the
+string concatenation (<code>+=</code>) shown in two previous approaches, but this
+isn&#8217;t the case in practice! This one usually takes about <strong>190</strong> units of
+time.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_generator_approach_5_of_9">The Generator Approach (5 of 9)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Modern Python programmers know how useful generators are. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">def</span> <span class="function">nows_generator_join</span>(s):
+    <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>.join(c <span class="keyword">for</span> c <span class="keyword">in</span> s <span class="keyword">if</span> <span class="keyword">not</span> c.isspace())</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>But it is easy to forget that generators perform best if the processing
+involved with each iteration costs a lot more than the (tiny) generator
+overhead. And this isn&#8217;t one of those best cases, with a dismal
+typical performance of about <strong>181</strong> units of time</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_list_comprehension_approach_6_of_9">The List Comprehension Approach (6 of 9)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>List comprehensions build lists in memory. This can be expensive
+compared with using generators&#8212;&#8203;at least for large lists or where the
+creation of each element is expensive. But for <em>small</em> lists, list
+comprehensions can provide good performance.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">def</span> <span class="function">nows_list_comp_join</span>(s):
+    <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>.join([c <span class="keyword">for</span> c <span class="keyword">in</span> s <span class="keyword">if</span> <span class="keyword">not</span> c.isspace()])</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This typically takes around <strong>154</strong> units of time, comprehensively beating
+the generator approach. Keep in mind that this is not a generalisable
+result, so for any given situation it is best to use the <code>timeit</code> module
+or similar to compare.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_a_regular_expression_7_of_9">Using a Regular Expression (7 of 9)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A simple regular expression can be used to match any amount of
+whitespace&#8212;&#8203;including newlines if we use the <code>re.MULTILINE</code> flag.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python">NOWS_RX = re.compile(<span class="string"><span class="modifier">r</span><span class="delimiter">'</span><span class="content">[</span><span class="content">\s</span><span class="content">\n</span><span class="content">]+</span><span class="delimiter">'</span></span>, re.MULTILINE)
+
+<span class="keyword">def</span> <span class="function">nows_re_sub_ws</span>(s):
+    <span class="keyword">return</span> NOWS_RX.sub(<span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>, s)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This function is very simple (assuming we understand regular
+expressions), but has disappointing performance of around <strong>110</strong> units of
+time.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_string_translate_8_of_9">Using String Translate (8 of 9)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Python&#8217;s <code>str</code> class provides a static method called <code>maketrans</code> which
+can create a “translation” table mapping characters to characters. It is
+also possible to map characters to <code>None</code> which has the effect of
+deleting them. Once a translation table has been created it can be used
+with the <code>str.translate</code> method.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python">NOWS_TABLE = <span class="predefined">str</span>.maketrans({<span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span>: <span class="predefined-constant">None</span>, <span class="string"><span class="delimiter">'</span><span class="char">\n</span><span class="delimiter">'</span></span>: <span class="predefined-constant">None</span>, <span class="string"><span class="delimiter">'</span><span class="char">\t</span><span class="delimiter">'</span></span>: <span class="predefined-constant">None</span>})
+
+<span class="keyword">def</span> <span class="function">nows_str_translate</span>(s):
+    <span class="keyword">return</span> s.translate(NOWS_TABLE)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of course in this example we haven&#8217;t actually deleted every possible
+whitespace character, just a few to show how it is done. As for
+performance, it takes a respectable <strong>80</strong> units of time. (Incidentally,
+this shoots up to over <strong>130</strong> units if we replace with <code>''</code> (the empty
+string) rather than <code>None</code>.)</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_c_without_using_c_9_of_9">Using C Without Using C (9 of 9)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The standard Python interpreter is written in C which is amongst the
+fastest languages available. So it shouldn&#8217;t be a surprise that by
+offloading all the work to Python functions that are implemented in C we
+get good performance.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">def</span> <span class="function">nows_split_join</span>(s):
+    <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>.join(s.split())</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is probably the simplest code of all the examples. The
+<code>str.split()</code> method returns a list of characters excluding any
+whitespace ones. (It is also possible to split on specified characters,
+but whitespace is the default.) This typically takes a mere <strong>24</strong> units
+of time, less than a tenth of that taken by a couple of the earlier
+functions, and far faster than any of the others.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusion">Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>On our test machine using our test data the <code>nows_split_join()</code> function
+comfortably outperformed every other method we tried for removing <em>all</em>
+whitespace from strings. Of course, in our real code we just call it
+<code>nows()</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">def</span> <span class="function">nows</span>(s):
+    <span class="keyword">return</span> <span class="string"><span class="delimiter">'</span><span class="delimiter">'</span></span>.join(s.split())</code></pre>
+</div>
+</div>
+</div>
+</div>
+
+<p>For more see <a href="pytips.html">Python Programming Tips</a></p>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>
+

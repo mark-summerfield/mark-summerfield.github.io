@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Python Programming Tips: Using Enumerations &mdash; article</title>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Python Programming Tips #1</h1>
+<h2 class="subtitle">Using Enumerations</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link-sub"><a href="pytips.html">Python Programming Tips</a></span>
+</div>
+
+<!-- Body -->
+<div class="shout">
+<p>
+Python&nbsp;3.4 introduced an
+<a
+href="https://docs.python.org/3.4/library/enum.html"><code>enum</code></a> module which at long last
+provides an enumeration type for Python. It has been worth the wait,
+since it has an excellent API. Furthermore, the module has been
+back-ported to every version of Python all the way to 2.4; so pretty
+well every Python programmer can take advantage of this useful module.
+(The back-ported module is called <a
+href="https://pypi.python.org/pypi/enum34">enum34</a>.)
+</p>
+
+<p>
+One ideal use is to replace a simple module constant (e.g., <code>RED =
+5</code>), with an <code>enum.Enum</code> or an <code>enum.IntEnum</code> (this
+latter for when you actually care about the numeric value). However, out
+of the box, rather than writing, say, <code>MyModule.RED</code> you'd end up
+having to write, say, <code>MyModule.State.RED</code>. In this very short
+article I explain why this is and how to have enums that are drop-in
+replacements for simple module contants.
+</p>
+</div>
+
+<p>
+Let's take a look at a tiny example. First, a module that has some
+simple constants and a function, and second, a program that uses
+the module.
+</p>
+
+<div class="highlight">
+<pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># Action.py</span>
+GO, STOP <span style="color: #666666">=</span> <span style="color: #008000">range</span>(<span style="color: #666666">2</span>)
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">perform</span>(action):
+    <span style="color: #008000; font-weight: bold">if</span> action <span style="color: #666666">==</span> GO:
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Go&quot;</span>)
+    <span style="color: #008000; font-weight: bold">elif</span> action <span style="color: #666666">==</span> STOP:
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Stop&quot;</span>)
+</pre>
+</div>
+<br>
+<div class="highlight">
+<pre style="line-height: 125%"><span style="color: #408080; font-style: italic">#!/usr/bin/env python3</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Action</span>
+
+Action<span style="color: #666666">.</span>perform(Action<span style="color: #666666">.</span>GO)
+Action<span style="color: #666666">.</span>perform(Action<span style="color: #666666">.</span>STOP)
+</pre>
+</div>
+
+<p>
+This works perfectly well and has been done for years. However, it isn't
+convenient for debugging since only the <code>int</code>s <code>0</code> and
+<code>1</code> would be shown.
+</p>
+
+<p>
+The next example uses the same basic approach but is better for debugging.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># Action.py</span>
+<b>GO, STOP <span style="color: #666666">=</span> (<span style="color: #BA2121">&quot;GO&quot;</span>, <span style="color: #BA2121">&quot;STOP&quot;</span>)</b>
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">perform</span>(action):
+    <span style="color: #008000; font-weight: bold">if</span> action <span style="color: #666666">==</span> GO:
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Go&quot;</span>)
+    <span style="color: #008000; font-weight: bold">elif</span> action <span style="color: #666666">==</span> STOP:
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Stop&quot;</span>)
+</pre></div>
+<br>
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">#!/usr/bin/env python3</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Action</span>
+
+Action<span style="color: #666666">.</span>perform(Action<span style="color: #666666">.</span>GO)
+Action<span style="color: #666666">.</span>perform(Action<span style="color: #666666">.</span>STOP)
+</pre></div>
+
+<p>
+I got the idea for this from Nick Coghlan.
+</p>
+
+<p>
+Nonetheless, an enumeration would be nicer, and now that Python has an
+official enumeration module there's no excuse not to use it. Here's one
+way to do it (the <code>enum</code> module also has a function-based API).
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># Action.py</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">enum</span>
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Action</span>(enum<span style="color: #666666">.</span>Enum):
+    GO <span style="color: #666666">=</span> <span style="color: #666666">1</span>
+    STOP <span style="color: #666666">=</span> <span style="color: #666666">2</span>
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">perform</span>(action):
+    <span style="color: #008000; font-weight: bold">if</span> action <span style="color: #AA22FF; font-weight: bold">is</span> Action<span style="color: #666666">.</span>GO:
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Go&quot;</span>)
+    <span style="color: #008000; font-weight: bold">elif</span> action <span style="color: #AA22FF; font-weight: bold">is</span> Action<span style="color: #666666">.</span>STOP:
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Stop&quot;</span>)
+</pre></div>
+
+<br>
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">#!/usr/bin/env python3</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Action</span>
+
+Action<span style="color: #666666">.</span>perform(Action<span style="color: #666666">.</span>Action<span style="color: #666666">.</span>GO)
+Action<span style="color: #666666">.</span>perform(Action<span style="color: #666666">.</span>Action<span style="color: #666666">.</span>STOP)
+</pre></div>
+
+<p>
+This works nicely, and puts the constants in their own namespace (the
+<code>Action</code> enum). Some people consider this the most Pythonic
+approach. However, this doesn't work as a drop-in replacement for
+simple constants, and some people find it a bit verbose.
+</p>
+
+<p>
+Here's another version, this time using a technique that I discovered in
+Python&nbsp;3.5's <code>Lib/signals.py</code> module.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># Action.py</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">enum</span>
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Action</span>(enum<span style="color: #666666">.</span>Enum):
+    GO <span style="color: #666666">=</span> <span style="color: #666666">1</span>
+    STOP <span style="color: #666666">=</span> <span style="color: #666666">2</span>
+<b><span style="color: #008000">globals</span>()<span style="color: #666666">.</span>update(Action<span style="color: #666666">.</span>__members__)</b>
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">perform</span>(action):
+    <span style="color: #008000; font-weight: bold">if</span> action <span style="color: #AA22FF; font-weight: bold">is</span> GO:
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Go&quot;</span>)
+    <span style="color: #008000; font-weight: bold">elif</span> action <span style="color: #AA22FF; font-weight: bold">is</span> STOP:
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Stop&quot;</span>)
+</pre></div>
+
+<br>
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">#!/usr/bin/env python3</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Action</span>
+
+Action<span style="color: #666666">.</span>perform(Action<span style="color: #666666">.</span>GO)
+Action<span style="color: #666666">.</span>perform(Action<span style="color: #666666">.</span>STOP)
+</pre></div>
+
+<p>
+The key difference here is the addition of one line immediately after
+the creation of the enumeration (and shown in bold). This line puts all
+the enumeration's members into the module's namespace. The result is
+that we can use <code>GO</code> and <code>STOP</code> directly in the module in
+which they are defined (compare this version's <code>perform()</code>
+function to the previous one), and in the same way as we use simple
+constants in modules that import them. This means that the program
+that's shown after the module with the enumeration has identical code to
+the first one shown, but is much nicer to debug because instead of
+getting plain <code>int</code>s we get enums which have both names and
+values.
+</p>
+
+<p>
+Incidentally, the examples above assume that the actual enum
+<i>values</i> don't matter. If you want to use enums with numeric values
+as drop-in replacements for simple numeric constants, the
+<a
+href="https://docs.python.org/3.5/library/enum.html#enum.IntEnum"><code>enum.IntEnum</code></a>
+class may be a better choice. Here's how.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># Action.py</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">enum</span>
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Action</span>(enum<span style="color: #666666">.</span>IntEnum):
+    GO <span style="color: #666666">=</span> <span style="color: #666666">1</span>
+    STOP <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+<span style="color: #008000">globals</span>()<span style="color: #666666">.</span>update(Action<span style="color: #666666">.</span>__members__)
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">perform</span>(action):
+    <span style="color: #008000; font-weight: bold">if</span> action <span style="color: #AA22FF; font-weight: bold">is</span> GO:
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Go&quot;</span>)
+    <span style="color: #008000; font-weight: bold">elif</span> action <span style="color: #AA22FF; font-weight: bold">is</span> STOP:
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Stop&quot;</span>)
+</pre></div>
+
+<br>
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">#!/usr/bin/env python3</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Action</span>
+
+Action<span style="color: #666666">.</span>perform(Action<span style="color: #666666">.</span>GO)
+Action<span style="color: #666666">.</span>perform(Action<span style="color: #666666">.</span>STOP)
+</pre></div>
+
+<p>
+This is almost identical the the previous example, but now the
+enumerations can also be used where <code>int</code>s are expected.
+</p>
+
+<p>
+Although the <code>globals().update(<i>MyEnum</i>.__members__)</code>
+technique is used in the standard library, it is still a bit
+controversial: see the <a href="https://bugs.python.org/issue23292">enum
+doc discussion</a>. Personally, I have stopped using this technique,
+because it doesn't play well with Python linting tools e.g., <a
+href="https://pypi.python.org/pypi/flake8">flake8</a>.
+My preferred style is now:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># Const.py</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">enum</span>
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">ActionKind</span>(enum<span style="color: #666666">.</span>Enum):
+    GO <span style="color: #666666">=</span> <span style="color: #666666">1</span>
+    STOP <span style="color: #666666">=</span> <span style="color: #666666">2</span>
+</pre></div>
+
+<br>
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">#!/usr/bin/env python3</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Action</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">Const</span> <span style="color: #008000; font-weight: bold">import</span> <span style="color: #666666">*</span>
+
+Action<span style="color: #666666">.</span>perform(ActionKind<span style="color: #666666">.</span>GO)
+Action<span style="color: #666666">.</span>perform(ActionKind<span style="color: #666666">.</span>STOP)
+</pre></div>
+
+<br>
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># Action.py</span>
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">Const</span> <span style="color: #008000; font-weight: bold">import</span> <span style="color: #666666">*</span>
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">perform</span>(action):
+    <span style="color: #008000; font-weight: bold">if</span> action <span style="color: #AA22FF; font-weight: bold">is</span> ActionKind<span style="color: #666666">.</span>GO:
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Go&quot;</span>)
+    <span style="color: #008000; font-weight: bold">elif</span> action <span style="color: #AA22FF; font-weight: bold">is</span> ActionKind<span style="color: #666666">.</span>STOP:
+        <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;Stop&quot;</span>)
+</pre></div>
+
+<p>
+As you can see, I put all my constants and enumerations, into a single
+<code>Const.py</code> module and do <code>from Const import&nbsp;*</code>.
+My rule for this module is that it never contains anything mutable or
+that has side-effects. And for enum names I always use the convention
+<code><i>Name</i>Kind</code> so I never risk name collisions despite the
+<code>import&nbsp;*</code>, and always know that I have an enum rather than
+a simple <code><i>NAME</i> = <i>value</i></code> constant.
+</p>
+
+<p>
+Incidentally, there is a third party advanced enum module, <a
+href="https://pypi.python.org/pypi/aenum">aenum</a>, which provides some
+extra facilities compared with the standard library's <code>enum</code>
+module discussed here.
+</p>
+
+<p>For more see <a href="pytips.html">Python Programming Tips</a></p>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>
+

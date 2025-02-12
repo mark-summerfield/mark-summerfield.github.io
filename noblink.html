@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>No Blink &mdash; stop blinking cursors</title>
+    <meta name="description" content="How to stop blinking cursors"/>
+    <meta name="keywords" content="cursor, blink, flash"/>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">No Blink</h1>
+<h2 class="subtitle">How to Stop Blinking or Flashing Cursors</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<!-- Body -->
+<p>
+A minority of people cannot work with blinking or flashing cursors. In
+today's globalized community even a “minority” is still a <b>lot</b> of
+people. Yet software providers often ignore these peoples' needs.
+</p>
+
+<p>
+Apple used to respect such people, and prior to OS&nbsp;X provided a
+means of turning off cursor blink globally across all applications. This
+feature was dropped with OS&nbsp;X. Now it is only possible to turn off
+cursor blink on some applications&mdash;and this must be done on a
+case-by-case basis.
+</p>
+
+<p>
+Microsoft built cursor blink into MS-DOS and then into Windows. However,
+even from Windows&nbsp;3, it was possible to work around this. I wrote a
+tiny program that executed in the background and that every 0.5 seconds
+reset the cursor blink rate to 0. This stopped cursor blink in all
+Windows applications that used the standard Windows APIs; although
+ironically this meant that the cursor disappeared in Word and continued
+to blink in Excel. Since 2000, Microsoft has respected the needs of
+people who can't work with blinking cursors and allows cursor blink to
+be turned off globally.
+</p>
+
+<p>
+In the Linux world, all decent terminals have long offered the user the
+choice of blinking or non-blinking cursors. And most Linux Window
+systems also provide a global solution&mdash;at least for applications
+written for the particular Window system the user is using. Thus, it is
+possible to globally turn off cursor blink for all GNOME&nbsp;2
+applications (I don't use or know about GNOME&nbsp;3), and for KDE
+applications that are based on Qt&nbsp;3 or Qt&nbsp;4.
+</p>
+
+<p>
+For more information about turning off cursor blink see 
+<a href="https://www.jurta.org/en/prog/noblink">
+www.jurta.org/en/prog/noblink</a>.
+Although the JURTA site is very useful, it doesn't help with
+applications that use Tcl/Tk's themed widgets (which have cursor blink
+but which don't respect the <code>insertOffTime</code> option), or with
+Qt&nbsp;5.0.0 applications which take their blink rate from the theme
+and seem to ignore user preferences. In both cases a solution is
+possible, but involves rebuilding these libraries from source.
+Note that more modern Qt&nbsp;5 versions do respect the user's blink
+rate&mdash;but only on Windows.
+</p>
+
+<h2>Non-blinking Tcl/Tk</h2>
+<p>
+This can be achieved for “classic” and <code>ttk</code> widgets with
+these two commands:
+<pre>
+option add *insertOffTime 0
+ttk::style configure . -insertofftime 0
+</pre>
+</p>
+
+<h2>Non-blinking Qt</h2>
+<p>
+Use the Qt Config application (<code>qt5ct</code> or <code>qt6ct</code>)
+and set the Cursor flash time in the Interface tab to 0.
+</p>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>
+

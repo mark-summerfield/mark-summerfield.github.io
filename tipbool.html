@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Code Tip: Booleans</title>
+<style>
+.cq {
+    margin-left: 2em;
+    font-size: 1em;
+    font-family: "dejavu sans mono", consolas, monaco, monospace;
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Code Tip: Booleans</h1>
+<h2 class="subtitle">Using Booleans with Functions</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<!-- Body -->
+<div class="shout">
+<p>
+Returning a Boolean or a pair or 2-tuple with a value and a Boolean is
+often a perfectly good choice. Similarly, passing a single Boolean
+argument &mdash; to a suitably named function &mdash; is often the right
+approach.
+</p>
+<p>
+But passing a Boolean to a function that accepts two or more arguments
+is almost always a mistake!
+</p>
+<p>
+This article explains why and what to do instead.
+</p>
+</div>
+
+<p>
+<i>This article's examples are shown using Python syntax but the ideas
+are applicable to most modern languages.</i>
+</p>
+
+<h3>Returning a Boolean</h3>
+
+<p>
+Query functions that return a Boolean should normally have names
+beginning <i>is</i> or <i>has</i>, e.g., <code>isVisible()</code>,
+<code>hasSubfolders()</code>.
+</p>
+
+<p>
+For side-effect functions the name usually reflects their action, e.g.,
+<code>container.delete(key)</code> might return <code>True</code> if key existed
+in the container and was deleted, or <code>False</code> otherwise.
+</p>
+
+<p>
+For functions that return a value that may or may not be valid the
+choices are usually: (1) return <code>None</code> (or whatever the
+language's <code>NULL</code> equivalent is), or a valid value; (2) return an
+<i>Option</i> object which essentially encapsulates a valid value and a
+Boolean; or (3) return a pair or 2-tuple of value (valid or not) and
+Boolean indicating the value's validity.
+</p>
+
+<p>
+In all these cases, returning a Boolean (or Boolean within an Option,
+pair or 2-tuple) is perfectly sensible.
+
+<h3>Passing a Single Boolean</h3>
+
+<p>
+For functions that accept a single argument, making that argument a
+Boolean works fine &mdash; providing the function's name works well with
+it. For example, <code>setVisible(True)</code> or
+<code>setEnabled(False)</code>.
+</p>
+
+<h3>Passing Multiple Arguments</h3>
+
+<p>
+For functions that take two or more arguments, <i>none</i> of them
+should be Booleans! (There's a possible exception shown in the box at
+the end.)
+</p>
+
+<p>
+To illustrate why, imagine trying to guess what the following call does:
+</p>
+
+<div class="cq">drawRectangle(p1, p2, True, False)</div>
+
+<p>
+Most programmers would reasonably guess that <code>p1</code> and
+<code>p2</code> are points representing two opposite corners. But no one can
+reliably know what the two Boolean arguments are. And even if there was
+just one Boolean &mdash; could True mean fill; or outline (i.e., the
+opposite of fill); or shadow; or something else entirely? It isn't
+possible to see at the call site. And this is why for functions that
+take two or more arguments using Booleans is a bad idea!
+</p>
+
+<p>
+What we should do instead is create an enumeration (even if it has only
+two members) and use that instead:
+</p>
+
+<div class="cq">drawRectangle(p1, p2, DrawStyle.Fill,
+ShadowStyle.NoShadow)</div>
+<div class="cq">drawRectangle(p1, p2, DrawStyle.Outline,
+ShadowStyle.DrawShadow)</div>
+
+<p>
+Here, there's no question about what the arguments mean. And as a bonus,
+because enumerations are used it is possible to extend the range of
+possibilities without changing the API. For example:
+</p>
+
+<div class="cq">drawRectangle(p1, p2, DrawStyle.FocusOutline,
+ShadowStyle.DrawDeepShadow)</div>
+
+<p>
+So, we recommend always using enumerations rather than Booleans for the
+parameter types of functions that take two or more arguments.
+</p>
+
+<table class="eth"><tr><td>
+<p>
+Some languages (for example, Python), allow us to specify named
+arguments whose names are <i>required</i> at the call site. For example,
+given this Python function signature:
+</p>
+
+<div class="cq">def drawRectangle(p1, p2, *, fill, shadow): ...</div>
+
+<p>
+callers <i>must</i> specify the last two arguments by name, e.g.,:
+</p>
+
+<div class="cq">drawRectangle(p1, p2, fill=True, shadow=False)</div>
+
+<p>
+Of course, this doesn't provide the versatility of using enumerations.
+So we still recommend always using enumerations rather than Booleans for
+multi-argument functions, even when using Python.
+</p>
+</td></tr></table>
+
+<p>
+But, what if you can't change the API &mdash; for example, because the
+function you're calling is in a library that you can't change? In such
+cases you can still improve call site readability by creating Boolean
+enumerations or Boolean constants, and passing them rather than raw
+<code>True</code> or <code>False</code> values.
+</p>
+
+<p>
+See also <a href="pytips.html">Python Programming Tips</a>.
+</p>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>com&shy;pare&shy;pdf&shy;cmd &mdash; PDF comparison console tool</title>
+    <meta name="description" content="comparepdfcmd is a fast commercial
+Windows command line tool for comparing PDF files. It is ideal for
+Quality Assurance and for automated testing. Comparisons are done on
+your own computer to protect your privacy."/>
+    <meta name="keywords" content="Compare, ComparePDF, PDF, DiffPDF,
+comparepdfcmd, PDF comparison, compare PDF, QA, quality assurance,
+test automation, automated testing"/>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">com&shy;pare&shy;pdf&shy;cmd</h1>
+<h2 class="subtitle">com&shy;pare&shy;pdf&shy;cmd compares two PDFs and can show any
+different pages side-by-side color highlighted.</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-here">com&shy;pare&shy;pdf&shy;cmd</span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-here">com&shy;pare&shy;pdf&shy;cmd</span> &bull;
+<span class="nav-link-sub"><a href="comparepdfcmd.html#inuse">Example
+Usages</a></span> &bull;
+<span class="nav-link-sub"><a href="comparepdfcmd.html#png">Example 
+report</a></span> &bull;
+<span class="nav-link-sub"><a
+href="comparepdfcmd-changes.html">Changes</a></span>
+</div>
+
+<!-- Body -->
+
+<p class="blue">This software is no longer for sale.</p>
+
+<p style="font-family: sans-serif; font-size: 1.75em;"
+><span style="color: #555">C:\&gt;</span>&nbsp;com&shy;pare&shy;pdf&shy;cmd.exe</p>
+
+<div class="shout">
+<p>
+Use com&shy;pare&shy;pdf&shy;cmd to compare two PDF files using the command line. In a
+console (i.e., in a Command Prompt window opened by running
+<code>cmd.exe</code>) enter, e.g., <code>com&shy;pare&shy;pdf&shy;cmd.exe -r report.pdf
+old.pdf new.pdf</code>. If there are any differences
+<code>report.pdf</code> will be output with each pair of pages from
+<code>old.pdf</code> and <code>new.pdf</code> shown side-by-side with
+differences color highlighted (as with a highlighter pen).
+</p>
+
+<p class="shout">
+This commercial console (command line) program for Windows is ideal for
+testing, quality assurance, scripted comparisons, and regression
+testing.
+It is fast and cloud-free:&nbsp;com&shy;pare&shy;pdf&shy;cmd runs on your own computer
+without the size or page limits of online tools&mdash;some customers
+compare PDFs with thousands of pages.
+Customers include publishers, banks, insurers, and Governments.
+</p>
+
+<p>
+com&shy;pare&shy;pdf&shy;cmd can say whether two PDFs&mdash;or two folders of
+PDFs&mdash;are the same or different, and it can optionally output one
+or more reports that show any differences. The reports can be output in
+PDF format, or as PNG images, or in CSV format suitable for spreadsheets
+or regression testing, or JSON or XML format.
+</p>
+
+<p>
+Comparisons can be made based purely on the text regardless of margins
+and word-wrap, or based on appearance (which accounts for fonts, colors,
+layout, diagrams, images, etc.)
+</p>
+
+<p class="dontshout" style="color: #333;">
+If you require an easy-to-use graphical user interface (GUI) tool, use
+<a href="diffpdf.html">DiffPDF</a>.
+</p>
+</div>
+
+<h2 id="inuse">Example Usages</h2>
+
+<p>
+Here is one example use of the program:
+</p>
+
+<pre class="console">
+C:\Users\me&gt;<b>com&shy;pare&shy;pdf&shy;cmd -v -s ^
+-r report.pdf ^
+oldfile.pdf newfile.pdf</b>
+Wrote "report.pdf"
+</pre>
+
+<p>
+Here the two PDFs have some different text (compared word-by-word which
+is the default), and because of the <code>-r</code> or <code>--report</code>
+option, the differences are shown highlighted in the file
+<code>report.pdf</code>. In addition, due to the <code>-s</code> or
+<code>--show</code> option, the <code>report.pdf</code> differences report will
+be shown in your PDF reader. The message was output because the
+<code>-v</code> or <code>--verbose</code> option was used. If they had the same
+texts the output on the console would have been <code>Same</code>, no
+report would have been produced, and no report would be shown in your
+PDF reader.
+</p>
+
+<p>
+<i>Note that <code>^</code> is the Windows line continuation character; you
+don't need it/them if you write the whole command as a single line.</i>
+</p>
+
+<p>
+Here is another example use of the program:
+</p>
+
+<pre class="console">
+C:\Users\me&gt;<b>com&shy;pare&shy;pdf&shy;cmd -f pdf ^
+-R reportdir -S summary.csv ^
+oldpdfdir newpdfdir</b>
+</pre>
+
+<p>
+This run compares each PDF file in the <code>oldpdfdir</code> directory
+with a PDF file in the <code>newpdfdir</code> directory that has the same
+name (if there is one). For each pair of PDFs that differ, it produces
+the requested report in the <code>reportdir</code> with the same name as the
+original files, and with the differences highlighted. In addition it
+produces a summary of the differences in the file <code>summary.csv</code>.
+</p>
+
+<p>
+Here is an example use with a custom configuration file:
+</p>
+
+<pre class="console">
+C:\Users\me&gt;<b>com&shy;pare&shy;pdf&shy;cmd -C myconfig.ini ^
+-r diff.csv file1.pdf file2.pdf</b>
+</pre>
+
+<p>
+This run reads the configuration from <code>myconfig.ini</code> and outputs
+a CSV difference report if <code>file1.pdf</code> is different from
+<code>file2.pdf</code>. The configuration file need only contain those
+options which you want to set to non-default values. Every configuration
+file option is explained in the manual.
+</p>
+
+<p>
+For a summary of all the command line options run <i>either</i> of these
+commands:
+</p>
+
+<pre class="console">
+C:\Users\me&gt;<b>com&shy;pare&shy;pdf&shy;cmd -h</b>
+C:\Users\me&gt;<b>com&shy;pare&shy;pdf&shy;cmd --help</b>
+</pre>
+
+<p>
+At the end this also shows which license is in use, what its expiry is,
+and where it is located.
+</p>
+
+<p>
+All the command line options and configuration file options are listed
+and explained in the manual:
+com&shy;pare&shy;pdf&shy;cmd2.pdf (~218 KB). This can
+also be viewed using the program using <i>either</i> of these commands:
+</p>
+
+<pre class="console">
+C:\Users\me&gt;<b>com&shy;pare&shy;pdf&shy;cmd -m</b>
+C:\Users\me&gt;<b>com&shy;pare&shy;pdf&shy;cmd --manual</b>
+</pre>
+
+<h2 id="png">Example Report (PDF format)</h2>
+
+<p>
+Here is an extract of a screenshot of a PDF report:
+</p>
+<p><img src="images/cpceg_M1.png" alt="Image cpceg_M1.png" width="400"
+height="120"><img src="images/cpceg_M2.png" alt="Image cpceg_M2.png"
+width="400" height="120"><img src="images/cpceg_M3.png" alt="Image cpceg_M3.png" width="355" height="120"></p>
+
+<p>
+Red change bars in the left margin indicate where changes are, and
+changes are highlighted by coloring them as if with a highlighter pen.
+</p>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-here">com&shy;pare&shy;pdf&shy;cmd</span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>

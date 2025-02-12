@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Programming in Go &mdash; book</title>
+    <meta name="description" content="Programming in Go is a textbook
+that teaches how to programin Go"/>
+    <meta name="keywords" content="Go, programming, textbook"/>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Programming in Go</h1>
+<h2 class="subtitle2">Creating Applications for the 21st Century
+<br>
+by <i>Mark Summerfield</i></h2>
+<h3 class="subsubtitle">ISBN-10: 0321774639&nbsp;&ndash;&nbsp;ISBN-13:
+978-0321774637</h3>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-here">Programming in Go</span> &bull;
+<span class="nav-link-sub"><a href="gobook.html#toc">Contents</a></span>
+&bull;
+<span class="nav-link-sub"><a href="gobook.html#cover">Cover</a></span>
+&bull;
+<span class="nav-link-sub"><a href="gobook.html#eg">Downloads</a></span>
+&bull;
+<span class="nav-link-sub"><a
+href="gobook-errata.html">Errata</a></span> &bull;
+<span class="nav-link-sub"><a href="gobook.html#trans">Translations</a></span>
+</div>
+
+<!-- Body -->
+<p class="shout">
+<a
+href="https://www.informit.com/store/product.aspx?isbn=0321774639">Chapter
+1</a> is available free from InformIT&mdash;click "Sample Content" and
+then "Download the sample pages" (PDF 6.5MB). I've also done some
+<a href="https://www.youtube.com/playlist?list=PL1RGC7NeOQe6qNOQVevDh80lo-JA3TGC1">short videos on Go</a>.
+</p>
+
+<p class="shout">
+The purpose of this book is to teach solid idiomatic Go programming
+using all the features the language provides, as well as the most
+commonly used Go packages, and also to serve as a useful
+reference once the language is learned. The reader is assumed to have
+programming experience in a mainstream programming language such as C,
+C++, Java, Python, or similar, although all of Go's unique features and
+idioms are illustrated with complete runnable examples that are fully
+explained in the text.
+</p>
+
+<p class="shout">
+Go runs on most Unix-like operating systems such as Linux and
+Mac&nbsp;OS&nbsp;X, and also on Windows. The book's text is completely
+compliant with Go&nbsp;1. All the examples and exercise solutions build
+with all Go&nbsp;1.<i>x</i> releases on Linux, Mac&nbsp;OS&nbsp;X, and
+Windows.
+</p>
+
+<p>
+The book will be useful to people who program professionally as part of
+their job, whether as full-time software developers, or those from other
+disciplines, including scientists and engineers, who need to do some
+programming in support of their work. It will also be useful to
+students who have had a reasonable amount of programming experience.
+</p>
+
+<p>
+Go provides high level features such as slices (in effect variable length
+arrays) and maps (hash tables). Go can be used for procedural and
+object-oriented programming (or a combination of both). Go's approach to
+object orientation is unusual being based on aggregation and delegation, interfaces,
+and duck typing, rather than inheritance and virtual (overridable)
+methods. Go has a garbage collector to relieve programmers from the
+burdens of manual memory management. Built into the Go language is
+support for a version of CSP (Concurrent Sequential Processes) using
+channels that makes writing concurrent programs a lot easier than the
+traditional threading approaches&mdash;it is perfectly possible to write
+highly concurrent Go programs that contain no explicit locks at all.
+</p>
+
+<p>
+Arguably, C++, Objective-C, and Java (the latter indirectly as a
+&#8220;better C++&#8221;), have all attempted to be better C's. Go can
+also be seen as an attempt to be a better C, even though Go's clean
+light syntax is reminiscent of Python&mdash;and Go's slices and maps are
+very similar to Python's lists and dicts. However, Go is probably closer
+in spirit to C than to any other language, and can be seen as an attempt
+to avoid all of C's drawbacks while providing all that's best in C, as
+well as its own powerful and useful features.
+</p> 
+
+<p>
+The book has benefited enormously from technical reviews by a couple of
+expert Go programmers&mdash;and from feedback from some non-Go
+programmers to ensure that the book teaches everything it should and is
+understandable to those new to Go.
+</p>
+  
+<p>
+The book is 496 pages, and is published by Addison-Wesley Professional.
+It can be bought from most online or local book stores.
+</p>
+
+<p>
+Only the English printed editions are <i>definitive</i>&mdash;although available
+in electronic formats, "ebooks" usually restrict your rights, and they
+are often retypeset which can introduce errors. A legal PDF version is
+available from <a
+href="https://www.informit.com/store/product.aspx?isbn=0321774639">InformIT</a>.
+Translations are arranged by the publisher and their quality can vary
+considerably.
+</p>
+
+<h2 id="eg">Downloads</h2>
+<p class="eucra">
+In view of the EU’s <a
+href="https://en.wikipedia.org/wiki/Cyber_Resilience_Act">Cyber
+Resilience Act</a> and an abundance of caution, we have withdrawn all
+our <a href="sitemap.html#foss">free software</a>, including our book
+examples.
+</p>
+
+<h2 id="toc"> Table of Contents&mdash;<small>most chapters also
+have at least one exercise</small></h2>
+<ul class="toptoc">
+<li>Tables</li>
+<li>Introduction
+    <ul class="toc">
+    <li>Why Go?</li>
+    <li>The Structure of the Book</li>
+    <li>Acknowledgements</li>
+    </ul>
+</li>
+<li>Chapter 1. An Overview in Five Examples&mdash;<i>This is available as a <a
+href="https://www.informit.com/store/product.aspx?isbn=0321774639">sample
+chapter</a>&mdash;click "Sample Content" and then "Download
+the sample pages".</i>
+    <ul class="toc">
+    <li>Getting Going</li>
+    <li>Editing, Compiling, and Running</li>
+    <li>Hello Who?</li>
+    <li>Big Digits&mdash;Two-dimensional Slices</li>
+    <li>Stack&mdash;Custom Types with Methods</li>
+    <li>Americanise&mdash;Files, Maps, and Closures</li>
+    <li>Polar to Cartesian&mdash;Concurrency</li>
+    </ul>
+</li>
+<li>Chapter 2. Booleans and Numbers
+    <ul class="toc">
+    <li>Preliminaries</li>
+    <li>Boolean Values and Expressions</li>
+    <li>Numeric Types</li>
+    <li>Example: Statistics</li>
+    </ul>
+</li>
+<li>Chapter 3. Strings
+    <ul class="toc">
+    <li>Literals, Operators, and Escapes</li>
+    <li>Comparing Strings</li>
+    <li>Characters and Strings</li>
+    <li>Indexing and Slicing Strings</li>
+    <li>String Formatting with the Fmt Package</li>
+    <li>Other String-Related Packages</li>
+    <li>Example: M3u2pls</li>
+    </ul>
+</li>
+<li>Chapter 4. Collection Types
+    <ul class="toc">
+    <li>Values, Pointers, and Reference Types</li>
+    <li>Arrays and Slices</li>
+    <li>Maps</li>
+    <li>Examples:
+	<ul class="toc">
+	<li>Guess Separator</li>
+	<li>Word Frequencies</li>
+	</ul>
+    </li>
+    </ul>
+</li>
+<li>Chapter 5. Procedural Programming
+    <ul class="toc">
+    <li>Statement Basics</li>
+    <li>Branching</li>
+    <li>Looping with For Statements</li>
+    <li>Communication and Concurrency Statements</li>
+    <li>Defer, Panic, and Recover</li>
+    <li>Custom Functions</li>
+    <li>Example: Indent Sort</li>
+    </ul>
+</li>
+<li>Chapter 6. Object Oriented Programming
+    <ul class="toc">
+    <li>Key Concepts</li>
+    <li>Custom Types</li>
+    <li>Interfaces</li>
+    <li>Structs</li>
+    <li>Examples:
+	<ul class="toc">
+	<li>FuzzyBool</li>
+	<li>Shapes</li>
+	<li>Ordered Map</li>
+	</ul>
+    </li>
+    </ul>
+</li>
+<li>Chapter 7. Concurrent Programming
+    <ul class="toc">
+    <li>Key Concepts</li>
+    <li>Examples:
+	<ul class="toc">
+	<li>Filter</li>
+	<li>Concurrent Grep</li>
+	<li>Thread-Safe Map</li>
+	<li>Apache Report</li>
+	<li>Find Duplicates</li>
+	</ul>
+    </li>
+    </ul>
+</li>
+<li>Chapter 8. File Handling
+    <ul class="toc">
+    <li>Custom Data Files
+	<ul class="toc">
+	<li>Handling JSON Files</li>
+	<li>Handling XML Files</li>
+	<li>Handling Plain Text Files</li>
+	<li>Handling Go Binary Files</li>
+	<li>Handling Custom Binary Files</li>
+	<li>Example: Invoicedata</li>
+	</ul>
+    </li>
+    <li>Compressed and Archive Files
+	<ul class="toc">
+	<li>Handling ZIP Files</li>
+	<li>Handling Tar Files</li>
+	<li>Examples:
+	    <ul class="toc">
+	    <li>Pack</li>
+	    <li>Unpack</li>
+	    </ul>
+	</li>
+	</ul>
+    </li>
+    </ul>
+</li>
+<li>Chapter 9. Packages
+    <ul class="toc">
+    <li>Custom Packages
+	<ul class="toc">
+	<li>Creating Custom Packages</li>
+	<li>Importing Packages</li>
+	</ul>
+    </li>
+    <li>Third-Party Packages</li>
+    <li>A Brief Survey of Go's Commands</li>
+    <li>A Brief Survey of the Go Standard Library</li>
+    </ul>
+</li>
+<li>Appendix A: Epilogue</li>
+<li>Appendix B: The Dangers of Software Patents</li>
+<li>Appendix C: Selected Bibliograpy</li>
+<li>Index</li>
+</ul>
+
+<div style="margin: 1em;" id="cover">
+<img 
+alt="Programming in Go book cover" src="images/gobookm.png" width="398" height="512">
+<h3 id="reviews">Reviews<!-- and Unsolicited Comments--></h3>
+<ul>
+<li><a href="https://www.drdobbs.com/tools/240000832?pgno=2">Dr Dobbs
+Developer's Reading List</a></li>
+<!--<li><i>""</i></li>-->
+</ul>
+</div>
+
+<h2 id="trans">Translations</h2>
+<p>
+Translations are arranged by the publisher and their quality can vary
+considerably. Only English print editions are definitive.
+</p>
+<p>
+This web page has been translated by third-parties over whom we have no
+control into:
+<a href="https://thcdetox.biz/education/programming-in-go/"
+rel="nofollow">Armenian</a>,
+<a href="https://png-library.com/gobook.html" rel="nofollow">Belarusian</a>,
+<a href="https://www.highhacker.com/useful#Programming-in-Go:NL" rel="nofollow">Dutch</a>,
+<a href="https://worldliterate.com/translations/gobook.html"
+rel="nofollow">French</a>,
+<a href="https://essayhilfe.de/translation/#Programming-in-Go:DE"
+rel="nofollow">German</a>,
+<a href="https://anguerde.com/programming-in-go/" rel="nofollow">Greek</a>,
+<a href="https://science.webhostinggeeks.com/qtrac-programming"
+rel="nofollow">Serbo-Croatian</a>,
+<a href="https://www.computer-magazine.org/programacion-en-go/"
+rel="nofollow">Spanish</a>,
+and
+<a href="https://bestreviewsbase.com/translations/#programming-in-go:UK"
+rel="nofollow">Ukrainian</a>.
+</p>
+
+<hr>
+
+<p>
+For more about Go see <a href="https://golang.org">golang.org</a>.
+</p>
+
+<p>
+Like <a href="sitemap.html">all my books and most of my other
+writings</a>, this book was written using the Lout Typesetting System.
+</p>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>

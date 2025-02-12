@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Rapid GUI Programming with Python and Qt &mdash; book errata</title>
+    <meta name="description" content="Rapid GUI Programming with Python
+and Qt textbook errata"/>
+    <meta name="keywords" content="Rapid GUI Programming with Python and
+Qt, textbook, errata"/>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Rapid GUI Programming with Python and Qt</h1>
+<h2 class="subtitle2">Errata</h2>
+<h3 class="subsubtitle">ISBN-10: 0132354187
+&nbsp;&ndash;&nbsp;ISBN-13: 978-0132354189</h3>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link"><a href="pyqtbook.html">Rapid GUI Programming
+with Python and Qt</a></span> &bull;
+<span class="nav-link-sub"><a href="pyqtbook.html#toc">Contents</a></span> &bull;
+<span class="nav-link-sub"><a href="pyqtbook.html#cover">Cover</a></span> &bull;
+<span class="nav-link-sub"><a href="pyqtbook.html#pyside">PySide
+Porting</a></span> &bull;
+<span class="nav-link-sub"><a
+href="pyqtbook.html#reviews">Reviews</a></span> &bull;
+<span class="nav-here-sub">Errata</span>
+</div>
+
+<!-- Body -->
+<p style="background-color: pink; text-align:center;">Errata for All
+Printings</p>
+<div style="overflow-x:auto; display: block; border-collapse: collapse;">
+<table class="eth">
+<tr>
+<td style="background-color: lightcyan;"  class="sectionheading">Issue</td>
+<td style="background-color: lightcyan;"  class="sectionheading">Resolution</td>
+<td style="background-color: lightcyan;"  class="sectionheading">Reporter</td>
+</tr>
+
+<tr><td class="etd" >The <code>imagechanger.pyw</code> application
+works correctly, but segfaults on termination on 32-bit Linux
+platforms.</td><td class="etd" >This is due to a 32-bit
+Linux-specific PyQt bug that does not affect the operation of the
+program. This is fixed in PyQt 4.3.1.</td>
+<td class="etd" >Author</td></tr>
+
+<tr><td class="etd" >Page 3. The license information has
+changed.</td>
+<td class="etd" >For open source applications there is no
+change: you can use the open source editions of PyQt and Qt under the
+GPL. But if you want to use PyQt to create commercial applications you
+must have a commercial PyQt license <i>and</i> a commercial Qt
+license&mdash;unless you use Qt 4.5 or later in which case you must have
+a commercial PyQt license and must either buy a commercial Qt license or
+use a (free of charge) LGPL edition of Qt.</td>
+<td class="etd" >Author</td></tr>
+
+<tr><td class="etd" >Pages 46, 49, 50, 55, 66, and 76.
+Indentation in the syntax illustrations is 2 spaces instead of 4.</td>
+<td class="etd" >These are just typesetting mistakes. All the
+code quoted in the book and all the examples and solutions use 4 spaces as the
+Python guidelines recommend.</td>
+<td class="etd" >Author</td></tr>
+
+<tr><td class="etd" >Pages 92-99. The <code>OrderedDict</code>
+class's name is wrong.</td>
+<td class="etd" >In Python terminology an "ordered dict" is an
+insertion order dictionary, whereas a "sorted dict" is a key ordered
+dictionary. Since <code>OrderedDict</code> is key ordered it should be
+called <code>SortedDict</code> to be terminologically correct. (I used C++
+terminology by mistake.) The class works fine though. (Another
+implementation, <code>SortedDict</code>, is provided with the examples for
+<a href="py3book.html">Programming in Python 3</a>.)
+</td><td class="etd" >Author</td></tr>
+
+<tr><td class="etd" >Page 95. Subtle bug.</td>
+<td class="etd" >The implementation of the
+<code>__delitem__()</code> method has a subtle bug. Replace the method as
+follows:
+<pre><code>
+def __delitem__(self, key):
+    del self.__dict[key]
+    i = bisect.bisect_left(self.__keys, key)
+    del self.__keys[i]
+</code></pre>
+The code has been corrected in the archives.
+</td>
+<td class="etd" >Rick Morra</td></tr>
+
+<tr><td class="etd" >Page 148. Bug in <code>numbers.pyw</code> example.</td>
+<td class="etd" >The <code>numbers.pyw</code> example has a bug
+that means it displays numbers incorrectly. The erroneous code is not
+quoted in the book, but its effect is visible in Figure&nbsp;5.3. The tarball and
+zip now have a fixed version of <code>numbers.pyw</code>.</td>
+<td class="etd" >Peter Hageman</td></tr>
+
+<tr><td class="etd" >Page 181. Code error.</td>
+<td class="etd" >In the code snippet at the top of this page
+change <code>editToolBar</code> to <code>self.imageLabel</code>.</td>
+<td class="etd" >Karl Gohl</td></tr>
+
+<tr><td class="etd" >Pages 288/9. The
+<code>updateWindowMenu()</code> and <code>raiseWindow()</code> methods are easy
+to understand but naive.</td>
+<td class="etd" >The file <code>sditexteditor2.pyw</code> has more
+sophisticated versions of these methods as explained in
+<code>README.txt</code>.</td><td class="etd" >Author</td></tr>
+
+<tr><td class="etd" >Page 301. Improved solution to exercise.</td>
+<td class="etd" >I improved the logic for the
+<code>tabbededitor.pyw</code> solution in the Python&nbsp;2.6 and 3
+archives. I also fixed a bug in naming the tabs when new files are
+created or when file save as is used.</td>
+<td class="etd" >Nankun Huang</td></tr>
+
+<tr><td class="etd" >Page 311. Two blank
+lines instead of one separate a paragraph from a code snippet on this page.</td>
+<td class="etd" >There's nothing missing, so just ignore the blank
+space. (I made a mistake when I typeset this page.)</td>
+<td class="etd" >Author</td></tr>
+
+<tr><td class="etd" >Pages 374 and 377</td>
+<td class="etd" >From Qt&nbsp;4.6,
+<code>QStyleOptionGraphicsItem.levelOfDetail()</code> has been deprecated in
+favour of
+<code>QStyleOptionGraphicsItem.levelOfDetailFromTransform()</code>. In view
+of this it is recommended to replace code like this:
+<code>option.levelOfDetail &gt; 0.5</code> with code like this:
+<code>option.levelOfDetailFromTransform(painter.transform()) &gt;
+0.5</code> (although I haven't tested this myself).
+</td>
+<td class="etd" >Andrew Goh L K</td></tr>
+
+<tr><td class="etd" >Page 386. The <code>PythonHighlighter</code>
+syntax highlighting class is easy to understand but naive.</td>
+<td class="etd" >The file <code>pythoneditor2.pyw</code> has a more
+sophisticated <code>PythonHighlighter</code> class that covers more
+corner-cases at the cost of being a bit more complex and a bit slower.
+</td>
+<td class="etd" >Author</td></tr>
+
+<tr><td class="etd" >Page 443. Typo.</td>
+<td class="etd" >In the Exercise, change
+<code>ShipTableDelegate.setDataModel()</code> to
+<code>ShipDelegate.setDataModel()</code>.</td>
+<td class="etd" >Eric E. Thomson</td></tr>
+
+</table> <!-- typesetting -->
+</div>
+
+<div style="overflow-x:auto; display: block; border-collapse: collapse;">
+<table class="eth">
+
+<tr><td class="etd" >Pages 540 &amp; 541. Rare and subtle bug
+in the threaded server example
+(<code>chap19/building- servicesserver.py</code>&mdash;this doesn't apply to the
+non-threaded Chapter 18 versions of this server)</td>
+<td class="etd" >The code presented on page 540 in the
+<code>run()</code> method has a failure mode: If a client makes a connection
+but sends incomplete data (or no data), e.g., due to a poor connection
+(e.g., wireless), or due to a bug in the client, the thread will wait
+forever. This doesn't block the rest of the program or stop other
+threads being created and used, but if errors of this kind kept
+happening, the server would consume more and more memory. Here is the
+code that the <code>run()</code> method ought to start with (and that is now
+in all the archives):
+<pre><code>
+    <span style="color: gray;">def run(self):
+        socket = QTcpSocket()
+        if not socket.setSocketDescriptor(self.socketId):
+            self.emit(SIGNAL("error(int)"), socket.error())
+            return</span>
+        while socket.state() == QAbstractSocket.ConnectedState:
+            nextBlockSize = 0
+            stream = QDataStream(socket)
+            stream.setVersion(QDataStream.Qt_4_2)
+            if (socket.waitForReadyRead() and
+                socket.bytesAvailable() &gt;= SIZEOF_UINT16):
+                nextBlockSize = stream.readUInt16()
+            else:
+                self.sendError(socket, "Cannot read client request")
+                return
+            if socket.bytesAvailable() &lt; nextBlockSize:
+                if (not socket.waitForReadyRead(60000) or
+                    socket.bytesAvailable() &lt; nextBlockSize):
+                    self.sendError(socket, "Cannot read client data")
+                    return
+        <span style="color: gray;">...</span>
+</code>
+</pre>
+The first <code>if</code> statement inside the <code>while</code> loop waits for
+up to 30 seconds (the default for
+<code>QTcpSocket.waitForReadyRead()</code>) and if by then it has the size
+of the block it reads the size and continues to the second <code>if</code>
+statement. Otherwise it sends an error message to the 
+client and returns (thus terminating the thread and
+allowing its memory to be reclaimed). Similarly, in the second
+<code>if</code> statement inside the loop, if we haven't received the entire
+block of data we are expecting we wait for up to two minutes for the
+data to become available, and if all the
+data hasn't arrived by then we send the client an error message and
+return, again terminating the thread.
+</td>
+<td class="etd" >Nicola Murino<br />(who both reported the bug &amp;
+tested my solution)</td></tr>
+</table>
+</div>
+
+<p style="background-color: pink; text-align:center;">Errata for the
+First Printing only (additional to the errata above&mdash;these are all
+fixed in the Second and subsequent printings)</p>
+<div style="overflow-x:auto; display: block; border-collapse: collapse;">
+<table class="eth">
+<tr>
+<td style="background-color: lightcyan;"  class="sectionheading">Issue</td>
+<td style="background-color: lightcyan;"  class="sectionheading">Resolution</td>
+<td style="background-color: lightcyan;"  class="sectionheading">Reporter</td>
+</tr>
+
+<tr><td class="etd" >Page 17. Incorrect forward reference.</td>
+<td class="etd" >The forward reference to Chapter&nbsp;4 should
+be to Chapter&nbsp;3.</td>
+<td class="etd" >Burkhard Lück</td></tr>
+
+<tr><td class="etd" >Page 19. Bad hypenation.</td>
+<td class="etd" >Namespace is hypenated as names-pace instead
+of name-space.</td>
+<td class="etd" >Lorenz Quack and Steve Shortess</td></tr>
+
+<tr><td class="etd" >Page 30. Typo in the penultimate
+paragraph.</td>
+<td class="etd" >In the paragraph beginning "Now we have
+changed the <code>names</code> tuple...", change <code>names[:1]</code> to
+<code>names[:2]</code>.</td>
+<td class="etd" >Giovanni Cavallin</td></tr>
+
+<tr><td class="etd" >Page 33. Missing item from list.</td>
+<td class="etd" >All the fruit lists shown at the bottom of
+this page should have <code>'Pear'</code> in front of <code>'Quince'</code>.</td>
+<td class="etd" >Mark M. Henwood</td></tr>
+
+<tr><td class="etd" >Page 51. Incorrect variable name in code
+snippet.</td>
+<td class="etd" >In the first code snippet change
+<code>print&nbsp;president,&nbsp;presidents[key]</code> to
+<code>print&nbsp;key,&nbsp;presidents[key]</code>.</td>
+<td class="etd" >Chris O'Halloran</td></tr>
+
+<tr><td class="etd" >Page 73. Poorly specified exercise.</td>
+<td class="etd" >In Exercise 2 change the text &#8220;For every lowercase character in
+<code>text</code>&#8221; to &#8220;For every character in a lowercased
+copy of <code>text</code>&#8221;.</td>
+<td class="etd" >Oleksandr Moskalenko</td></tr>
+
+<tr><td class="etd" >Page 82. Although the <code>__cmp__()</code>
+method works as written, it doesn't take advantage of the fact that
+<code>area</code> is a property.</td>
+<td class="etd" >Change the return line to:
+<br />&nbsp;&nbsp;&nbsp;&nbsp;<code>return cmp(self.area, other.area)</code>
+<br />This correction has been made to the example source code.</td>
+<td class="etd" >Ralph Wagner</td></tr>
+
+<tr><td class="etd" >Page 96. Missing period</td>
+<td class="etd" >The period is missing from the end of the first sentence of the second paragraph.</td>
+<td class="etd" >Kazuyoshi Furutaka</td></tr>
+
+<tr><td class="etd" >Page 117. Incorrect word.</td>
+<td class="etd" >In the last line of the paragraph below the
+screenshot change the word "encodings" to the phrase "character sets".</td>
+<td class="etd" >Erik Dalén</td></tr>
+
+<tr><td class="etd" >Page 126. Incorrect word.</td>
+<td class="etd" >Change the last word in the second paragraph
+from &#8220;<code>readlines()</code>&#8221; to the phrase, &#8220;the file handle as an iterable&#8221;
+(Kurt Welgehausen also suggested an improvement to the code shown on
+page 125&mdash;this is now in the tarball and zip file.)</td>
+<td class="etd" >Kurt Welgehausen</td></tr>
+
+<tr><td class="etd" >Page 162. Typo in the first sentence of
+the Summary.</td>
+<td class="etd" >Change "showned" to "showed".</td>
+<td class="etd" >Lorenz Quack</td></tr>
+
+<tr><td class="etd" >Page 163. Poor solution to exercise.</td>
+<td class="etd" >The solution in the archives has been improved
+by removing some redundant lines and by rewriting the <code>up()</code> and
+<code>down()</code> methods.</td>
+<td class="etd" >Alexander Kanevskiy and Oleksandr Moskalenko</td></tr>
+
+<tr><td class="etd" >Pages 333 and 460. Two blank
+lines instead of one separate a paragraph from a code snippet on each of
+these pages.</td>
+<td class="etd" >There's nothing missing, so just ignore the blank
+space. (I made a mistake when I typeset these pages.)</td>
+<td class="etd" >Author</td></tr>
+
+<tr><td class="etd" >Page 403. Typo in the first code snippet.</td>
+<td class="etd" >Replace <code>page-break-after=always;</code> with
+<code>page-break-after:always;</code>.
+This is now fixed in <code>printing.pyw</code>'s source code, and
+gives proper page breaks but it
+also outputs an extra blank page at the end. A new version,
+<code>printing2.pyw</code> has been added to the source code with this fix
+and improved
+code so that no spurious blank page is output. It also puts the footer
+that appears when using <code>QPainter</code> a bit lower.</td>
+<td class="etd" >Benno Dielmann</td></tr>
+
+<tr><td class="etd" >Page 463. Workaround for
+Qt&nbsp;&lt;=&nbsp;4.3.3/SQLite <a
+href="https://trolltech.com/developer/task-tracker/index_html?id=194644&method=entry">bug</a>.
+</td>
+<td class="etd" >The QTableView showing the log records
+sometimes shows spurious blank rows when using SQLite; the workaround is to add the line
+<code>self.logModel.reset()</code> just before the <code>select()</code> call.
+(The workaround was provided by Sibylle Koczian and is now in the
+tarball and zip file.)</td>
+<td class="etd" >Sibylle Koczian</td></tr>
+
+<tr><td class="etd" >Page 465. Missing <code>:</code> in code
+snippet.</td>
+<td class="etd" >In the page's main code snippet there's a
+colon missing after <code>if not QSqlDatabase.database().commit()</code>.
+</td>
+<td class="etd" >Carla Paredes</td></tr>
+
+<tr><td class="etd" >Page 615. Misplaced <code>gzip</code> module
+index entry.</td>
+<td class="etd" >This entry appears at the end of the `Q's
+instead of the end of the `G's on page 596 (i.e., it was filed as "qzip"
+instead of "gzip").</td>
+<td class="etd" >Robert Withrow</td></tr>
+
+<!--
+
+<tr><td class="etd" ></td>
+<td class="etd" ></td>
+<td class="etd" ></td></tr>
+
+-->
+</table>
+</div>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>

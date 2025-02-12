@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Aggregate, Delegate, Mixin, and Decorate &mdash; Python
+article</title>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Aggregate, Delegate, Mixin, and Decorate</h1>
+<h2 class="subtitle">First published in Micro Mart #1424, August 2016</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link-sub"><a href="pytips.html">Python Programming Tips</a></span>
+</div>
+
+<!-- Body -->
+<div class="shout">
+<p>
+The traditional approach to object-oriented programming is to use
+inheritance to model is-a relationships (a Car is-a Vehicle), and
+aggregation to model has-a relationships (a Car has-a Engine). This
+article will explain the more modern approach, which is to use
+aggregation (also called composition), whenever possible, and only use
+inheritance when necessary. Although Python 3 is used for the examples,
+the ideas apply equally to Python 2, Java, C#, and C++.
+</p>
+</div>
+
+<h3>Aggregate and Delegate</h3>
+
+<p>
+Many classes are specifically designed to be inherited from, and for
+these inheritance is the right approach. For example, the Python
+standard library's
+<a
+href="https://docs.python.org/3/library/html.parser.html#module-html.parser">
+html.parser</a> module provides an excellent
+<code>HTMLParser</code>
+class made to be used in this way. Here's an example of using
+inheritance:
+</p>
+
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Point</span>:
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, x<span style="color: #666666">=0</span>, y<span style="color: #666666">=0</span>):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>x <span style="color: #666666">=</span> x
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>y <span style="color: #666666">=</span> y
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">distance_to_origin</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> math<span style="color: #666666">.</span>hypot(<span style="color: #008000">self</span><span style="color: #666666">.</span>x, <span style="color: #008000">self</span><span style="color: #666666">.</span>y)
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">manhattan_length</span>(<span style="color: #008000">self</span>, other):
+        <span style="color: #008000; font-weight: bold">return</span> math<span style="color: #666666">.</span>fabs(<span style="color: #008000">self</span><span style="color: #666666">.</span>x <span style="color: #666666">-</span> other<span style="color: #666666">.</span>x) <span style="color: #666666">+</span> math<span style="color: #666666">.</span>fabs(<span style="color: #008000">self</span><span style="color: #666666">.</span>y <span style="color: #666666">-</span> other<span style="color: #666666">.</span>y)
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">CircleI</span>(Point):
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, x<span style="color: #666666">=0</span>, y<span style="color: #666666">=0</span>, radius<span style="color: #666666">=1</span>):
+        <span style="color: #008000">super</span>()<span style="color: #666666">.</span>__init__(x, y)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>radius <span style="color: #666666">=</span> radius
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">distance_to_origin</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">super</span>()<span style="color: #666666">.</span>distance_to_origin()
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">edge_to_origin</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">super</span>()<span style="color: #666666">.</span>distance_to_origin() <span style="color: #666666">-</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>radius
+</pre></div>
+
+<p>
+The advantage of using inheritance is that users of our subclass can use
+all the operators and methods that are defined in the base class. So
+now, if we write <code>circle = CircleI(3, 5, 2)</code>, we can access
+<code>circle.x</code> and
+<code>circle.y</code>, as well as <code>circle.radius</code>.
+</p>
+
+<p>
+But inheritance can be disadvantageous too. For example, Manhattan
+length doesn't really make sense for a circle, but we get that method
+even though we don't want it. Similarly, any methods added to
+<code>Point</code> at a
+later date will also be available to <code>CircleI</code> whether they make sense for
+circles or not. Inheritance can also expose us to the risk of
+accidentally by-passing validation because we get direct rather than
+mediated access to inherited attributes. We can eliminate these problems
+by aggregating rather than inheriting, and delegating access to the
+aggregated instance's attributes. Here is another circle class, this
+time using aggregation:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">CircleA1</span>:
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, x<span style="color: #666666">=0</span>, y<span style="color: #666666">=0</span>, radius<span style="color: #666666">=1</span>):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_point <span style="color: #666666">=</span> Point(x, y)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>radius <span style="color: #666666">=</span> radius
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">distance_to_origin</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_point<span style="color: #666666">.</span>distance_to_origin()
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">edge_to_origin</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_point<span style="color: #666666">.</span>distance_to_origin() <span style="color: #666666">-</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>radius
+    <span style="color: #AA22FF">@property</span>
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">x</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_point<span style="color: #666666">.</span>x
+    <span style="color: #AA22FF">@x</span><span style="color: #666666">.</span>setter
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">x</span>(<span style="color: #008000">self</span>, x):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_point<span style="color: #666666">.</span>x <span style="color: #666666">=</span> x
+    <span style="color: #AA22FF">@property</span>
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">y</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_point<span style="color: #666666">.</span>y
+    <span style="color: #AA22FF">@y</span><span style="color: #666666">.</span>setter
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">y</span>(<span style="color: #008000">self</span>, y):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_point<span style="color: #666666">.</span>y <span style="color: #666666">=</span> y
+</pre></div>
+
+<p>
+Instances of <code>CircleA1</code> don't have the unwanted
+<code>manhattan_length()</code> and
+won't have any other unwanted <code>Point</code> methods that may be added later.
+Furthermore, because we have to provide delegates to access the
+aggregated <code>Point</code>'s attributes, we can fully control
+access&mdash;for
+example, we can add circle-specific constraints. Unfortunately,
+delegating properties takes several lines of code per attribute, and
+even method delegates require a one-liner as <code>CircleA1</code>'s
+<code>distance_to_origin()</code> and <code>edge_to_origin()</code> methods illustrate. So
+aggregation provides control, avoids unwanted features, but at the cost
+of extra code. Here's an alternative that can scalably handle any number
+of attributes:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">CircleA2</span>:
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, x<span style="color: #666666">=0</span>, y<span style="color: #666666">=0</span>, radius<span style="color: #666666">=1</span>):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_point <span style="color: #666666">=</span> Point(x, y)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>radius <span style="color: #666666">=</span> radius
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">distance_to_origin</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_point<span style="color: #666666">.</span>distance_to_origin()
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">edge_to_origin</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_point<span style="color: #666666">.</span>distance_to_origin() <span style="color: #666666">-</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>radius
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__getattr__</span>(<span style="color: #008000">self</span>, name):
+        <span style="color: #008000; font-weight: bold">if</span> name <span style="color: #AA22FF; font-weight: bold">in</span> {<span style="color: #BA2121">&quot;x&quot;</span>, <span style="color: #BA2121">&quot;y&quot;</span>, <span style="color: #BA2121">&quot;distance_to_origin&quot;</span>}:
+            <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">getattr</span>(<span style="color: #008000">self</span><span style="color: #666666">.</span>_point, name)
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__setattr__</span>(<span style="color: #008000">self</span>, name, value):
+        <span style="color: #008000; font-weight: bold">if</span> name <span style="color: #AA22FF; font-weight: bold">in</span> {<span style="color: #BA2121">&quot;x&quot;</span>, <span style="color: #BA2121">&quot;y&quot;</span>}:
+            <span style="color: #008000">setattr</span>(<span style="color: #008000">self</span><span style="color: #666666">.</span>_point, name, value)
+        <span style="color: #008000; font-weight: bold">else</span>:
+            <span style="color: #008000">super</span>()<span style="color: #666666">.</span>__setattr__(name, value)
+</pre></div>
+
+<p>
+Here, instead of handling each property individually, we delegate
+accesses to the aggregated point using special methods. Furthermore, we
+can also delegate methods as we've done here for the
+<code>Point.distance_to_origin()</code> method. Note that
+<code>__getattr__()</code> and
+<code>__setattr__()</code> are <i>not</i> symmetric: <code>__getattr__()</code> is only called when the
+attribute hasn't been found by other means, so there's no need to call
+the base class. For delegating readable properties and for methods, <code>__getattr__()</code> is sufficient, since
+this returns the property's value or the bound method which can then be called. But for
+writable properties we must also implement <code>__setattr__()</code>. Note also that we don't have to check the names at
+all&mdash;we could simply do the <code>return</code> call since
+<code>__getattr__</code> is only called if the named attribute hasn't
+already been found. (And if the attribute isn't in the delegatee, Python
+will correctly raise an <code>AttributeError</code>.)
+</p>
+
+<p>
+Incidentally, it is possible to add methods to a class using a class
+decorator that <code>eval()</code>s the methods into existence right after the class
+is created.
+</p>
+
+<h3>Mixins</h3>
+
+<p>
+There is one kind of inheritance which is often used in conjunction with
+conventional inheritance or with aggregation: mixin inheritance. A mixin
+is a class which has no data, only methods. For this reason mixins
+normally don't have an <code>__init__()</code> and any class that inherits a mixin
+does not need to use <code>super()</code> to call the mixin's
+<code>__init__()</code>. In effect,
+a mixin class provides a means of splitting up the implementation of one
+class over two or more classes &mdash; and allows us to reuse mixins if
+their functionality makes sense for more than one of our classes. A
+mixin will often depend on the class that inherits it having particular
+attributes, and these may need to be added if they aren't already
+present.
+</p>
+
+<p>
+The Python standard library's <a
+href="https://docs.python.org/3/library/socketserver.html#module-socketserver">
+socketserver</a> module provides a couple of
+mixin classes to make it easy to create either forking or threading
+servers.
+</p>
+
+<p>
+The point and circle classes shown above all have a
+<code>distance_to_origin()</code>
+method, which in the case of the circle classes is either inherited or
+delegated to the aggregated point. An alternative approach is to create
+a mixin that provides this method and any others that are common to our
+classes. For example:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">DistanceToMixin</span>:
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">distance_to_origin</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> math<span style="color: #666666">.</span>hypot(<span style="color: #008000">self</span><span style="color: #666666">.</span>x, <span style="color: #008000">self</span><span style="color: #666666">.</span>y)
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">distance_to</span>(<span style="color: #008000">self</span>, other):
+        <span style="color: #008000; font-weight: bold">return</span> math<span style="color: #666666">.</span>hypot(<span style="color: #008000">self</span><span style="color: #666666">.</span>x <span style="color: #666666">-</span> other<span style="color: #666666">.</span>x, <span style="color: #008000">self</span><span style="color: #666666">.</span>y <span style="color: #666666">-</span> other<span style="color: #666666">.</span>y)
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">PointD</span>(DistanceToMixin):
+    __slots__ <span style="color: #666666">=</span> (<span style="color: #BA2121">&quot;x&quot;</span>, <span style="color: #BA2121">&quot;y&quot;</span>)
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, x<span style="color: #666666">=0</span>, y<span style="color: #666666">=0</span>):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>x <span style="color: #666666">=</span> x
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>y <span style="color: #666666">=</span> y
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">manhattan_length</span>(<span style="color: #008000">self</span>, other<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">None</span>):
+        <span style="color: #008000; font-weight: bold">if</span> other <span style="color: #AA22FF; font-weight: bold">is</span> <span style="color: #008000; font-weight: bold">None</span>:
+            other <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>__class__() <span style="color: #408080; font-style: italic"># Point(0, 0)</span>
+        <span style="color: #008000; font-weight: bold">return</span> math<span style="color: #666666">.</span>fabs(<span style="color: #008000">self</span><span style="color: #666666">.</span>x <span style="color: #666666">-</span> other<span style="color: #666666">.</span>x) <span style="color: #666666">+</span> math<span style="color: #666666">.</span>fabs(<span style="color: #008000">self</span><span style="color: #666666">.</span>y <span style="color: #666666">-</span> other<span style="color: #666666">.</span>y)
+</pre></div>
+
+<p>
+The <code>PointD</code> class gets its <code>distance_to_origin()</code> method and a new
+<code>distance_to()</code> method from the <code>DistanceToMixin</code>. We can also inherit the
+mixin in our circle classes, and if we use aggregation there will be no
+need to provide a <code>distance_to_origin()</code> delegate in
+<code>CircleA1</code> or to have
+<code>"distance_to_origin"</code> in <code>CircleA2</code>'s
+<code>__getattr__()</code> method.
+</p>
+
+<p>
+Although Python supports multiple inheritance, this feature is best
+avoided since it can greatly complicate code and result in subtle bugs
+(which is why Java doesn't allow it). However, in the case of mixins,
+because they hold no data, it is safe to multiply inherit as many mixins
+as we like &mdash; and up to one normal class too. For example:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">MoveMixin</span>:
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">move_up</span>(<span style="color: #008000">self</span>, distance):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>y <span style="color: #666666">-=</span> distance
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">move_down</span>(<span style="color: #008000">self</span>, distance):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>y <span style="color: #666666">+=</span> distance
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">move_left</span>(<span style="color: #008000">self</span>, distance):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>x <span style="color: #666666">-=</span> distance
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">move_right</span>(<span style="color: #008000">self</span>, distance):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>x <span style="color: #666666">+=</span> distance
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">move_by</span>(<span style="color: #008000">self</span>, dx, dy):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>x <span style="color: #666666">+=</span> dx
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>y <span style="color: #666666">+=</span> dy
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">PointDM</span>(DistanceToMixin, MoveMixin):
+    __slots__ <span style="color: #666666">=</span> (<span style="color: #BA2121">&quot;x&quot;</span>, <span style="color: #BA2121">&quot;y&quot;</span>)
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, x<span style="color: #666666">=0</span>, y<span style="color: #666666">=0</span>):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>x <span style="color: #666666">=</span> x
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>y <span style="color: #666666">=</span> y
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">manhattan_length</span>(<span style="color: #008000">self</span>, other<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">None</span>):
+        <span style="color: #008000; font-weight: bold">if</span> other <span style="color: #AA22FF; font-weight: bold">is</span> <span style="color: #008000; font-weight: bold">None</span>:
+            other <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>__class__() <span style="color: #408080; font-style: italic"># Point(0, 0)</span>
+        <span style="color: #008000; font-weight: bold">return</span> math<span style="color: #666666">.</span>fabs(<span style="color: #008000">self</span><span style="color: #666666">.</span>x <span style="color: #666666">-</span> other<span style="color: #666666">.</span>x) <span style="color: #666666">+</span> math<span style="color: #666666">.</span>fabs(<span style="color: #008000">self</span><span style="color: #666666">.</span>y <span style="color: #666666">-</span> other<span style="color: #666666">.</span>y)
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">CircleA2DM</span>(DistanceToMixin, MoveMixin):
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, x<span style="color: #666666">=0</span>, y<span style="color: #666666">=0</span>, radius<span style="color: #666666">=1</span>):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_point <span style="color: #666666">=</span> PointDM(x, y)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>radius <span style="color: #666666">=</span> radius
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">edge_to_origin</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_point<span style="color: #666666">.</span>distance_to_origin() <span style="color: #666666">-</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>radius
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__getattr__</span>(<span style="color: #008000">self</span>, name):
+	<span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">getattr</span>(<span style="color: #008000">self</span><span style="color: #666666">.</span>_point, name)
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__setattr__</span>(<span style="color: #008000">self</span>, name, value):
+        <span style="color: #008000; font-weight: bold">if</span> name <span style="color: #AA22FF; font-weight: bold">in</span> {<span style="color: #BA2121">&quot;x&quot;</span>, <span style="color: #BA2121">&quot;y&quot;</span>}:
+            <span style="color: #008000">setattr</span>(<span style="color: #008000">self</span><span style="color: #666666">.</span>_point, name, value)
+        <span style="color: #008000; font-weight: bold">else</span>:
+            <span style="color: #008000">super</span>()<span style="color: #666666">.</span>__setattr__(name, value)
+</pre></div>
+
+<p>
+The <code>PointDM</code> class has its own properties (<code>x</code> and
+<code>y</code>), its own
+<code>manhattan_length()</code> method, plus all the
+<code>DistanceToMixin</code> and <code>MoveMixin</code>
+methods. Similarly, we can create our circle class to inherit the two
+mixin classes and thereby acquire all their methods, as
+<code>CircleA2DM</code>
+illustrates. Note also that <code>CircleA2DM</code> simply delegates any
+attribute (readable property or method), to its aggregated
+<code>PointDM</code> (<code>self._point</code>).
+</p>
+
+<h3>Class Decorators</h3>
+
+<p>
+Mixins are probably the best way to add extra methods to two or more
+classes. However, thanks to Python's dynamic nature, it is possible to
+create classes and then add extra features (e.g., methods) to them.
+Suppose we have some functions like these:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">distance_to_origin</span>(<span style="color: #008000">self</span>):
+    <span style="color: #008000; font-weight: bold">return</span> math<span style="color: #666666">.</span>hypot(<span style="color: #008000">self</span><span style="color: #666666">.</span>x, <span style="color: #008000">self</span><span style="color: #666666">.</span>y)
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">distance_to</span>(<span style="color: #008000">self</span>, other):
+    <span style="color: #008000; font-weight: bold">return</span> math<span style="color: #666666">.</span>hypot(<span style="color: #008000">self</span><span style="color: #666666">.</span>x <span style="color: #666666">-</span> other<span style="color: #666666">.</span>x, <span style="color: #008000">self</span><span style="color: #666666">.</span>y <span style="color: #666666">-</span> other<span style="color: #666666">.</span>y)
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">move_up</span>(<span style="color: #008000">self</span>, distance):
+    <span style="color: #008000">self</span><span style="color: #666666">.</span>y <span style="color: #666666">-=</span> distance
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">move_down</span>(<span style="color: #008000">self</span>, distance):
+    <span style="color: #008000">self</span><span style="color: #666666">.</span>y <span style="color: #666666">+=</span> distance
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">move_left</span>(<span style="color: #008000">self</span>, distance):
+    <span style="color: #008000">self</span><span style="color: #666666">.</span>x <span style="color: #666666">-=</span> distance
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">move_right</span>(<span style="color: #008000">self</span>, distance):
+    <span style="color: #008000">self</span><span style="color: #666666">.</span>x <span style="color: #666666">+=</span> distance
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">move_by</span>(<span style="color: #008000">self</span>, dx, dy):
+    <span style="color: #008000">self</span><span style="color: #666666">.</span>x <span style="color: #666666">+=</span> dx
+    <span style="color: #008000">self</span><span style="color: #666666">.</span>y <span style="color: #666666">+=</span> dy
+</pre></div>
+
+<p>
+They are functions not methods (despite <code>self</code>), because they are
+declared at the top-level outside of any class. But we can add them as
+methods to existing classes if we have a suitable class decorator:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #AA22FF">@add_methods</span>(distance_to_origin, distance_to, move_up,
+             move_down, move_left, move_right, move_by)
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Point2</span>:
+    __slots__ <span style="color: #666666">=</span> (<span style="color: #BA2121">&quot;x&quot;</span>, <span style="color: #BA2121">&quot;y&quot;</span>)
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, x<span style="color: #666666">=0</span>, y<span style="color: #666666">=0</span>):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>x <span style="color: #666666">=</span> x
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>y <span style="color: #666666">=</span> y
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">manhattan_length</span>(<span style="color: #008000">self</span>, other<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">None</span>):
+        <span style="color: #008000; font-weight: bold">if</span> other <span style="color: #AA22FF; font-weight: bold">is</span> <span style="color: #008000; font-weight: bold">None</span>:
+            other <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>__class__() <span style="color: #408080; font-style: italic"># Point(0, 0)</span>
+        <span style="color: #008000; font-weight: bold">return</span> math<span style="color: #666666">.</span>fabs(<span style="color: #008000">self</span><span style="color: #666666">.</span>x <span style="color: #666666">-</span> other<span style="color: #666666">.</span>x) <span style="color: #666666">+</span> math<span style="color: #666666">.</span>fabs(<span style="color: #008000">self</span><span style="color: #666666">.</span>y <span style="color: #666666">-</span> other<span style="color: #666666">.</span>y)
+
+<span style="color: #AA22FF">@add_methods</span>(distance_to_origin, distance_to, move_up,
+             move_down, move_left, move_right, move_by)
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Circle2</span>:
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, x<span style="color: #666666">=0</span>, y<span style="color: #666666">=0</span>, radius<span style="color: #666666">=1</span>):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_point <span style="color: #666666">=</span> Point2(x, y)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>radius <span style="color: #666666">=</span> radius
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">edge_to_origin</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_point<span style="color: #666666">.</span>distance_to_origin() <span style="color: #666666">-</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>radius
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__getattr__</span>(<span style="color: #008000">self</span>, name):
+	<span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">getattr</span>(<span style="color: #008000">self</span><span style="color: #666666">.</span>_point, name)
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__setattr__</span>(<span style="color: #008000">self</span>, name, value):
+        <span style="color: #008000; font-weight: bold">if</span> name <span style="color: #AA22FF; font-weight: bold">in</span> {<span style="color: #BA2121">&quot;x&quot;</span>, <span style="color: #BA2121">&quot;y&quot;</span>}:
+            <span style="color: #008000">setattr</span>(<span style="color: #008000">self</span><span style="color: #666666">.</span>_point, name, value)
+        <span style="color: #008000; font-weight: bold">else</span>:
+            <span style="color: #008000">super</span>()<span style="color: #666666">.</span>__setattr__(name, value)
+</pre></div>
+
+<p>
+A class decorator takes a class as its sole argument, and returns a new
+class &mdash; usually the original class with some extra features added.
+This updated or new class completely replaces the original.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">add_methods</span>(<span style="color: #666666">*</span>methods):
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">decorator</span>(Class):
+        <span style="color: #008000; font-weight: bold">for</span> method <span style="color: #AA22FF; font-weight: bold">in</span> methods:
+            <span style="color: #008000">setattr</span>(Class, method<span style="color: #666666">.</span>__name__, method)
+        <span style="color: #008000; font-weight: bold">return</span> Class
+    <span style="color: #008000; font-weight: bold">return</span> decorator
+</pre></div>
+
+<p>
+The <code>add_methods()</code> function is a function that takes zero or more
+positional arguments (in this case functions), and returns a class
+decorator that when applied to a class will add each of the functions as
+methods to the class.
+When Python encounters <code>@add_methods</code>, it calls it as a function with the
+given arguments. Inside the <code>add_methods()</code> function, we create a new
+function called <code>decorator()</code> which adds the methods to the
+<code>Class</code> that is
+passed to the decorator, and at the end returns the modified class.
+Finally, <code>add_methods()</code> returns the <code>decorator()</code> function it has created.
+The <code>decorator()</code> function is then called in turn, with the class on the
+following line (e.g., <code>Point2</code> or <code>Circle2</code>) as its argument. This class
+then has the extra methods added to it, after which it replaces the
+original class.
+</p>
+
+<p>
+Python provides rich support for object-oriented programming, making it
+possible to take full advantage of this paradigm &mdash; while also allowing
+us to program in procedural style (i.e., using plain functions), or any
+mixture of the two which suits our needs.
+</p>
+
+<p>For more see <a href="pytips.html">Python Programming Tips</a></p>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>
+

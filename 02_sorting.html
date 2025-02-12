@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="asciidoctor-default.css" rel="stylesheet" type="text/css" />
+    <link href="coderay-asciidoctor.css" rel="stylesheet" type="text/css" />
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Sorting Heterogeneous Sequences</title>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Python Programing Tips</h1>
+<h2 class="subtitle">Sorting Heterogeneous Sequences</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link-sub"><a href="pytips.html">Python Programming Tips</a></span>
+</div>
+
+<!-- Body -->
+
+<div class="sect1">
+<h2 id="_sorting_heterogeneous_sequences">Sorting Heterogeneous Sequences</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="shout">It sometimes occurs that we want to sort a sequence (a <code>list</code>, a
+<code>dict</code>'s keys), but where the elements aren&#8217;t all of the same type.
+Normally this would cause Python to raise a <code>TypeError</code>. Here we will
+review two simple approaches to solving this problem (and a trivial
+approach that doesn&#8217;t really work).</span></p>
+</div>
+<div class="sect2">
+<h3 id="_a_trivial_approach_that_works_poorly">A Trivial Approach that Works Poorly</h3>
+<div class="paragraph">
+<p>A trivially simple approach to sort a heterogeneous sequence is like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python">seq = [<span class="integer">9</span>, <span class="integer">4</span>, -<span class="integer">3</span>, <span class="string"><span class="delimiter">'</span><span class="content">Twelve</span><span class="delimiter">'</span></span>, <span class="integer">17</span>,
+       datetime.date(<span class="integer">2021</span>, <span class="integer">5</span>, <span class="integer">22</span>),
+       <span class="string"><span class="delimiter">'</span><span class="content">20</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">8</span><span class="delimiter">'</span></span>, <span class="integer">150</span>, <span class="string"><span class="delimiter">'</span><span class="content">-14</span><span class="delimiter">'</span></span>,
+       datetime.date(<span class="integer">1921</span>, <span class="integer">11</span>, <span class="integer">7</span>), <span class="string"><span class="delimiter">'</span><span class="content">one</span><span class="delimiter">'</span></span>, <span class="integer">0</span>]
+result = <span class="predefined">sorted</span>(seq, key=<span class="predefined">str</span>)
+print(result)
+<span class="comment"># prints (as one line):</span>
+<span class="comment">#   ['-14', -3, 0, 150, 17,</span>
+<span class="comment">#    datetime.date(2021, 5, 22), '20',</span>
+<span class="comment">#    datetime.date(1921, 11, 7), 4, '8', 9,</span>
+<span class="comment">#    'Twelve', 'one']</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Clearly, this produces an unsatisfactory result. Nor could we solve the
+problem by passing <code>key=int</code> since that will raise a <code>ValueError</code> when
+<code>'one'</code> or <code>'Twelve'</code> or one of the <code>date</code>s is encountered.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_a_generic_approach">A Generic Approach</h3>
+<div class="paragraph">
+<p>This first proper approach is completely generic and allows us to sort
+any mixture of elements of any types providing each element supports <code>&lt;</code>
+in relation to another element of the same type.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python">seq = [<span class="integer">9</span>, <span class="integer">4</span>, -<span class="integer">3</span>, <span class="string"><span class="delimiter">'</span><span class="content">Twelve</span><span class="delimiter">'</span></span>, <span class="integer">17</span>,
+       datetime.date(<span class="integer">2021</span>, <span class="integer">5</span>, <span class="integer">22</span>),
+       <span class="string"><span class="delimiter">'</span><span class="content">20</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">8</span><span class="delimiter">'</span></span>, <span class="integer">150</span>, <span class="string"><span class="delimiter">'</span><span class="content">-14</span><span class="delimiter">'</span></span>,
+       datetime.date(<span class="integer">1921</span>, <span class="integer">11</span>, <span class="integer">7</span>), <span class="string"><span class="delimiter">'</span><span class="content">one</span><span class="delimiter">'</span></span>, <span class="integer">0</span>]
+result = <span class="predefined">sorted</span>(seq,
+                key=<span class="keyword">lambda</span> x: (x.__class__.__name__, x))
+print(result)
+<span class="comment"># prints (as one line):</span>
+<span class="comment">#   [datetime.date(1921, 11, 7),</span>
+<span class="comment">#    datetime.date(2021, 5, 22),</span>
+<span class="comment">#    -3, 0, 4, 9, 17, 150, '-14',</span>
+<span class="comment">#    '20', '8', 'Twelve', 'one']</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This produces a sane ordering and won&#8217;t raise a <code>TypeError</code> because
+elements are only compared if they are of the same type. So it is a safe
+approach.</p>
+</div>
+<div class="paragraph">
+<p>The reason this works is because we return <code>(typename, value)</code> 2-tuples.
+When Python compares tuples, it starts with the first (<code>0</code>-th value): if
+these are different, their difference is the comparison&#8217;s result; and if
+they are the same, Python compares the second, and so on, until a
+difference is found or there&#8217;re no more values to compare.</p>
+</div>
+<div class="paragraph">
+<p>So, because the first value in our 2-tuples is always a type name, when
+the types differ, that&#8217;s sufficient for Python and the <code>&lt;</code> is applied to
+these names. Only when the types are the same are the values compared
+(hence this is a safe technique), using their natural <code>&lt;</code>.</p>
+</div>
+<div class="paragraph">
+<p>Unfortunately, this approach doesn&#8217;t provide much control. For example,
+if we want case-insensitive string comparisons or to sort strings before
+dates and so on.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_a_type_specific_approach">A Type-Specific Approach</h3>
+<div class="paragraph">
+<p>For this second proper approach we show how to sort elements whose types
+are of a know set of types: this allows us to sort elements of one
+particular type before elements of another particular type.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">def</span> <span class="function">by_custom</span>(value):
+    <span class="keyword">if</span> <span class="predefined">isinstance</span>(value, <span class="predefined">str</span>):
+        <span class="keyword">try</span>: <span class="comment"># sort as int if poss.</span>
+            <span class="keyword">return</span> <span class="integer">3</span>, <span class="predefined">int</span>(value)
+        <span class="keyword">except</span> <span class="exception">ValueError</span>:
+            <span class="keyword">return</span> <span class="integer">1</span>, value.lower()
+    <span class="keyword">if</span> <span class="predefined">isinstance</span>(value, datetime.date):
+        <span class="keyword">return</span> <span class="integer">2</span>, value
+    <span class="keyword">if</span> <span class="predefined">isinstance</span>(value, <span class="predefined">int</span>):
+        <span class="keyword">return</span> <span class="integer">3</span>, value
+    <span class="keyword">raise</span> <span class="exception">TypeError</span>(<span class="string"><span class="delimiter">'</span><span class="content">can only sort: str int date</span><span class="delimiter">'</span></span>)
+
+seq = [<span class="integer">9</span>, <span class="integer">4</span>, -<span class="integer">3</span>, <span class="string"><span class="delimiter">'</span><span class="content">Twelve</span><span class="delimiter">'</span></span>, <span class="integer">17</span>,
+       datetime.date(<span class="integer">2021</span>, <span class="integer">5</span>, <span class="integer">22</span>),
+       <span class="string"><span class="delimiter">'</span><span class="content">20</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">8</span><span class="delimiter">'</span></span>, <span class="integer">150</span>, <span class="string"><span class="delimiter">'</span><span class="content">-14</span><span class="delimiter">'</span></span>,
+       datetime.date(<span class="integer">1921</span>, <span class="integer">11</span>, <span class="integer">7</span>), <span class="string"><span class="delimiter">'</span><span class="content">one</span><span class="delimiter">'</span></span>, <span class="integer">0</span>]
+result = <span class="predefined">sorted</span>(seq, key=by_custom)
+print(result)
+<span class="comment"># prints (as one line):</span>
+<span class="comment">#   ['one', 'Twelve', datetime.date(1921, 11, 7),</span>
+<span class="comment">#    datetime.date(2021, 5, 22),</span>
+<span class="comment">#    '-14', -3, 0, 4, '8', 9, 17, '20', 150]</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here we have chosen to sort strings before dates before ints (<em>str</em> &lt;
+<em>date</em> &lt; <em>int</em>). And in addition, if a string&#8217;s text is an int we sort
+it as an int, otherwise we sort the string case-insensitively.</p>
+</div>
+<div class="paragraph">
+<p>Rather than using type names we&#8217;ve used simple ints, <code>1</code> for strings,
+<code>2</code> for dates, and so on. This makes it easy to add support for extra
+types and to get the ordering we want.</p>
+</div>
+<div class="paragraph">
+<p>Clearly we can easily add additional types and logic to get any ordering
+of our heterogeneous data that we like.</p>
+</div>
+</div>
+</div>
+</div>
+
+<p>For more see <a href="pytips.html">Python Programming Tips</a></p>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar3">
+<a href="pipbook.html">Python in Practice</a> (book) &bull;
+<a href="py3book.html">Programming in Python&nbsp;3</a> (book) &bull;
+<a href="gobook.html">Programming in Go</a> (book)
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>
+

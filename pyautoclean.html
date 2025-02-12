@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Automated Cleanup &mdash; Python article</title>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Automated Cleanup with Python</h1>
+<h2 class="subtitle">First published in Micro Mart #1420, June 2016</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link-sub"><a href="pytips.html">Python Programming Tips</a></span>
+</div>
+
+<!-- Body -->
+<div class="shout">
+<p>
+One of the most useful programming patterns is to acquire some
+resource&mdash;a file handle, a lock, or a database or network
+connection&mdash;do some work with it, and then release it. In C++ this
+is easily achieved using constructors and destructors&mdash;but Python
+(like Java) doesn't guarantee that a destructor is ever called.
+Fortunately, Python provides a nice solution: context managers.
+</p>
+</div>
+
+<p>
+Let's begin by seeing how we can read in a text file without using a
+context manager:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">file <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">None</span>
+lines <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">None</span>
+<span style="color: #008000; font-weight: bold">try</span>:
+    file <span style="color: #666666">=</span> <span style="color: #008000">open</span>(filename, <span style="color: #BA2121">&quot;rt&quot;</span>, encoding<span style="color: #666666">=</span><span style="color: #BA2121">&quot;utf-8&quot;</span>)
+    lines <span style="color: #666666">=</span> file<span style="color: #666666">.</span>readlines()
+<span style="color: #008000; font-weight: bold">finally</span>:
+    <span style="color: #008000; font-weight: bold">if</span> file <span style="color: #AA22FF; font-weight: bold">is</span> <span style="color: #AA22FF; font-weight: bold">not</span> <span style="color: #008000; font-weight: bold">None</span>:
+	file<span style="color: #666666">.</span>close()
+</pre></div>
+
+<p>
+When this code finishes we are guaranteed that the file has been closed
+(if it was opened in the first place), even in the face of exceptions.
+If an exception did occur, it would be raised after the file was closed.
+Here's how to write the code in modern Python:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">lines <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">None</span>
+<span style="color: #008000; font-weight: bold">with</span> <span style="color: #008000">open</span>(filename, <span style="color: #BA2121">&quot;rt&quot;</span>, encoding<span style="color: #666666">=</span><span style="color: #BA2121">&quot;utf-8&quot;</span>) <span style="color: #008000; font-weight: bold">as</span> file:
+    lines <span style="color: #666666">=</span> file<span style="color: #666666">.</span>readlines()
+</pre></div>
+
+<p>
+These three lines do exactly the same thing as the first example. This
+works because Python's <code>open()</code> function returns a file object
+and file objects support the context manager protocol. So the middle
+line says: call the <code>open()</code> function and use its return value as
+a context manager&mdash;and name this return value <code>file</code> so that
+it can be accessed within the scope of the context manager. The scope is
+any code indented under the <code>with</code> statement.
+</p>
+
+<p>
+The <code>with <i>context_manager</i> as</code> syntax is so useful that in
+almost every new Python release more Python objects in the standard
+library are turned into context managers. For example, the standard
+library's <code>shelve</code>, <code>subprocess</code>, <code>tempfile</code>,
+<code>threading</code>, <code>unittest</code>, and <code>zipfile</code>
+modules all provide functions that return context managers, and there
+are many others.
+</p>
+
+<p>
+One of Python's nicest features is that it allows us to fully integrate
+our own classes and functions so that they work just like built-ins, and
+this extends to context managers. To make a class whose instances are
+context managers (i.e., to make it support the context manager
+protocol), the class must have two special methods: <code>__enter__()</code> and
+<code>__exit__()</code>, both with specific signatures.
+(A special method is one that we write but never explicitly call: calls
+are made by Python itself in response to the use of particular syntax.)
+Here's an example used to ensure that a SQLite database transaction will
+be committed&mdash;or rolled back in the face of an exception:
+</p>
+
+<div class="highlight" id="trans"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Transaction</span>:
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, db):
+	<span style="color: #008000">self</span><span style="color: #666666">.</span>cursor <span style="color: #666666">=</span> db<span style="color: #666666">.</span>cursor()
+
+    <b><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__enter__</span>(<span style="color: #008000">self</span>):</b> <span style="color: #408080; font-style: italic"># Start transaction</span>
+	<span style="color: #008000">self</span><span style="color: #666666">.</span>cursor<span style="color: #666666">.</span>execute(<span style="color: #BA2121">&quot;BEGIN;&quot;</span>)
+	<span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>cursor
+
+    <b><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__exit__</span>(<span style="color: #008000">self</span>, exc_type, exc_val, exc_tb):</b>
+	<span style="color: #408080; font-style: italic"># End transaction</span>
+	<span style="color: #008000; font-weight: bold">if</span> exc_type <span style="color: #AA22FF; font-weight: bold">is</span> <span style="color: #008000; font-weight: bold">None</span>:
+	    <span style="color: #008000">self</span><span style="color: #666666">.</span>cursor<span style="color: #666666">.</span>execute(<span style="color: #BA2121">&quot;COMMIT;&quot;</span>)
+	<span style="color: #008000; font-weight: bold">else</span>: <span style="color: #408080; font-style: italic"># Exception will be raised</span>
+	    <span style="color: #008000">self</span><span style="color: #666666">.</span>cursor<span style="color: #666666">.</span>execute(<span style="color: #BA2121">&quot;ROLLBACK;&quot;</span>)
+</pre></div>
+
+<p>
+Here's how we could use the <code>Transaction</code> class:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">db <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">None</span>
+<span style="color: #008000; font-weight: bold">try</span>:
+    db <span style="color: #666666">=</span> apsw<span style="color: #666666">.</span>Connection(filename)
+    <span style="color: #008000; font-weight: bold">with</span> Transaction(db) <span style="color: #008000; font-weight: bold">as</span> cursor:
+	cursor<span style="color: #666666">.</span>execute(<span style="color: #BA2121">&quot;DELETE FROM sales WHERE pid = ?&quot;</span>, (pid,))
+	cursor<span style="color: #666666">.</span>execute(<span style="color: #BA2121">&quot;DELETE FROM products WHERE pid = ?&quot;</span>, (pid,))
+<span style="color: #008000; font-weight: bold">finally</span>:
+    <span style="color: #008000; font-weight: bold">if</span> db <span style="color: #AA22FF; font-weight: bold">is</span> <span style="color: #AA22FF; font-weight: bold">not</span> <span style="color: #008000; font-weight: bold">None</span>:
+	db<span style="color: #666666">.</span>close()
+</pre></div>
+
+<p>
+The <a href="https://rogerbinns.github.io/apsw/">apsw</a> module
+provides a comprehensive interface to the SQLite database, but it is not
+in the standard library so must be downloaded separately. We could
+always use the standard (but less functional), <code>sqlite3</code> module
+instead.
+</p>
+
+<p>
+When the <code>Transaction(db)</code> call is encountered a new
+<code>Transaction</code> object is created (i.e., its <code>__init__()</code>)
+method is called, which in turn creates a database <code>cursor</code>. The
+returned <code>Transaction</code> object is assumed to be a context manager
+(since it is in a <code>with</code> statment), so its <code>__enter__()</code>
+method is immediately called, which in this case begins a SQLite
+transaction. The <code>__enter__()</code> method's return value is assigned
+to the variable that follows the <code>as</code>, in this case
+<code>cursor</code>. When the code leaves the context of the <code>with</code>
+statement (i.e., after the attempt to delete a product)&mdash;or if an
+uncaught exception occurs within the <code>with</code> statement&mdash;the
+context manager's <code>__exit__()</code> method is called. In this case, if
+there was no exception we commit the transaction to the database and
+both deletions take place; otherwise we rollback and nothing is deleted.
+In either case we are guaranteed to preserve the integrity of our
+database.
+</p>
+
+<p>
+It is also possible to create an <i>atomic</i> context manager class
+which can ensure that a sequence of actions on a mutable data structure
+such as a <code>dict</code>, <code>list</code>, or <code>set</code> either all
+happen&mdash;or don't happen at all. For an example, see <a
+href="py3book.html">Programming in Python&nbsp;3</a>.
+</p>
+
+<p>
+The context manager protocol can also be used to monitor, rather than to
+manage state. Here's a useful example that can be used to time little
+bits of code:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Timer</span>:
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, message, minSecs<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">None</span>):
+	<span style="color: #008000">self</span><span style="color: #666666">.</span>message <span style="color: #666666">=</span> message
+	<span style="color: #008000">self</span><span style="color: #666666">.</span>minSecs <span style="color: #666666">=</span> minSecs
+	<span style="color: #008000">self</span><span style="color: #666666">.</span>monotime <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__enter__</span>(<span style="color: #008000">self</span>):
+	<span style="color: #008000">self</span><span style="color: #666666">.</span>monotime <span style="color: #666666">=</span> time<span style="color: #666666">.</span>monotonic()
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__exit__</span>(<span style="color: #008000">self</span>, exc_type, exc_val, exc_tb):
+	elapsed <span style="color: #666666">=</span> time<span style="color: #666666">.</span>monotonic() <span style="color: #666666">-</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>monotime
+	<span style="color: #008000; font-weight: bold">if</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>minSecs <span style="color: #AA22FF; font-weight: bold">is</span> <span style="color: #008000; font-weight: bold">None</span> <span style="color: #AA22FF; font-weight: bold">or</span> elapsed <span style="color: #666666">&gt;</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>minSecs:
+	    <span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;{} {:.3f} sec&quot;</span><span style="color: #666666">.</span>format(<span style="color: #008000">self</span><span style="color: #666666">.</span>message, elapsed))
+</pre></div>
+
+<p>
+The <code>time.monotonic()</code> function returns a reference time in
+seconds (as a <code>float</code>), and is not affected if the program is
+running when the clocks go back. The <code>Timer</code> class can be used as
+follows:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">with</span> Timer(<span style="color: #BA2121">&quot;slow function&quot;</span>):
+    slowFunction(args)
+</pre></div>
+
+<p>
+This will print how long <code>slowFunction()</code> took to run. We can
+provide a second argument, e.g., <code>with Timer("slow function",
+2)</code>, that means the time is only printed if the duration exceeds the
+second argument's number of seconds. And, of course, we could time
+multiple statements by including them all within a single <code>with
+Timer</code> statement.
+</p>
+
+<p>
+The <code>Timer</code> class requires us to remember (or copy and paste) the
+rather complex signature of the <code>__exit__()</code> method. Fortunately,
+the standard library's <code>contextlib</code> module provides a simpler and
+shorter way to create context managers:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #AA22FF">@contextlib</span><span style="color: #666666">.</span>contextmanager
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">timer</span>(message, minSecs<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">None</span>):
+    monotime <span style="color: #666666">=</span> time<span style="color: #666666">.</span>monotonic() <span style="color: #408080; font-style: italic"># here we __enter__()</span>
+    <span style="color: #008000; font-weight: bold">yield</span> <span style="color: #408080; font-style: italic"># The body of the with statement executes here</span>
+    elapsed <span style="color: #666666">=</span> time<span style="color: #666666">.</span>monotonic() <span style="color: #666666">-</span> monotime <span style="color: #408080; font-style: italic"># here we __exit__()</span>
+    <span style="color: #008000; font-weight: bold">if</span> minSecs <span style="color: #AA22FF; font-weight: bold">is</span> <span style="color: #008000; font-weight: bold">None</span> <span style="color: #AA22FF; font-weight: bold">or</span> elapsed <span style="color: #666666">&gt;</span> minSecs:
+	<span style="color: #008000">print</span>(<span style="color: #BA2121">&quot;{} {:.3f} sec&quot;</span><span style="color: #666666">.</span>format(message, elapsed))
+</pre></div>
+
+<p>
+The <code>timer()</code> function can be used just like the <code>Timer</code>
+class:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">with</span> timer(<span style="color: #BA2121">&quot;slow function&quot;</span>):
+    slowFunction(args)
+</pre></div>
+
+<p>
+If we need to return a value to be the variable after the <code>as</code>,
+we can provide it as the <code>yield</code> statement's argument. However,
+this case is less convenient than using a class since we have to wrap
+the <code>yield</code> in a <code>try/except/finally</code> construct.
+Personally, I always create a class.
+</p>
+
+<p>
+The <code>contextlib</code> module provides some useful generic context
+managers, as we will see in a moment. First though, let's see how to
+delete a file that may or may not exist:
+</p>
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">try</span>:
+    os<span style="color: #666666">.</span>remove(filename)
+<span style="color: #008000; font-weight: bold">except</span> FileNotFoundError:
+    <span style="color: #008000; font-weight: bold">pass</span>
+</pre></div>
+<p>
+A nicer alternative is to use the <code>contextlib</code>'s
+<code>suppress()</code> context manager which throws away the specific
+exception it is given if that exception is raised&mdash;but lets any
+other exception through:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">with</span> contextlib<span style="color: #666666">.</span>suppress(FileNotFoundError):
+    os<span style="color: #666666">.</span>remove(filename)
+</pre></div>
+
+<p>
+Two other really useful context managers are
+<code>contextlib.redirect_stdout()</code> and
+<code>contextlib.redirect_stderr()</code>. These are
+especially helpful in unit tests since they make it easy to capture
+output that would normally be written to the console to check that it
+matches the output we expect. For example, suppose we want to test a
+function which prints odd numbers given a list of numbers:
+</p>
+
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">print_odd_numbers</span>(data):
+    <span style="color: #008000; font-weight: bold">for</span> i, datum <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>(data):
+        <span style="color: #008000; font-weight: bold">if</span> datum <span style="color: #666666">%</span> <span style="color: #666666">2</span>:
+            <span style="color: #008000">print</span>(datum, end<span style="color: #666666">=</span><span style="color: #BA2121">&quot; &quot;</span> <span style="color: #008000; font-weight: bold">if</span> i <span style="color: #666666">+</span> <span style="color: #666666">1</span> <span style="color: #666666">&lt;</span> <span style="color: #008000">len</span>(data) <span style="color: #008000; font-weight: bold">else</span> <span style="color: #BA2121">&quot;&quot;</span>)
+    <span style="color: #008000">print</span>()
+
+expected <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;1 3 5 7 9 11 13 15 17 19</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>
+out <span style="color: #666666">=</span> io<span style="color: #666666">.</span>StringIO()
+<span style="color: #008000; font-weight: bold">with</span> contextlib<span style="color: #666666">.</span>redirect_stdout(out):
+    print_odd_numbers(<span style="color: #008000">range</span>(<span style="color: #666666">20</span>))
+actual <span style="color: #666666">=</span> out<span style="color: #666666">.</span>getvalue()
+<span style="color: #008000; font-weight: bold">assert</span> actual <span style="color: #666666">==</span> expected
+</pre></div>
+
+<p>
+We start by creating the string we expect to be output. Then we create
+an <code>io.StringIO</code> object called <code>out</code>. This object can be
+treated like a file opened for reading and writing text, so we can call
+<code>out.write(str)</code> or <code>print(str, file=out)</code>. But the
+<code>print_odd_numbers()</code> function doesn't know anything about our
+out object, it contains statemenst like <code>print(datum)</code> which
+writes to <code>sys.stdout</code>. Fortunately, we can overcome this problem
+by using the context manager to temporarily redirect any output to
+<code>sys.stdout</code> to our <code>out</code> object. And once we leave the
+context of the <code>with</code> statement, <code>sys.stdout</code> is
+automatically restored and we can obtain anything written to it within
+the context manager by calling the <code>io.StringIO.getvalue()</code>
+method.
+</p>
+
+<p>
+Context managers are used throughout the Python 3 standard
+library&mdash;and their use is growing. Furthermore, as we've seen, we
+can easily create our own custom context managers. The <a
+href="https://docs.python.org/dev/library/contextlib.html">contextlib
+documentation</a> provides examples and links to further information. In
+addition, the documentation covers the <code>closing()</code> context
+manager which can be used for any Python object that has a
+<code>close()</code> method but which isn't itself a context manager, and
+the <code>ExitStack</code> class which can be used to handle a whole bunch
+of context managers in one go.
+</p>
+
+<p>For more see <a href="pytips.html">Python Programming Tips</a></p>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>

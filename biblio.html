@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="tabs.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Programming Books</title>
+    <meta name="description" content="Annotated bibliography of
+interesting and useful computer books."/>
+    <meta name="keywords" content="bibliography, computer textbooks"/>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Programming Books</h1>
+<h2 class="subtitle">Practical programming books&mdash;all recommended.</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-here">Books</span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link-sub"><a href="sitemap.html#software">Software</a></span>
+&bull;
+<span class="nav-link-sub"><a href="sitemap.html#books">My Books</a></span> &bull;
+<span class="nav-link-sub"><a href="sitemap.html#recent">Recent Writing</a></span>
+&bull;
+<span class="nav-link-sub"><a href="sitemap.html#other">Other Writing</a></span>
+&bull;
+<span class="nav-link"><a href="marksummerfield.html">Mark Summerfield</a></span>
+</div>
+
+<!-- Body -->
+
+<p class="blue">This page is no longer updated.</p>
+
+<p style="margin-top: 15px;" class="shout">
+This annotated bibliography lists books in my reading order from most to
+least recent (which is close to date order). There's also an alphabetical
+title index on the right.
+</p>
+<p style="margin-top: 15px;" class="shout">
+Only those books that I think are worth reading (and that I myself have
+bought and read) are included, except for <a
+href="sitemap.html#books">my own books</a> which are listed separately.
+All comments are about the specified <i>print</i> edition, not about the
+possibly mangled ebook or translated versions. 
+Note also that there may be newer editions of some of these books.
+</p>
+
+<div style="float: right; background-color: #EbEbEb; font-size: 0.9em;
+padding: 0.2em; margin-left: 0.5em;">
+&nbsp;&nbsp;<span style="color: navy; font-style: italic;">Alphabetical
+Title Index</span><br />
+&bull;&nbsp;<a href="#advunixenv">Advanced Programming in the UNIX Environment</a><br />
+&bull;&nbsp;<a href="#surveillancecapital">Age of Surveillance
+Capitalism, The</a><br />
+&bull;&nbsp;<a href="#arch1">Architecture of Open Source Applications Volume I, The</a><br />
+&bull;&nbsp;<a href="#arch2">Architecture of Open Source Applications Volume II, The</a><br />
+&bull;&nbsp;<a href="#artofmulti">Art of Multiprocessor Programming, The</a><br />
+&bull;&nbsp;<a href="#cnut">C in a Nutshell</a><br />
+&bull;&nbsp;<a href="#cppconcurrency">C++ Concurrency in Action</a><br />
+&bull;&nbsp;<a href="#cppnut">C++ in a Nutshell</a><br />
+&bull;&nbsp;<a href="#cppswdesign">C++ Software Design</a><br />
+&bull;&nbsp;<a href="#cleancode">Clean Code</a><br />
+&bull;&nbsp;<a href="#codecomplete">Code Complete</a><br />
+&bull;&nbsp;<a href="#coders">Coders</a><br />
+&bull;&nbsp;<a href="#corejavai">Core Java</a><br />
+&bull;&nbsp;<a href="#craftinginterpreters">Crafting Interpreters</a><br />
+&bull;&nbsp;<a href="#dprog">D Programming Language, The</a><br />
+&bull;&nbsp;<a href="#datastructjava">Data Structures and Algorithms in
+Java</a><br />
+&bull;&nbsp;<a href="#designpatterns">Design Patterns</a><br />
+&bull;&nbsp;<a href="#domaindrivendesign">Domain-Driven Design</a><br />
+&bull;&nbsp;<a href="#dontmakeme">Don't Make Me Think, Revisited</a><br />
+&bull;&nbsp;<a href="#effectivecpp">Effective C++</a><br />
+&bull;&nbsp;<a href="#effectivemodcpp">Effective Modern C++</a><br />
+&bull;&nbsp;<a href="#exinprostyle">Exercises in Programming Style</a><br />
+&bull;&nbsp;<a href="#fluentpy">Fluent Python</a><br />
+&bull;&nbsp;<a href="#freethink">Freedom to Think</a><br />
+&bull;&nbsp;<a href="#guibloopers">GUI Bloopers</a><br />
+&bull;&nbsp;<a href="#highperfpy">High Performance Python</a><br />
+&bull;&nbsp;<a href="#javaconcurrency">Java Concurrency in Practice</a><br />
+&bull;&nbsp;<a href="#rhino">JavaScript: The Definitive Guide</a><br />
+&bull;&nbsp;<a href="#learngo">Learning Go</a><br />
+&bull;&nbsp;<a href="#linuxbyeg">Linux Programming by Example</a><br />
+&bull;&nbsp;<a href="#masterregex">Mastering Regular Expressions</a><br />
+&bull;&nbsp;<a href="#openglsuper">OpenGL SuperBible</a><br />
+&bull;&nbsp;<a href="#progrust">Programming Rust</a><br />
+&bull;&nbsp;<a href="#scala">Programming in Scala</a><br />
+&bull;&nbsp;<a href="#pycookbook">Python Cookbook</a><br />
+&bull;&nbsp;<a href="#pyessentialref">Python Essential Reference</a><br />
+&bull;&nbsp;<a href="#pynut">Python in a Nutshell</a><br />
+&bull;&nbsp;<a href="#rapiddev">Rapid Development</a><br />
+&bull;&nbsp;<a href="#refac">Refactoring</a><br />
+&bull;&nbsp;<a href="#rustpl">Rust Programming Language, The</a><br />
+&bull;&nbsp;<a href="#securityin">Security in Computing</a><br />
+&bull;&nbsp;<a href="#sevenconcurrency">Seven Concurrency Models in Seven Weeks</a><br />
+&bull;&nbsp;<a href="#sqlsmart">SQL for Smarties</a><br />
+&bull;&nbsp;<a href="#tcltk">Tcl and the Tk Toolkit</a><br />
+&bull;&nbsp;<a href="#tcl">The Tcl Programming Language</a><br />
+&bull;&nbsp;<a href="#usingsqlite">Using SQLite</a><br />
+&bull;&nbsp;<a href="#onfire">Your Computer Is on Fire</a><br />
+</div>
+
+<!--
+
+<div id="" class="biblio">
+TITLE
+<br>
+    <div class="biblio2">
+    AUTHOR (PUBLISHER; ED? YEAR)
+    </div>
+</div>
+
+<div class="indent">
+<p>
+DESC
+</p>
+</div>
+
+-->
+
+<div id="cppswdesign" class="biblio">
+C++ Software Design: Design Principles and Patterns for High-Quality
+Software
+<br>
+    <div class="biblio2">
+    Klaus Iglberger (O'Reilly Media Inc; 2022)
+    </div>
+</div>
+
+<div class="indent">
+<p>
+I consider this to be a really excellent book—both for its <i>design</i>
+ideas and for its C++. It is aimed at experienced C++ developers who
+want to stay up-to-date and raise their game. I learnt a huge amount
+from this book and strongly recommend it.
+</p>
+
+<p>
+Full disclosure: I was one of the book's technical reviewers.
+</p>
+</div>
+
+<div id="craftinginterpreters" class="biblio">
+Crafting Interpreters
+<br>
+    <div class="biblio2">
+    Robert Nystrom (Genever Benning; 2021)
+    </div>
+</div>
+
+<div class="indent">
+<p>
+Crafting Interpreters is one of the most inspiring, enjoyable&mdash;and
+useful&mdash;programming textbooks I've ever read. The writing style is
+engaging and accessible, the emphasis strongly practical. Theory is
+provided when necessary, and clearly explained.
+</p>
+
+<p>
+The first part of the book uses Java, the second uses C; but it doesn't
+matter whether you know either, the exposition is so clear you can
+easily translate in your head or at the keyboard into the language
+you're most familiar with.
+</p>
+
+<p>
+If you want to create&mdash;or simply understand <i>how</i> to
+create&mdash;a language, DSL, or file format, this book will take you
+further than any other I've ever read. It certainly slays the dragon of
+first time programming language implementation.
+</p>
+</div>
+
+<div id="freethink" class="biblio">
+Freedom to Think
+<br>
+    <div class="biblio2">
+    Susie Alegre (Atlantic Books; 2022)
+    </div>
+</div>
+
+<div class="indent">
+<p>
+This book is essential reading for anyone involved with software
+development (programmers, designers, psychologists, managers, etc.).
+It clearly explains the practical and legal impacts of software
+(especially AI, social media, and online advertising) on users (both
+adults and children). It shows how our thinking can be influenced both
+for the purpose of selling products and political positions, and how the
+law can be used&mdash;and in some cases needs to be strengthened and
+extended&mdash;to protect our freedom of thought.
+</p>
+</div>
+
+<div id="learngo" class="biblio">
+Learning Go: An Idiomatic Approach to Real-World Go Programming
+<br>
+    <div class="biblio2">
+    Jon Bodner (O'Reilly Media; 2021)
+    </div>
+</div>
+
+<div class="indent">
+<p>
+This book is aimed at existing programmers of languages other than Go
+(or those who've been away from Go for a few years).
+</p>
+
+<p>
+Written more than a decade after Go's 1.0 release, in addition to
+teaching the Go language itself, this book illustrates many useful Go
+programming patterns. For example, the book shows now-standard ways of
+doing Go concurrent programming, as well as how to make best use of Go's
+evolved features for modules, contexts, and error wrapping. And the book
+finishes with a short but useful introduction to Go's support for
+generics.
+</p>
+
+<p>
+A genuinely useful introduction and guide to modern Go programming, this
+book also highlights Go's few misfeatures and how to avoid being caught
+out by them. Strongly recommended.
+</p>
+</div>
+
+<div id="onfire" class="biblio">
+Your Computer Is on Fire
+<br>
+    <div class="biblio2">
+    Editors:&nbsp;Thomas S. Mullaney, Benjamin Peters, Mar Hicks, Kavita Philip
+    (The MIT Press; 2021)
+    </div>
+</div>
+
+<div class="indent">
+<p>
+This is a collection of essays designed to provoke thought and debate
+about the uses and impact of computing on society.
+</p>
+
+<p>
+The essays range from those about the physical infrastructure&mdash;for
+example, the “cloud” may appear to be <i>virtual</i>, but actually runs
+on huge numbers of computers in very large power-hungry
+data-centers&mdash;to the human aspects. For example, no matter how many
+or how diverse are the children taught to program, if big companies
+primarily hire and promote those from a narrow spectrum, then the
+software they produce will likely only suit people like themselves.
+</p>
+
+<p>
+Back in the twentieth-century, for most programmers, ethics was really
+just concerned with professionalism:&nbsp;being honest about timescales
+and what was possible and working to the highest standards ones
+abilities and the available tools and hardware made possible. But
+nowadays, the ethical aspect is much wider, from who decides how an
+autonomous vehicle should behave to all the topics covered in this book.
+</p>
+
+<p>
+This book would be a beneficial addition to the reading (and debating)
+list for any undergraduate course that had any computing or management
+modules. Recommended.
+</p>
+</div>
+
+<div id="surveillancecapital" class="biblio">
+The Age of Surveillance Capitalism
+<br>
+    <div class="biblio2">
+    Shoshana Zuboff (PublicAffairs; 2020)
+    </div>
+</div>
+
+<div class="indent">
+<p>
+This book could usefully be read by every practicing and aspiring
+computer scientist, data scientist, programmer, and those who manage
+them. It will make you think about the work you do and for whom, about
+the interface between your work and ethics and law, and above all on the
+impact of your work on society.
+</p>
+
+<p>
+Prior to reading this book I believed that when things went wrong (e.g.,
+Google's collection of private WiFi data during Street View journeys, or
+Facebook's repeated selling of private data), it was due to genuine
+error or rogue “bad actors” as the companies' claimed. Now I understand
+that these things (done by Apple, Google, Facebook, Microsoft, Verizon,
+and so on) are matters of policy, and that lying about what they're
+really doing is standard practice.
+</p>
+
+<p>
+Naturally, I don't expect anyone to take my word for it. I strongly
+recommend reading this book. It is easy to read and fully referenced so
+you can check its sources for yourself.
+</p>
+</div>
+
+<div id="refact" class="biblio">
+Refactoring: Improving the Design of Existing Code
+<br>
+    <div class="biblio2">
+    Martin Fowler (2nd edition; Addison-Wesley; 2019)
+    </div>
+</div>
+
+<div class="indent">
+<p>
+This is an ideal book for less experienced or less formally trained
+programmers wanting to improve the quality of their coding.</p>
+
+<p>
+The book is essentially a list of recipes that show how do do various
+code improvements in a reliable and systematic way.
+</p>
+
+<p>
+All but one example is illustrated using JavaScript, but all the code is
+very easy to understand, and the ideas and practices are applicable
+to&mdash;and easily translatable to&mdash;any modern object-oriented
+programming language.
+</p>
+
+<p>
+Each recipe is small, self-contained, and well explained. And here and
+there the author has injected tiny sparks of leavening humour.
+Recommended.
+</p>
+</div>
+
+<div id="coders" class="biblio">
+Coders: The Making of a New Tribe and the Remaking of the World 
+<br>
+    <div class="biblio2">
+    Clive Thompson (Penguin Press; 2019)
+    </div>
+</div>
+
+<div class="indent">
+<p>
+This is a non-programming book that is nonetheless worth reading by every
+programmer, would-be programmer, and anyone else involved with or
+interested in software.
+</p>
+
+<p>
+The book provides information and insights into programmer psychology,
+into how and why certain groups are excluded or underrepresented in
+programming&mdash;and what the effects of this are. It also addresses
+some ideas for remedies. It examines the pressures that developers and
+software companies are under and the impacts these have on corporate
+behavior and the practical and ethical results.
+</p>
+
+<p>
+This book is thought-provoking and full of ideas and facts about
+software developers, software development, and software companies. It
+will deepen anyone's understanding of how, why, and by whom software
+gets written, and what the consequences are. Highly recommended.
+</p>
+</div>
+
+<div id="corejavai" class="biblio">
+Core Java Volume I&mdash;Fundamentals
+<br>
+    <div class="biblio2">
+    Cay S. Horstmann (Prentice Hall; 11th edition; 2018)
+    </div>
+</div>
+
+<div class="indent">
+<p>
+The Java language has evolved quite a lot since the 1990s, incorporating
+modern features like lambdas and generics. This book (and its companion,
+Volume II) covers the fully up-to-date modern language, as well as the
+most important and widely used parts of the standard library.
+</p>
+<p>
+What I particularly like about this book is that it explains points of
+contention (e.g., how to implement <code>equals()</code>), <i>and</i>
+provides the arguments on the different possibilities and the rationale
+for the choices made in the book.
+</p>
+<p>
+Another aspect I like is that in some cases the book provides useful
+code snippets or classes to supplement Java out-of-the-box. Overall,
+this book is ideal for programmers of other languages who want to learn
+modern Java.
+</p>
+</div>
+
+<div id="rustpl" class="biblio">
+The Rust Programming Language
+<br>
+<div class="biblio2">
+Steve Klabnik and Carol Nichols (No Starch Press; 2018)
+</div>
+</div>
+
+<div class="indent">
+<p>
+Rust is a modern language that can be used to create applications and
+systems of all kinds. The language uses aggregation and traits rather
+than inheritance. The Rust compiler does extensive code analysis to make
+it impossible to introduce data races in concurrent code, and generally
+eliminates whole categories of potential errors that C/C++ compilers are
+defenceless against. The compiler uses the LLVM toolchain, so produces
+fast-running executables. Rust's build tool, <code>cargo</code>, is a
+pleasure to use.
+</p>
+<p>
+This book teaches Rust from scratch, but assumes some programming
+knowledge. It is Rust's official textbook and is freely available <a
+href="https://doc.rust-lang.org/book/">online</a>. The early part of the
+book is a bit uneven&mdash;alternating between baby steps and being more
+demanding, but it does give good overall coverage of the language. The
+book goes beyond being a mere introduction in that it explains some
+subtle and important Rust features including interior mutability and key
+patterns of use, especially for concurrency. However, no mention is made
+of the excellent and easy-to-use concurrency provided by the
+<code>rayon</code> crate. The error handling coverage is barely adequate,
+with no mention of the <code>error-chain</code>, <code>failure</code>, or
+<code>quick-error</code> crates.
+</p>
+<p>
+This book will be useful to anyone starting out with Rust. In addition
+to covering the language and glimpses of the standard library, it
+illustrates good Rust style, something not always obvious (for Rust or
+any language) simply by reading the documentation.
+</p>
+</div>
+
+<div id="tcl" class="biblio">
+The Tcl Programming Language
+<br>
+    <div class="biblio2">
+Ashok P. Nadkarni (self-published; 2017)
+    </div>
+</div>
+
+<div class="indent">
+<p>
+This book covers the Tcl language and library. In addition it covers
+many useful parts of Tcllib (Tcl's standard library), and some
+third-party libraries. The coverage includes cross-platform differences
+and practical advice based on real experience with the language.
+</p>
+<p>
+This is the first self-published book I've ever read that could be
+published as-is by a reputable publisher. Overall it is well-written and
+interesting. And unlike Ousterhout's book it covers Tcl's
+object-oriented features. (However, it doesn't cover GUI programming
+with Tk, so for that <a href="#tcltk">Ousterhout</a>'s book remains
+essential.)
+</p>
+</div>
+
+<div id="progrust" class="biblio">
+Programming Rust
+<br>
+<div class="biblio2">
+Jim Blandy &amp; Jason Orendorff (O'Reilly Media; 2017)
+</div>
+</div>
+
+<div class="indent">
+<p>
+This book teaches Rust to programmers of other languages. Given the
+dearth of good Rust books, this book is certainly worth reading. It
+covers the Rust language pretty fully, although it doesn't cover much of
+the standard library, or have much to say about third-party libraries.
+The book introduces the novel and advanced feature of “lifetimes” rather
+early, which would have been fine if the subject had been returned to
+later on to explain how and when to use owned and borrowed data in
+structs. The index is poor. Overall, this book is adequate for getting
+to grips with all the basics, and is sufficient to get people to the
+point of writing their own small programs. A lot more reading elsewhere
+will be required to progress further though.
+</p>
+</div>
+
+<div id="pynut" class="biblio">
+Python in a Nutshell
+<br>
+<div class="biblio2">
+Alex Martelli, Anna Ravenscroft, &amp; Steve Holden (O'Reilly; 2017)
+</div>
+</div>
+
+<div class="indent">
+<p>
+This book presents the entire Python language (2.7&ndash;3.6), many
+parts of the standard library, and some important third-party libraries.
+It is ideal for beginner/intermediate Python programmers who want to
+broaden their knowledge with a useful overview; and for those moving
+from other languages to Python. The book provides sufficient
+introduction to get started with many major topics in Python
+programming, and usually provides links for where to get further
+information. The coverage of Python&nbsp;2.7 is unfortunate since it
+complicates and confuses the text in places.
+</p>
+</div>
+
+<div id="scala" class="biblio">
+Programming in Scala
+<br>
+<div class="biblio2">
+Martin Odersky, Lex Spoon, Bill Venners (Artima; 2016)
+</div>
+</div>
+
+<div class="indent">
+<p>
+Scala is a hybrid object-oriented&mdash;functional language for the Java
+Virtual Machine. The language itself is large and interesting. And this
+book is an excellent introduction. In fact, this book could be taken as
+a model of how to write a programming language textbook. The
+explanations are crystal clear using appropriate technical terminology
+(that's properly explained), and liberally illustrated with readable and
+understandable examples throughout. For anyone coming from a procedural
+or object-oriented programming background&mdash;and for anyone
+considering writing a programming textbook&mdash;this book is well worth
+reading.
+</p>
+</div>
+
+<div id="fluentpy" class="biblio">
+Fluent Python
+<br>
+<div class="biblio2">
+Luciano Ramalho (O'Reilly Media; 2015)
+</div>
+</div>
+
+<div class="indent">
+<p>
+This is essential reading&mdash;in addition to the <a
+href="#pycookbook">Python Cookbook</a> and my own <a
+href="pipbook.html">Python in Practice</a>&mdash;for any Python programmer
+(beginner to intermediate) who wants to broaden and deepen their
+understanding of Python. The book is wide-ranging and interesting with
+the occasional flash of humor. It includes an introduction to using
+Python&nbsp;3.4's <code>asyncio</code> module. The only weak area is the
+coverage of meta-programming which is rather short and superficial; but
+the rest of the book is really excellent.
+</p>
+</div>
+
+<div id="sqlsmart" class="biblio">
+SQL for Smarties: Advanced SQL Programming
+<br>
+<div class="biblio2">
+Joe Celko (5th edition; Morgan Kaufmann; 2015)
+</div>
+</div>
+
+<div class="indent">
+<p>
+On the positive side the book illustrates many useful, powerful, and
+advanced features of standard SQL, and is packed with interesting advice
+and information. On the negative side the prose is often poorly written
+and is littered with typos; and sadly, the typos extend into some of the
+examples too. Apart from the typo caveats, this book should be useful
+for anyone looking to move more of their code out of their procedural
+language and into pure SQL, and for anyone wanting to deepen and broaden
+their SQL knowledge.
+</p>
+</div>
+
+<div id="datastructjava" class="biblio">
+Data Structures and Algorithms in Java
+<br>
+    <div class="biblio2">
+    Michael T. Goodrich, Roberto Tamassia, Michael H. Goldwasser (Wiley;
+6th edition 2014)
+    </div>
+</div>
+
+<div class="indent">
+<p>
+This is a well-written textbook ideal for computer science
+undergraduates or anyone else who wants to understand the design and
+performance of data structures and algorithms. Naturally all the
+examples are in Java, but the performance analysis generally applies to
+the same data structures and algorithms regardless of language. In fact,
+porting some of the code to another language would probably lead to an
+even deeper understanding. Although for those who like Java itself,
+there are plenty of graded exercises provided.
+</p>
+</div>
+
+<div id="effectivemodcpp" class="biblio">
+Effective Modern C++
+<br>
+<div class="biblio2">
+Scott Meyers (O'Reilly Media; 2014)
+</div>
+</div>
+
+<div class="indent">
+<p>
+Every programmer ought to read this book&mdash;whether or not they use
+C++!
+</p>
+<p>
+If you <i>use</i> C++, you need this book because it explains all the
+major pitfalls and how to avoid them, as well as all the important best
+practices. It covers the type deduction rules, the use of auto,
+move semantics, smart pointers, rvalues, lambda expressions, as well as
+a bit of useful advice on concurrency. (For comprehensive coverage of
+C++ concurrency see <a href="#cppconcurrency">C++ Concurrency in
+Action</a>. And for more advice on C++ programming, much of it still
+valuable, see Meyers' other books, especially, <a
+href="#effectivecpp">Effective C++</a>.)
+</p>
+</div>
+
+<div id="exinprostyle" class="biblio">
+Exercises in Programming Style
+<br>
+<div class="biblio2">
+Cristina Videira Lopes (Chapman and Hall/CRC; 2014)
+</div>
+</div>
+
+<div class="indent">
+<p>
+This unusual and interesting book takes a simple programming problem and
+presents over thirty different implementations, each illustrating a
+different programming style. This approach makes it very clear how the
+different styles differ, and the accompanying explanations help with
+understanding the trade-offs. The examples are in Python&nbsp;2 and
+written in a very simple style so they are easy to understand and apply
+to any language. The book will be most useful to intermediate
+programmers seeking to broaden their toolbox of coding ideas and
+practices, on their way to becomming more advanced practitioners.
+</p>
+</div>
+
+
+<div id="highperfpy" class="biblio">
+High Performance Python: Practical Performant Programming for Humans
+<br>
+<div class="biblio2">
+Micha Gorelick &amp; Ian Ozsvald (O'Reilly Media; 2014)
+</div>
+</div>
+
+<div class="indent">
+<p>
+This book is mostly focused on Python&nbsp;2.7 with a few remarks about
+Python&nbsp;3 here and there. It is also geared up mainly to those using
+Linux. The book looks at the fundamentals&mdash;in particular, profiling
+and the use of Python's built-in data structures. It also introduces
+<a href="https://www.numpy.org">NumPy</a> and <a
+href="https://cython.org/">Cython</a>, as well as some lesser known
+technologies. The book will be of most benefit to two kinds of reader:
+those doing large scale processing on a single machine (e.g., big
+numeric computations), and those doing large scale processing more
+generally (e.g., using clusters or cloud computing). Apart from the
+early chapters which go into reasonable depth, most of the rest
+provides introductory material on techniques and technologies to get you
+started. A useful overview and a useful start for those beginning to get
+to grips with performance problems.
+</p>
+</div>
+
+<div id="sevenconcurrency" class="biblio">
+Seven Concurrency Models in Seven Weeks: When Threads Unravel
+<br>
+<div class="biblio2">Paul Butcher (Pragmatic Bookshelf; 2014)</div>
+</div>
+
+<div class="indent">
+<p>
+Ignore the "Seven Weeks" silliness&mdash;this is a really well written
+and interesting book that looks deeply into the major approaches to
+doing concurrency. The book covers all the pitfalls as well as showing
+the benefits, and is written in an accessible style that any moderately
+experienced programmer should be able to understand. The examples are in
+different languages since some approaches to concurrency are available
+only in particular languages, but are well explained and easy to follow
+even if you don't know the language concerned. This book serves as
+an excellent introduction to concurrency, although experienced
+concurrent programmers should also find much of interest. C++
+programmers should also read <a href="#cppconcurrency">C++ Concurrency
+in Action</a>. Java programmers should read <a
+href="#javaconcurrency">Java Concurrency in Practice</a>; hard-core Java
+programmers might also enjoy
+<a href="#artofmulti">The Art of Multiprocessor
+Programming</a>.
+</p>
+</div>
+
+<div id="dontmakeme" class="biblio">
+Don't Make Me Think, Revisited: A Common Sense Approach to Web Usability
+<br>
+<div class="biblio2">Steve Krug (3rd edition; New Riders; 2014)</div>
+</div>
+
+<div class="indent">
+<p>
+This is a short and practical book on web usability based on research and
+experience. Applying the easy-to-understand ideas in this book will
+improve any web site of any size.
+(Based on the second edition.)
+</p>
+</div>
+
+<div id="advunixenv" class="biblio">
+Advanced Programming in the UNIX Environment
+<br>
+<div class="biblio2">W. Richard Stevens, Stephen A. Rago (3rd
+edition; Addison-Wesley Professional; 2013)</div>
+</div>
+
+<div class="indent">
+<p>
+A thorough in-depth introduction to Unix programming using the Unix
+system call APIs and the standard C library. The book's examples are in
+C. (Based on the second edition.)
+</p>
+</div>
+
+<div id="openglsuper" class="biblio">
+OpenGL SuperBible: Comprehensive Tutorial and Reference
+<br>
+<div class="biblio2">Graham Sellers, Richard S. Wright, Nicholas Haemel
+(6th edition; Addison-Wesley Professional; 2013)</div>
+</div>
+
+<div class="indent">
+<p>
+This is a good introduction to 3D graphics using OpenGL, suitable for
+programmers without prior 3D graphics experience. The examples are
+written in C++, but the OpenGL APIs are usually pretty faithfully
+reproduced in bindings for other languages (e.g., <a
+href="https://pyopengl.sourceforge.net/">PyOpenGL</a> for Python), so the
+book's examples can be used without too much adaptation.
+</p>
+</div>
+
+<div id="pycookbook" class="biblio">
+Python Cookbook
+<br>
+<div class="biblio2">David Beazley, Brian K. Jones (3rd edition;
+O'Reilly Media; 2013)</div>
+</div>
+
+<div class="indent">
+<p>
+This book is full of interesting and practical ideas covering all
+aspects of Python&nbsp;3 programming. I have two caveats. First, some
+of the ideas for improved efficiency only seem to work well for
+unrealistic examples. Second, some of the more advanced examples show
+what <i>can</i> be done&mdash;but not necessarily what one <i>ought</i>
+to do when writing maintainable code. Nonetheless, every Python
+programmer should buy and read this book.
+</p>
+</div>
+
+<div id="artofmulti" class="biblio">
+The Art of Multiprocessor Programming
+<br>
+<div class="biblio2">Maurice Herlihy, Nir Shavit (Morgan Kaufmann;
+2012)</div>
+</div>
+
+<div class="indent">
+<p>
+This book provides a thorough introduction to multithreaded programming,
+including small but complete working examples (in Java) that demonstrate
+all the key techniques. The last chapter provides a brief introduction
+to transactional memory, one of the hopes for a higher-level approach to
+threading that doesn't burden programmers with all the petty bookkeeping
+details that conventional techniques demand. This is not light reading,
+but worthwhile for those who really want to <i>understand</i>
+multithreaded concurrency rather than simply use it through their
+language's libraries. Incidentally, the links are to the revised
+reprint, I only have the original.
+For a more accessible introduction to concurrency (not just using
+threads), see
+<a href="#sevenconcurrency">Seven
+Concurrency Models</a>.
+</p>
+</div>
+
+<div id="cppconcurrency" class="biblio">
+C++ Concurrency in Action: Practical Multithreading
+<br>
+<div class="biblio2">Anthony Williams (Manning Publications; 2012)</div>
+</div>
+
+<div class="indent">
+<p>
+This challenging book covers concurrency in C++. It describes many of
+the problems and pitfalls that can afflict concurrent programs that use
+threading (regardless of language), and explains how to avoid them.
+</p>
+</div>
+
+<div id="arch2" class="biblio">
+The Architecture of Open Source Applications Volume II
+<br>
+<div class="biblio2">Amy Brown &amp; Greg Wilson (editors) (Brown &amp;
+Wilson; 2012)</div>
+</div>
+
+<div class="indent">
+<p>
+This book follows the same pattern as Volume I (described below). And
+like Volume I it is interesting and useful, especially for those
+contemplating larger or multi-person projects.
+</p>
+</div>
+
+<div id="arch1" class="biblio">
+The Architecture of Open Source Applications Volume I
+<br>
+<div class="biblio2">Amy Brown &amp; Greg Wilson (editors) (Brown &amp;
+Wilson; 2011)</div>
+</div>
+
+<div class="indent">
+<p>
+This is an unusual and valuable book. Each chapter covers a different
+open source application and is written by one of the application's lead
+developers. Each chapter gives a brief introduction to what the software
+does and then goes on to explain the overall architecture, the rationale
+for the key decisions, and concludes with a brief assessment of the
+project's successes and failures. Anyone interested in building larger
+scale software or working on multi-person software projects should find
+something of interest in this book.
+</p>
+</div>
+
+
+<div id="rhino" class="biblio">
+JavaScript: The Definitive Guide: Activate Your Web Pages
+<br>
+<div class="biblio2">David Flanagan (6th editon; O'Reilly Media;
+2011)</div>
+</div>
+
+<div class="indent">
+<p>
+This is an ideal tutorial and reference for JavaScript/ECMAScript. It is
+comprehensive and easy to read, and the examples work. The few bits of
+JavaScript used on this website are all based on ideas and examples from
+this book.
+</p>
+</div>
+
+<div id="dprog" class="biblio">
+The D Programming Language
+<br>
+    <div class="biblio2">Andrei Alexandrescu (Addison Wesley; 2010)</div>
+</div>
+
+<div class="indent">
+<p>
+D is a very interesting language. It is much easier to learn and use
+than C++ or Rust, yet offers many of the benefits of those languages,
+plus many additional&mdash;and useful&mdash;features unique to D. It is
+rather sad that D has not had the attention of other languages (such as
+the far less capable Go), and so D is not especially well supported
+either in terms of documentation or third-party libraries. Nonetheless
+for non-GUI programs D has much to offer.
+</p>
+<p>
+Although rather old, this book remains by far the best book on D. It is
+well structured and clearly written in a good humored and accessible
+style. It is aimed at those who can already program rather than
+beginners.
+</p>
+</div>
+
+<div id="usingsqlite" class="biblio">
+Using SQLite
+<br>
+<div class="biblio2">Jay A. Kreibich (O'Reilly Media; 2010)</div>
+</div>
+
+<div class="indent">
+<p>
+Don't be put off by the “Lite” in SQLite&mdash;SQLite is a real database
+with excellent SQL support. SQLite is very widely deployed and is useful
+not only as a conventional SQL database but also as a single-file file
+store for application data. This book shows how to use SQLite to create,
+modify, and query databases. It also serves as a good introduction to
+SQL since it doesn't assume prior knowledge of SQL. In addition to being
+a fine tutorial, the book is also a good reference. SQLite is accessible
+to any language which can access C libraries (pretty well all
+languages).
+For example, Python includes built-in support for SQLite with its
+<code>sqlite3</code> module; but I recommend using <a
+href="https://rogerbinns.github.io/apsw/">APSW</a> instead since it is
+far superior, offering as much access to SQLite as C programmers get but
+through a nice Python API.
+</p>
+</div>
+
+<div id="pyessentialref" class="biblio">
+Python Essential Reference
+<br>
+<div class="biblio2">David M. Beazley (4th edition; Addison-Wesley
+Professional; 2009)</div>
+</div>
+
+<div class="indent">
+<p>
+The book's title is an accurate description. The fourth edition has been
+updated to cover both Python&nbsp;2.6 and Python&nbsp;3.0. Most of the
+book is devoted to Python's standard library as well as covering
+more advanced features such as extending Python with C libraries and
+embedding the Python interpreter into other programs. Personally, I find
+David's <a href="#pycookbook">Python Cookbook</a> more useful and
+interesting.
+</p>
+</div>
+
+<div id="tcltk" class="biblio">
+Tcl and the Tk Toolkit
+<br>
+<div class="biblio2">John K. Ousterhout, Ken Jones (2nd edition;
+Addison-Wesley Professional; 2009)</div>
+</div>
+
+<div class="indent">
+<p>
+This is the standard text on Tcl/Tk&nbsp;8.5. Tcl is an unconventional,
+almost syntax-free language. It is worth learning about simply because
+it is so different from almost anything else, and the ability to write
+lightweight cross-platform GUI programs with it is a useful bonus.
+</p>
+<p>
+(For coverage of Tcl&nbsp;8.6, see <a href="#tcl">The Tcl Programming
+Language</a>.)
+</p>
+</div>
+
+<div id="cleancode" class="biblio">
+Clean Code: A Handbook of Agile Software Craftsmanship
+<br>
+<div class="biblio2">Robert C. Martin (Prentice Hall; 2008)</div>
+</div>
+
+<div class="indent">
+<p>
+This book addresses many “tactical” issues in programming: good naming,
+function design, refactoring, and similar. The book has many interesting
+and useful ideas that should help any programmer improve their coding
+style and make their programs more maintainable. The book's examples
+are in Java, but in most cases they are applicable to any
+object-oriented language (and often to procedural languages too).
+</p>
+</div>
+
+<div id="guibloopers" class="biblio">
+GUI Bloopers 2.0: Common User Interface Design Don'ts and Dos
+<br>
+<div class="biblio2">Jeff Johnson (2nd edition; Morgan Kaufmann; 2007)</div>
+</div>
+
+<div class="indent">
+<p>
+Don't be put off by the slightly whimsical title; this is a serious book
+that every GUI programmer should read. You won't agree with every single
+suggestion, but you will think more carefully and with more insight
+about user interface design after reading this book.
+</p>
+</div>
+
+<div id="javaconcurrency" class="biblio">
+Java Concurrency in Practice
+<br>
+<div class="biblio2">Brian Goetz, Tim Peierls, Joshua Bloch, Joseph
+Bowbeer, David Holmes, Doug Lea (Addison-Wesley Professional; 2006)</div>
+</div>
+
+<div class="indent">
+<p>
+This book provides excellent coverage of concurrency in Java. The book
+contains many tips on concurrent programming that are applicable to any
+language.
+</p>
+</div>
+
+<div id="masterregex" class="biblio">
+Mastering Regular Expressions
+<br>
+<div class="biblio2">Jeffrey E. F. Friedl (3rd edition; O'Reilly Media;
+2006)</div>
+</div>
+
+<div class="indent">
+<p>
+This is the standard text on regular expressions&mdash;a very interesting
+and useful book. Most of the coverage is understandably devoted to
+Perl&mdash;which probably has more regular expression features than any
+other tool. In addition to its coverage of regular expressions
+generally, it has specific chapters devoted to Perl, Java, .NET, and PHP
+regular expressions. Incidentally, a different kind of regular
+expression engine was created for Google by Russ Cox&mdash;<a
+href="https://code.google.com/p/re2/">re2</a>&mdash;which is well worth
+reading about.
+Although specific coverage of Python isn't present in the book,
+since Python supports a large subset of what Perl provides (plus
+Python's own <code>?P</code> extensions), the book is still very useful to
+Python programmers. Furthermore, an excellent and well-established and
+much more powerful and more Unicode-friendly Python regular expression
+library is available from PyPI: <a
+href="https://pypi.python.org/pypi/regex">regex</a>.
+</p>
+</div>
+
+<div id="securityin" class="biblio">
+Security in Computing
+<br>
+<div class="biblio2">Charles P. Pfleeger, Shari Lawrence Pfleeger (4th
+edition; Prentice Hall; 2006)</div>
+</div>
+
+<div class="indent">
+<p>
+This book provides interesting, useful, and practical coverage of the
+broad range of computer security issues. It explains how attacks can be
+made and how to protect against them. However, I did find it a rather
+dry read.
+</p>
+</div>
+
+<div id="cnut" class="biblio">
+C in a Nutshell
+<br>
+<div class="biblio2">Peter Prinz, Tony Crawford (O'Reilly Media; 2005)</div>
+</div>
+
+<div class="indent">
+<p>
+This is the best C reference book I've read. It gives comprehensive
+coverage of the C language and the standard library. This is the book to
+buy once you've read a tutorial book on C&mdash;although very
+experienced programmers may find that this book is sufficient to learn
+from in its own right.
+</p>
+</div>
+
+<div id="effectivecpp" class="biblio">
+Effective C++: 55 Specific Ways to Improve Your Programs and Designs
+<br>
+<div class="biblio2">Scott Meyers (3rd edition; Addison-Wesley
+Professional; 2005)</div>
+</div>
+
+<div class="indent">
+<p>
+This book is essential reading for any C++ programmer. It describes
+many subtle pitfalls and explains lots of good practices. 
+An additional book that is also essential reading&mdash;and which
+covers C++11 and C++14&mdash;is Meyers' <a href="#effectivemodcpp">Effective
+Modern C++</a>.
+</p>
+</div>
+
+<div id="codecomplete" class="biblio">
+Code Complete: A Practical Handbook of Software Construction
+<br>
+<div class="biblio2">Steve McConnell (2nd edition; Microsoft Press; 2004)</div>
+</div>
+
+<div class="indent">
+<p>
+This book shows how to build solid software, going beyond the language
+specifics into the realms of ideas, principles, and practices. The
+book is packed with ideas that will make any programmer think more
+deeply about their programming. The book's examples are mostly in C++,
+Java, and Visual Basic, but are readily translatable and applicable to
+other languages.
+</p>
+</div>
+
+<div id="linuxbyeg" class="biblio">
+Linux Programming by Example: The Fundamentals
+<br>
+<div class="biblio2">Arnold Robbins (Prentice Hall; 2004)</div>
+</div>
+
+<div class="indent">
+<p>
+A useful and accessible introduction to Linux programming using the
+Linux system call APIs. The book's examples are in C.
+</p>
+</div>
+
+<div id="cppnut" class="biblio">
+C++ in a Nutshell
+<br>
+<div class="biblio2">Ray Lischner (O'Reilly; 2003)</div>
+</div>
+
+<div class="indent">
+<p>
+This useful book provides a solid, compact, and comprehensive reference
+to the C++ language and its standard libraries (including the C
+libraries that are part of the C++ standard). Unfortunately it doesn't
+cover C++11.
+</p>
+</div>
+
+<div id="domaindrivendesign" class="biblio">
+Domain-Driven Design: Tackling Complexity in the Heart of Software
+<br>
+<div class="biblio2">Eric Evans (Addison-Wesley Professional; 2003)</div>
+</div>
+
+<div class="indent">
+<p>
+A very interesting book on software design, particularly useful for
+large, multiperson projects. At its heart it is about creating and
+refining domain models that represent what the system is designed to do,
+and about creating a ubiquitous language through which all those
+involved with the system&mdash;not just software engineers&mdash;can
+communicate their ideas. The book's examples are in Java.
+</p>
+</div>
+
+<div id="rapiddev" class="biblio">
+Rapid Development: Taming Wild Software Schedules
+<br>
+<div class="biblio2">Steve McConnell (Microsoft Press; 1996)</div>
+</div>
+
+<div class="indent">
+<p>
+This book takes a strategic&mdash;project-oriented&mdash;approach rather
+than a tactical&mdash;code-oriented&mdash;one, as it explains the
+software development process and how to manage it. I still have this
+book and it sticks in my memory because while I was reading it I was
+working on a software project that made just about every mistake the
+book covers. (The project was finally killed off a few years after I'd
+moved on.) The book is evidence-based and still interesting despite its
+age.
+</p>
+</div>
+
+<div id="designpatterns" class="biblio">
+Design Patterns: Elements of Reusable Object-Oriented Software
+<br>
+<div class="biblio2">Erich Gamma, Richard Helm, Ralph Johnson, John
+Vlissides (Addison-Wesley Professional; 1994) </div>
+</div>
+
+<div class="indent">
+<p>
+Deservedly one of the most influential programming books of modern
+times. The design patterns are fascinating and of great practical use in
+everyday programming. The book's examples are mostly in C++, with some
+also illustrated using Smalltalk. One consequence of this book's success
+is that many more design patterns have been discovered since its
+publication, and some of the patterns it describes have become
+controversial.
+</p>
+</div>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-here">Books</span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p style="margin-top: 20px;"><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>

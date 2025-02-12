@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Programming in Go &mdash; book errata</title>
+    <meta name="description" content="Programming in Go textbook errata"/>
+    <meta name="keywords" content="Go, programming, textbook, errata"/>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Programming in Go</h1>
+<h2 class="subtitle2">Errata</h2>
+<h3 class="subsubtitle">ISBN-10: 0321774639&nbsp;&ndash;&nbsp;ISBN-13:
+978-0321774637</h3>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link"><a href="gobook.html">Programming in
+Go</a></span> &bull;
+<span class="nav-link-sub"><a href="gobook.html#toc">Contents</a></span>
+&bull;
+<span class="nav-link-sub"><a href="gobook.html#cover">Cover</a></span>
+&bull;
+<span class="nav-link-sub"><a href="gobook.html#eg">Downloads</a></span>
+&bull;
+<span class="nav-here-sub">Errata</span> &bull;
+<span class="nav-link-sub"><a href="gobook.html#trans">Translations</a></span>
+</div>
+
+<!-- Body -->
+<div style="overflow-x:auto; display: block; border-collapse: collapse;">
+<table class="eth">
+<tr>
+<td class="sectionheading, eth">Issue</td>
+<td class="sectionheading, eth">Resolution</td>
+<td class="sectionheading, eth">Reporter</td>
+</tr>
+
+<tr><td class="etd">Page 10. URL change.</td>
+<td class="etd" >The URL for <code>gonow</code> has changed to
+<a href="https://github.com/kisom/GoNow">https://github.com/kisom/GoNow</a>.
+</td>
+<td class="etd" >Gary Scarr</td></tr>
+
+<tr><td class="etd" >Page 17. Typesetting error.</td>
+<td class="etd" >In the console output shown after the first
+paragraph the last <code>333</code> at the bottom should be two spaces to
+the right.</td>
+<td class="etd" >Author</td></tr>
+
+<tr><td class="etd" >Page 21. Spurious text.</td>
+<td class="etd" >The first line of the last paragraph on this
+page has the text <code>keyword!!struct</code>; this should be deleted.</td>
+<td class="etd" >Mikhail Strebkov</td></tr>
+
+<tr><td class="etd" >Page 40. Tiny typo.</td>
+<td class="etd" >In the final paragraph of section 1.6. replace
+“suppport” with “support”.</td>
+<td class="etd" >Ryan Boehning</td></tr>
+
+<tr><td class="etd" >Page 52. Tiny typo.</td>
+<td class="etd" >In the first line replace “lines it it” with
+“lines it is”.</td>
+<td class="etd" >Manuel Kiessling</td></tr>
+
+<tr><td class="etd" >Page 54. Clarification/correction.</td>
+<td class="etd" >Replace the paragraph that begins “On the
+other hand,” with:<br />
+“On the other hand, if the right-hand code snippet <i>didn't</i> have
+<code>iota</code>, <code>Cyan</code> must be given an explicit value, and
+<code>Magenta</code> would be set to <code>Cyan</code>'s value and
+<code>Yellow</code> would be set to <code>Magenta</code>'s value. So, if
+<code>Cyan</code> was set to, say 9, then they would all be set to 9. We can
+use both <code>iota</code> and explicit values. For example, we could set
+<code>Cyan</code> to <code>iota</code> (so its value will be 0), give no value
+to <code>Magenta</code> (so it becomes 1 due to <code>Cyan</code>'s
+<code>iota</code>), and <code>Yellow</code> to 5. If we then added
+<code>Black</code> it would have the previous constant's value (i.e.,
+<code>Yellow</code>'s 5), unless we gave it an explicit value.”</td>
+<td class="etd" >Luca Boasso</td></tr>
+
+<tr><td class="etd" >Page 55. Wrong word.</td>
+<td class="etd" >In this page's first paragraph replace the
+phrase “Go's bitwise flags” with “Go's bitwise operators”.</td>
+<td class="etd" >Luca Boasso</td></tr>
+
+<tr><td class="etd" >Page 117. Tiny typo.</td>
+<td class="etd" >The function
+<code>utf.DecodeLastRuneInString()</code> should, of course, be
+<code>utf8.DecodeLastRuneInString()</code>.</td>
+<td class="etd" >Luca Boasso</td></tr>
+
+<tr><td class="etd" >Page 140. Wrong information.</td>
+<td class="etd" >I claimed that Go does copy on write when
+using augmented assignment with strings, but actually a new string is
+created under the hood. Replace the phrase “behind the scenes Go must do
+a copy on write ... was being used”, with “behind the scenes Go must
+create a new string and copy the original string and the added string
+into it, which is potentially expensive for large strings.”.</td>
+<td class="etd" >Jonathan Amsterdam</td></tr>
+
+<tr><td class="etd" >Page 142. Wrong value in Figure&nbsp;4.2</td>
+<td class="etd" >In Figure&nbsp;4.2 the Value for the statement
+<code>pi := &amp;y</code> (i.e., the third column's value) should be
+<code>22</code> not <code>y</code>.</td>
+<td class="etd" >Darin Greaham</td></tr>
+
+<tr><td class="etd" >Page 247. Bug.</td>
+<td class="etd" >The <code>computeIndent()</code> function will
+hang if the indent isn't exactly four spaces. To fix this,
+increment <code>i</code> just before the first <code>return</code> call:
+<pre>
+                if char != whitespace {
+                    i++ // FIX: will now work for any non-zero indent
+                    return strings.Repeat(string(whitespace), i), i
+                }
+</pre>
+This correction has been made to the <code>indent_sort/indent_sort.go</code>
+file in the archive files. (Note that the function will fail if the data
+has no or inconsistent indentation.)
+</td>
+<td class="etd" >Alexander Häckel</td></tr>
+
+<tr><td class="etd" >Page 263. Subtle error.</td>
+<td class="etd" >In the first paragraph replace the phrase
+“method's type” with “receiver's type”.</td>
+<td class="etd" >Luca Boasso</td></tr>
+
+<tr><td class="etd" >Page 336. Incorrect phrase.</td>
+<td class="etd" >In the penultimate paragraph, replace “is
+a closure which has captured” with “communicates using the”.</td>
+<td class="etd" >Luca Boasso</td></tr>
+
+<tr><td class="etd" >Pages 341&ndash;348. Additional notes.</td>
+<td class="etd" >I did some speed testing against an access.log file of 572MB (2.6M lines) on a quad core AMD-64 3GHz
+machine.</td><td class="etd">Author</td></tr>
+</table>
+</div>
+
+<div style="overflow-x:auto; display: block; border-collapse: collapse;">
+<table class="eth">
+<tr><th>Program</th><th>Time</th><th>Notes</th></tr>
+<tr><td class="etd">apachereport1</td><td class="etd">13.8s</td><td class="etd">
+The file is read in one goroutine which feeds lines to four other
+goroutines who populate a safe map in its own goroutine.
+</td></tr>
+<tr><td class="etd">apachereport2</td><td class="etd">13.9s</td><td class="etd">
+The file is read in one goroutine which feeds lines to four other
+goroutines who populate a map which is protected by a mutex.
+</td></tr>
+<tr><td class="etd">apachereport3</td><td class="etd">14.8s</td><td class="etd">
+The file is read in one goroutine which feeds lines to four other
+goroutines who populate their own independent maps which are merged as
+each worker goroutine finishes.
+</td></tr>
+<tr><td class="etd">apachereport4</td><td class="etd">11.5s</td><td class="etd">
+The file is read in one goroutine which feeds lines to four other
+goroutines who populate a safe slice in its own goroutine.
+</td></tr>
+<tr><td class="etd">apachereport5</td>
+    <td class="etd"><span style="color: #FFFFF0;">0</span>7.4s</td>
+    <td class="etd">
+Four goroutines each open the same file and read lines from their own
+quarter of it. They populate their own independent maps which are merged
+as each worker goroutine finishes. (This example was added after the
+book was published; it is now included with the book's source code.)
+</td></tr>
+</table>
+</div>
+
+<p>
+Keen experimenters might like to do their own timings and then create
+new versions (e.g., <code>apachereport6</code> based on
+<code>apachereport1</code> and <code>apachereport7</code> based on
+<code>apachereport2</code> etc.), but where each goroutine opens the same
+file and reads in its own lines like <code>apachereport5</code> does.
+</p>
+
+<table class="eth">
+<tr>
+<td class="sectionheading, eth">Issue</td>
+<td class="sectionheading, eth">Resolution</td>
+<td class="sectionheading, eth">Reporter</td>
+</tr>
+<tr><td class="etd" >Pages 401-416</td>
+<td class="etd" >A small batch of books was printed with one
+16-page sheet missing&mdash;pages 401-416. Please check that these pages
+are present if buying in a book store. If you buy online and these pages
+are missing, you could go through the returns process for a free
+replacement, or alternatively ask me for a PDF of the missing pages.
+I'm very sorry for the inconvenience.
+</td>
+<td class="etd" >Author</td></tr>
+
+<tr><td class="etd" >Page 439. Missing URL.</td>
+<td class="etd" >In the last paragraph, in addition to
+<a href="https://www.endsoftpatents.org">www.endsoftpatents.org</a> and
+<a href="https://www.nosoftwarepatents.com">www.nosoftwarepatents.com</a>, I
+should have included
+<a href="https://www.eff.org/patent">www.eff.org/patent</a>.
+</td>
+<td class="etd" >Author</td></tr>
+
+<tr><td class="etd" >Page 439. Update.</td>
+<td class="etd" >The European Parliament has now passed into
+law, European Unitary patents (including software
+patents). They are due to come into force 2014-01-01. The European patent
+office will both grant patents and be the final arbiter for disputes
+(not the European Court of Justice). So Europeans can now expect even
+worse patent troll shakedowns than those in the U.S.</td>
+<td class="etd" >Author.</td></tr>
+</table>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Python Programming Tips: Saving Memory on Millions of Small
+Objects &mdash; article</title>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Python Programming Tips #3</h1>
+<h2 class="subtitle">Saving Memory on Millions of Small
+Objects</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link-sub"><a href="pytips.html">Python Programming Tips</a></span>
+</div>
+
+<!-- Body -->
+<div class="shout">
+<p>
+Some applications need to store literally millions of small objects.
+Python has no problems with this per se, but if you're using a 32-bit
+Python or 32-bit operating system, or just don't have that much memory,
+the memory consumption of these objects may become problematic.
+</p>
+
+<p>
+Python has a classic solution designed to reduce memory consumption:
+<code>__slots__</code>. We'll see how to use this technique to reduce memory
+consumption by about half&mdash;and then we'll see how to go further, to
+reduce memory consumption by about two thirds.
+</p>
+</div>
+
+<p>
+We'll start with a simple <code>Rect</code> class that uses integer
+coordinates, and see how much memory one million occupy. Then we'll
+start to reduce the memory consumption and do some code improvement
+along the way.
+</p>
+
+<p>
+Here's the simple <code>Rect</code> class:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Rect</span>:
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, x1, y1, x2, y2):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>x1 <span style="color: #666666">=</span> x1
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>x2 <span style="color: #666666">=</span> x2
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>y1 <span style="color: #666666">=</span> y1
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>y2 <span style="color: #666666">=</span> y2
+</pre></div>
+
+<p>
+When we created a million of these using a 64-bit Python&nbsp;3 on a
+64-bit operating system they occupied about 400KB.
+</p>
+
+<p>
+Rather than try the normal <code>__slots__</code> technique, we began by
+using a more subtle approach:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Rect</span>(<span style="color: #008000">tuple</span>):
+
+    __slots__ <span style="color: #666666">=</span> ()
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__new__</span>(Class, x1, y1, x2, y2):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">super</span>()<span style="color: #666666">.</span>__new__(Class, (x1, y1, x2, y2))
+</pre></div>
+
+<p>
+This makes our <code>Rect</code> a <code>tuple</code> subclass. Using it reduces
+memory consumption by about 43% to about 227KB.
+</p>
+
+<p>
+Now let's look at the classic <code>__slots__</code> approach:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Rect</span>:
+
+    __slots__ <span style="color: #666666">=</span> (<span style="color: #BA2121">&quot;x1&quot;</span>, <span style="color: #BA2121">&quot;x2&quot;</span>, <span style="color: #BA2121">&quot;y1&quot;</span>, <span style="color: #BA2121">&quot;y2&quot;</span>)
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, x1, y1, x2, y2):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>x1 <span style="color: #666666">=</span> x1
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>x2 <span style="color: #666666">=</span> x2
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>y1 <span style="color: #666666">=</span> y1
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>y2 <span style="color: #666666">=</span> y2
+</pre></div>
+
+<p>
+This reduces memory consumption by about 47% to around 212KB. This is
+what the textbooks teach, so a lot of people might be tempted to think
+this is as far as they can go (at least without dropping down to C).
+</p>
+
+<p>
+Incidentally, there is one drawback of using <code>__slots__</code>: you
+can't add arbitrary extra data to <code>Rect</code> instances as you could
+if the class used a <code>dict</code>. For our use cases this hasn't
+mattered; and anyway, there's nothing to stop us adding more items to
+the <code>__slots__</code> in the future.
+</p>
+
+<p>
+But actually, we can do a lot better. We'll show two versions, the first
+rather long-winded but fairly easy to understand; the second, much more
+compact although a bit trickier.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Rect</span>:
+
+    __slots__ <span style="color: #666666">=</span> (<span style="color: #BA2121">&quot;_data&quot;</span>,)
+
+    <span style="color: #408080; font-style: italic"># We are not limited to using the same types; could mix any</span>
+    <span style="color: #408080; font-style: italic"># fixed-width types we want. And, of course, we can add extra</span>
+    <span style="color: #408080; font-style: italic"># items to the struct later if need be.</span>
+    Coords <span style="color: #666666">=</span> struct<span style="color: #666666">.</span>Struct(<span style="color: #BA2121">&quot;llll&quot;</span>)
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, x1, y1, x2, y2):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_data <span style="color: #666666">=</span> Rect<span style="color: #666666">.</span>Coords<span style="color: #666666">.</span>pack(x1, y1, x2, y2)
+
+    <span style="color: #AA22FF">@property</span>
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">x1</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> Rect<span style="color: #666666">.</span>Coords<span style="color: #666666">.</span>unpack(<span style="color: #008000">self</span><span style="color: #666666">.</span>_data)[<span style="color: #666666">0</span>]
+
+    <span style="color: #AA22FF">@property</span>
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">x2</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> Rect<span style="color: #666666">.</span>Coords<span style="color: #666666">.</span>unpack(<span style="color: #008000">self</span><span style="color: #666666">.</span>_data)[<span style="color: #666666">1</span>]
+
+    <span style="color: #AA22FF">@property</span>
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">y1</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> Rect<span style="color: #666666">.</span>Coords<span style="color: #666666">.</span>unpack(<span style="color: #008000">self</span><span style="color: #666666">.</span>_data)[<span style="color: #666666">2</span>]
+
+    <span style="color: #AA22FF">@property</span>
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">y2</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> Rect<span style="color: #666666">.</span>Coords<span style="color: #666666">.</span>unpack(<span style="color: #008000">self</span><span style="color: #666666">.</span>_data)[<span style="color: #666666">3</span>]
+</pre></div>
+
+<p>
+What we've done here is made every <code>Rect</code> store a <i>single</i>
+Python object (<code>Rect._data</code>), rather than four separate objects,
+thus potentially reducing the overhead by 75%. Of course we have to pay
+for this somehow, and we've paid by having a processing overhead in that
+when a coordinate is looked up we have to extract it. But with modern
+CPUs this probably doesn't matter if memory is at a premium.
+</p>
+
+<p>
+Using this technique reduces memory consumption by 66%, taking it down
+to about 137KB compared with the 400KB the original class needed.
+And we could save even more memory by using a smaller integer size.
+</p>
+
+<p>
+(Incidentally, throughout we've only shown read-only properties, there's
+no reason the examples couldn't be extended to have writable
+properties.)
+</p>
+
+<p>
+Finally, here's a much shorter version that has the same performance
+characteristics, but is written using much less code.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">_make_unpacker</span>(index):
+    <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000; font-weight: bold">lambda</span> <span style="color: #008000">self</span>: operator<span style="color: #666666">.</span>itemgetter(index)(
+        Rect<span style="color: #666666">.</span>Coords<span style="color: #666666">.</span>unpack(<span style="color: #008000">self</span><span style="color: #666666">.</span>_data))
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Rect</span>:
+
+    __slots__ <span style="color: #666666">=</span> (<span style="color: #BA2121">&quot;_data&quot;</span>,)
+
+    Coords <span style="color: #666666">=</span> struct<span style="color: #666666">.</span>Struct(<span style="color: #BA2121">&quot;llll&quot;</span>)
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, x1, y1, x2, y2):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_data <span style="color: #666666">=</span> Rect<span style="color: #666666">.</span>Coords<span style="color: #666666">.</span>pack(x1, y1, x2, y2)
+
+    x1 <span style="color: #666666">=</span> <span style="color: #008000">property</span>(_make_unpacker(<span style="color: #666666">0</span>))
+    x2 <span style="color: #666666">=</span> <span style="color: #008000">property</span>(_make_unpacker(<span style="color: #666666">1</span>))
+    y1 <span style="color: #666666">=</span> <span style="color: #008000">property</span>(_make_unpacker(<span style="color: #666666">2</span>))
+    y2 <span style="color: #666666">=</span> <span style="color: #008000">property</span>(_make_unpacker(<span style="color: #666666">3</span>))
+</pre></div>
+
+<p>
+Here, we've used a private helper function (<code>_make_unpacker()</code>)
+to create each property.
+</p>
+
+<p>
+Does this matter in practice? We've certainly found it made a huge
+difference for an application that needed to create millions of items
+(not rectangles, but similar in principle).
+</p>
+
+<p>For more see <a href="pytips.html">Python Programming Tips</a></p>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>
+

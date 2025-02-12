@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Python Programming Tips: Spreading a Class Over Multiple
+Files &mdash; article</title>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Python Programming Tips #2</h1>
+<h2 class="subtitle">Spreading a Class Over Multiple Files</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link-sub"><a href="pytips.html">Python Programming Tips</a></span>
+</div>
+
+<!-- Body -->
+<div class="shout">
+<p>
+It is expected that any class implemented in Python will occupy a single
+module. So, for example, if we have a class called <code>DataStore</code>,
+by convention we would put it in a module called <code>DataStore.py</code>.
+To access the class we would do <code>import DataStore</code> and then
+create an instance using code like <code>store =
+DataStore.DataStore(...)</code> where the ellipsis stands for any
+arguments we might pass.
+</p>
+
+<p>
+But what happens if our class has some very large methods? Or lots or
+methods? Or both? Personally, I prefer to keep my modules under 1,000
+lines, but larger classes&mdash;such as those that provide an
+application's data storage or a top-level window in a GUI
+application&mdash;can easily run to well over 1,000 lines. Fortunately,
+thanks to Python's flexibility and meta-programming support (don't
+worry, the code is short and straightforward!) we can keep our modules
+to a managable size by spreading a class over as many files as we like. 
+</p>
+</div>
+
+<p>
+Probably the most common approach to spreading a class's code over
+multiple files is to use subclassing, with the base class in one
+module, and the (or each) subclass, in its own separate module. This
+works fine when there is a logical division of functionality into a base
+class/subclass hierarchy, but isn't suitable for cases where all the
+functionality needs to be at the same level, which is the case this
+article addresses.
+</p>
+
+<p>
+We'll start with our “large” module, and then look at a very simple way
+to spread its code over multiple files. This first way has some
+disadvantages, so we'll then show a second way that uses a tiny bit of
+meta-programming, then a third way that is what I actually used to use
+in practice, and finally the “definitive” technique I now use.
+(<a href="#definitive">Skip to the definitive way.</a>)
+</p>
+
+<p>
+First though, our “large” module:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># DataStore.py</span>
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">DataStore</span>:
+
+    <span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># lots of other methods ...</span>
+
+    <b><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">bigMethod</span>(<span style="color: #008000">self</span>):
+	<span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># lots of lines</span></b>
+
+    <b><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">hugeMethod</span>(<span style="color: #008000">self</span>):
+	<span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># lots of lines</span></b>
+</pre></div>
+
+<p>
+Overall, this module is too big and we'd rather split it up. A simple
+solution is to delegate the work to functions in a separate module. For
+example:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># DataStore.py</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">_DataStore</span>
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">DataStore</span>:
+
+    <span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># lots of other methods ...</span>
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">bigMethod</span>(<span style="color: #008000">self</span>):
+	<b>state <span style="color: #666666">=</span> <span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># accumulate all the necessary state</span>
+	_DataStore<span style="color: #666666">.</span>bigMethod(state)</b>
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">hugeMethod</span>(<span style="color: #008000">self</span>):
+	<b>state <span style="color: #666666">=</span> <span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># accumulate all the necessary state</span>
+	_DataStore<span style="color: #666666">.</span>hugeMethod(state)</b>
+</pre></div>
+
+<br>
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># _DataStore.py</span>
+
+<b><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">bigMethod</span>(state):
+    <span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># lots of lines</span></b>
+
+<b><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">hugeMethod</span>(state):
+    <span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># lots of lines</span></b>
+</pre></div>
+
+<p>
+I've called the supporting module <code>_DataStore.py</code> to indicate
+that is a private version of <code>DataStore.py</code>, but that's just my
+personal convention. (When I spread a class over multiple files I add
+more description, for example, <code>_DataStoreSelect.py</code>,
+<code>_DataStoreModify.py</code>, etc.)
+</p>
+
+<p>
+Unfortunately, there are a couple of disadvantages to this approach.
+Firstly, every method call to a delegated method becomes a method call
+plus a function call. The overhead of this should be insignificant
+though, because we normally use the technique for big methods anyway.
+(But it does preclude our use of small or fast methods that are used a
+lot.) Also, we have to pass the instance's state to give the
+function access to the class's methods and the instance's data.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># DataStore.py</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">_DataStore</span>
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">DataStore</span>:
+
+    <span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># lots of other methods ...</span>
+
+    <b><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">bigMethod</span>(<span style="color: #008000">self</span>):
+	_DataStore<span style="color: #666666">.</span>bigMethod(<span style="color: #008000">self</span>)
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">hugeMethod</span>(<span style="color: #008000">self</span>):
+	_DataStore<span style="color: #666666">.</span>hugeMethod(<span style="color: #008000">self</span>)</b>
+</pre></div>
+
+<br>
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># _DataStore.py</span>
+
+<b><span style="color: #408080; font-style: italic"># self is a DataStore</span></b>
+
+<b><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">bigMethod</span>(<span style="color: #008000">self</span>):
+    <span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># lots of lines</span>
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">hugeMethod</span>(<span style="color: #008000">self</span>):
+    <span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># lots of lines</span></b>
+</pre></div>
+
+<p>
+Here we've solved the problem of passing state by simply passing
+<code>self</code> to the functions. But we still have the
+delegation&mdash;it would be nice to get rid of that, and in fact we can
+do so by using a little bit of meta-programming.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># DataStore.py</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Lib</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">_DataStore</span>
+
+<b><span style="color: #AA22FF">@Lib</span><span style="color: #666666">.</span>add_functions_as_methods(
+    (_DataStore<span style="color: #666666">.</span>bigMethod, _DataStore<span style="color: #666666">.</span>hugeMethod))</b>
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">DataStore</span>:
+
+    <span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># lots of other methods ...</span>
+</pre></div>
+<br>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># Lib.py</span>
+
+<b><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">add_functions_as_methods</span>(functions):
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">decorator</span>(Class):
+        <span style="color: #008000; font-weight: bold">for</span> function <span style="color: #AA22FF; font-weight: bold">in</span> functions:
+            <span style="color: #008000">setattr</span>(Class, function<span style="color: #666666">.</span>__name__, function)
+        <span style="color: #008000; font-weight: bold">return</span> Class
+    <span style="color: #008000; font-weight: bold">return</span> decorator</b>
+</pre></div>
+
+<p>
+Here we've used a class decorator that given a sequence of functions,
+adds each one to the decorated class as a method. So now, there's no
+need for delegation and our <code>DataStore</code> class has its
+<code>bigMethod()</code> and <code>hugeMethod()</code> methods even though they
+are implemented in a separate <code>_DataStore.py</code> module.
+</p>
+
+<p>
+I don't like having to name all the functions that are to become methods
+when I call the class decorator, so my convention is to create a
+<code>functions</code> variable at the end of the private module(s) that
+lists the functions to be used by the class decorator.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># DataStore.py</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Lib</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">_DataStore</span>
+
+<b><span style="color: #AA22FF">@Lib</span><span style="color: #666666">.</span>add_functions_as_methods(_DataStore<span style="color: #666666">.</span>functions)</b>
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">DataStore</span>:
+
+    <span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># lots of other methods ...</span>
+</pre></div>
+
+<br>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># _DataStore.py</span>
+
+<span style="color: #408080; font-style: italic"># self is a DataStore</span>
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">bigMethod</span>(<span style="color: #008000">self</span>):
+    <span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># lots of lines</span>
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">hugeMethod</span>(<span style="color: #008000">self</span>):
+    <span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># lots of lines</span>
+
+<b>functions <span style="color: #666666">=</span> (bigMethod, hugeMethod)</b>
+</pre></div>
+
+<p>
+Of course, it would be nicer if we didn't have to remember to populate
+the <code>functions</code> list at the end. Also it would be nice to be able
+to distinguish between functions that are to be added to a class as
+methods and their helpers. Here is my original code which works, but is
+rather simple and slightly inconvenient.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># Lib.py</span>
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">add_functions_as_methods</span>(functions):
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">decorator</span>(Class):
+        <span style="color: #008000; font-weight: bold">for</span> function <span style="color: #AA22FF; font-weight: bold">in</span> functions:
+            <span style="color: #008000">setattr</span>(Class, function<span style="color: #666666">.</span>__name__, function)
+        <span style="color: #008000; font-weight: bold">return</span> Class
+    <span style="color: #008000; font-weight: bold">return</span> decorator
+
+<b><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">register_function</span>(sequence, function):
+    sequence<span style="color: #666666">.</span>append(function)
+    <span style="color: #008000; font-weight: bold">return</span> function</b>
+</pre></div>
+
+<br>
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># _DataStore.py</span>
+
+<b><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">functools</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Lib</span>
+
+functions <span style="color: #666666">=</span> []
+register_function <span style="color: #666666">=</span> functools<span style="color: #666666">.</span>partial(
+    Lib<span style="color: #666666">.</span>register_function, functions)</b>
+
+<span style="color: #408080; font-style: italic"># self is a DataStore</span>
+
+<b><span style="color: #AA22FF">@register_function</span></b>
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">bigMethod</span>(<span style="color: #008000">self</span>):
+    <span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># lots of lines</span>
+
+<b><span style="color: #AA22FF">@register_function</span></b>
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">hugeMethod</span>(<span style="color: #008000">self</span>):
+    <span style="color: #666666">...</span> <span style="color: #408080; font-style: italic"># lots of lines</span>
+</pre></div>
+
+<p>
+Here, I've added a new function to the <code>Lib</code> module that is used
+as a decorator and modified the private <code>_DataStore</code> module to
+make use of it. Rather unusually, instead of returning a modified
+function, the decorator returns the original function unchanged, but as
+a side-effect, adds the function to the given sequence&mdash;in this
+case the <code>functions</code> list. The imports and two extra statements
+at the start of the private <code>_DataStore</code> are boilerplate that can
+be copied verbatim; then all that's needed is to use the
+<code>@register_function</code> decorator for any functions that are
+ultimately to be added as methods. (Incidentally, the public
+<code>DataStore</code> module itself requires no changes.)
+</p>
+
+<p>
+Although the example only spreads the class over two files, the
+technique can easily be used to spread a class over as many files as
+required. Each supplementary module should have the boilerplate code
+near the start, i.e.,
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">functools</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Lib</span>
+
+functions <span style="color: #666666">=</span> []
+register_function <span style="color: #666666">=</span> functools<span style="color: #666666">.</span>partial(
+    Lib<span style="color: #666666">.</span>register_function, functions)
+</pre></div>
+
+<p>
+In addition, each function to be used as a method will need the
+<code>@register_function</code> decorator, and of course, for each of these
+modules the main module needs an extra
+<code>@Lib.add_functions_as_methods(<i>_supplementaryModule</i>.functions)</code>
+statement to be added in front of the <code>class</code> definition.
+</p>
+
+<p>
+Here's what used to be my definitive version.
+</p>
+
+<p>
+Since originally writing this article I've used this technique quite a
+lot, and I've now refined and simplified it. First up are the improved
+library functions, then we'll see them in use.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># Lib.py</span>
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">add_methods_from</span>(<span style="color: #666666">*</span>modules):
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">decorator</span>(Class):
+        <span style="color: #008000; font-weight: bold">for</span> module <span style="color: #AA22FF; font-weight: bold">in</span> modules:
+            <span style="color: #008000; font-weight: bold">for</span> method <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">getattr</span>(module, <span style="color: #BA2121">&quot;__methods__&quot;</span>):
+                <span style="color: #008000">setattr</span>(Class, method<span style="color: #666666">.</span>__name__, method)
+        <span style="color: #008000; font-weight: bold">return</span> Class
+    <span style="color: #008000; font-weight: bold">return</span> decorator
+
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">register_method</span>(methods):
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">register_method</span>(method):
+        methods<span style="color: #666666">.</span>append(method)
+        <span style="color: #008000; font-weight: bold">return</span> method <span style="color: #408080; font-style: italic"># Unchanged</span>
+    <span style="color: #008000; font-weight: bold">return</span> register_method
+</pre></div>
+
+<p>
+The <code>add_methods_from()</code> function takes any number of modules and
+for each one adds any methods that have been registered with the class
+it is used to decorate.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># DataStore.py</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Lib</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">_DataStore</span>
+
+<span style="color: #AA22FF">@Lib</span><span style="color: #666666">.</span>add_methods_from(_DataStore) <span style="color: #408080; font-style: italic"># Don&#39;t need to specify which methods.</span>
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">DataStore</span>:                  <span style="color: #408080; font-style: italic"># Can pass multiple modules.</span>
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_a <span style="color: #666666">=</span> <span style="color: #666666">1</span>
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_b <span style="color: #666666">=</span> <span style="color: #666666">2</span>
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_c <span style="color: #666666">=</span> <span style="color: #666666">3</span>
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">small_method</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_a
+</pre></div>
+
+<p>
+We can have as many <code>add_methods_from()</code> decorators as we like,
+or we can just use one with multiple modules, e.g.,
+<code>@Lib.add_methods_from(_DataStoreLoad, _DataStoreSave)</code>.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># _DataStore</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">Lib</span>
+
+__methods__ <span style="color: #666666">=</span> [] <span style="color: #408080; font-style: italic"># self is a DataStore</span>
+register_method <span style="color: #666666">=</span> Lib<span style="color: #666666">.</span>register_method(__methods__)
+
+<span style="color: #AA22FF">@register_method</span>
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">big_method</span>(<span style="color: #008000">self</span>):
+    <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_b
+
+<span style="color: #AA22FF">@register_method</span>
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">huge_method</span>(<span style="color: #008000">self</span>):
+    <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_c
+</pre></div>
+
+<p>
+We <i>must</i> provide a <code>__methods__</code> list since the
+<code>Lib.add_methods_from()</code> function depends on it. Notice that we
+don't use partial function application any more (in fact, it wasn't
+needed before, but I hadn't noticed at the time).
+</p>
+
+<h3 id="definitive">The Definitive Version?</h3>
+
+<p>
+Thanks to <a
+href="https://groups.google.com/forum/?hl=en#!topic/comp.lang.python/goLBrqcozNY">Garry
+Herron's post</a> on the <a
+href="https://groups.google.com/forum/?hl=en#!forum/comp.lang.python">comp.lang.python</a>
+newsgroup, I now use a much simpler, cleaner approach: mixins. These are
+classes that have no data of their own&mdash;only methods&mdash;so
+although you inherit them, you never have to call <code>super()</code> on
+them, and they “just work”. Nor do we need any library functions, since
+Python supports this out of the box.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># DataStore.py</span>
+
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">_DataStore</span>
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">DataStore</span>(_DataStore<span style="color: #666666">.</span>Mixin): <span style="color: #408080; font-style: italic"># Could inherit many more mixins</span>
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_a <span style="color: #666666">=</span> <span style="color: #666666">1</span>
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_b <span style="color: #666666">=</span> <span style="color: #666666">2</span>
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_c <span style="color: #666666">=</span> <span style="color: #666666">3</span>
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">small_method</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_a
+</pre></div>
+
+<p>
+Our mixin classes must not have an <code>__init__</code> or store any
+data&mdash;but they have full access to <code>self</code> and <i>its</i>
+data of course.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic"># _DataStore.py</span>
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Mixin</span>:
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">big_method</span>(<span style="color: #008000">self</span>):
+	<span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_b
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">huge_method</span>(<span style="color: #008000">self</span>):
+	<span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_c
+</pre></div>
+
+<p>
+Simpler, and nicer&mdash;and pure Python. However, some posters on the
+newsgroup felt that other approaches would be better, e.g., Steven
+D'Aprano's reply
+<a href="https://groups.google.com/forum/?hl=en#!topic/comp.lang.python/goLBrqcozNY">importing into a class</a>.
+In fact, nowadays, I tend to just use pure delegation.
+</p>
+
+<p>For more see <a href="pytips.html">Python Programming Tips</a></p>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Advanced Qt Programming &mdash; book errata</title>
+    <meta name="description" content="Advanced Qt Programming book errata."/>
+    <meta name="keywords" content="Qt, programming, textbook, errata"/>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Advanced Qt Programming</h1>
+<h2 class="subtitle2">Errata</h2>
+<h3 class="subsubtitle">ISBN-10:&nbsp;0321635906&nbsp;&ndash;&nbsp;ISBN-13: 978-0321635907</h3>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link"><a href="aqpbook.html">Advanced Qt
+Programming</a> &bull;</span>
+<span class="nav-link-sub"><a href="aqpbook.html#toc">Contents</a> &bull;</span>
+<span class="nav-link-sub"><a href="aqpbook.html#cover">Cover</a> &bull;</span>
+<span class="nav-link-sub"><a href="aqpbook.html#eg">Downloads</a>
+&bull;</span>
+<span class="nav-here-sub">Errata &bull;</span>
+<span class="nav-link-sub"><a href="aqpbook-translations.html">Translations</a></span>
+</div>
+
+<!-- Body -->
+<p style="color: darkmagenta;">Errata for the First and Second
+Printings (the errata in the second table were all fixed in the Second
+Printing)</p>
+<div style="overflow-x:auto; display: block; border-collapse: collapse;">
+<table style="border-width: 1pt;">
+<tr>
+<td style="background-color: lightcyan;" class="sectionheading">Issue</td>
+<td style="background-color: lightcyan;" class="sectionheading">Resolution</td>
+<td style="background-color: lightcyan;" class="sectionheading">Reporter</td>
+</tr>
+
+<tr><td style="text-align: left; vertical-align: top;">Page 15.</td>
+<td style="text-align: left; vertical-align: top;">The sidebar gives a very brief summary of the
+<code>Alt_Key</code> library supplied with the book.</td>
+<td style="text-align: left; vertical-align: top;">Author</td></tr>
+
+<tr><td style="text-align: left; vertical-align: top;">Pages 355-357. Redundant code.</td>
+<td style="text-align: left; vertical-align: top;">The <code>cursorPositionChanged()</code>
+signal&ndash;slot connection and the <code>cursorPositionChanged()</code>
+slot appear to be redundant for Qt&nbsp;4.7+.
+</td>
+<td style="text-align: left; vertical-align: top;">Yuriy Grihsin</td></tr>
+</table>
+</div>
+
+<p style="color: darkmagenta;">Errata for the First Printing only (additional to the errata
+above&mdash;these are all fixed in the Second and subsequent
+printings)</p>
+
+<div style="overflow-x:auto; display: block; border-collapse: collapse;">
+<table style="border-width: 1pt;">
+<tr>
+<td style="background-color: lightcyan;" class="sectionheading">Issue</td>
+<td style="background-color: lightcyan;" class="sectionheading">Resolution</td>
+<td style="background-color: lightcyan;" class="sectionheading">Reporter</td>
+</tr>
+
+<tr><td style="text-align: left; vertical-align: top;">Pages 166-167. Subtle bug.</td>
+<td style="text-align: left; vertical-align: top;">In the <code>insertRows()</code> method each new
+<code>TaskItem</code> is inserted at the end of its parent's list of
+children rather than at the row specified. Replace the <code>for</code> loop
+with the following to correct this:
+<pre>
+    for (int i = 0; i &lt; count; ++i) {
+	TaskItem *item = new TaskItem(tr("New Task"), false);
+	parentItem-&gt;insertChild(row, item);
+    }
+</pre>
+(The archives already contain this bug fix.)
+<p>
+In addition, replace the last phrase of the sentence that ends at the
+top of page 167 with ", and each the child of the parent item at the
+specified row."
+</td>
+<td style="text-align: left; vertical-align: top;">Alexey Smirnov</td></tr>
+
+<tr><td style="text-align: left; vertical-align: top;">Page 174. Suboptimal code.</td>
+<td style="text-align: left; vertical-align: top;">In the <code>moveItem()</code> method shown on
+this page two separate emissions of the <code>dataChanged()</code> signal
+are made. This works perfectly well for the example application, but is
+not the best approach to use in the general case. A better way is to
+emit a single <code>dataChanged()</code> signal that spans the model indexes
+that have changed, so replace the two <code>emit</code> lines with just this
+one line:
+<pre>
+    emit dataChanged(oldIndex, newIndex);
+</pre>
+(The archives already contain this improvement.)
+</td>
+<td style="text-align: left; vertical-align: top;">Alexey Smirnov</td></tr>
+
+<tr><td style="text-align: left; vertical-align: top;">Page 175. Subtle bug.</td>
+<td style="text-align: left; vertical-align: top;">In the <code>cut()</code> method shown on this
+page the last assertion will cause the program to crash if the very
+first item is cut. The solution is to replace the last three lines with
+these six lines:
+<pre>
+    if (parent != rootItem) {
+        TaskItem *grandParent = parent-&gt;parent();
+        Q_ASSERT(grandParent);
+        return createIndex(grandParent-&gt;rowOfChild(parent), 0, parent);
+    }
+    return QModelIndex();
+</pre>
+What we've done is put the original three lines in a conditional and
+return an invalid model index (which means the root of the tree) if the
+condition isn't met.
+(The archives already contain this improvement.)
+</td>
+<td style="text-align: left; vertical-align: top;">Reiner Itschert</td></tr>
+
+</table>
+</div>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>

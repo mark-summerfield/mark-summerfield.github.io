@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Python in Practice &mdash; book errata</title>
+    <meta name="description" content="Python in Practice textbook errata"/>
+    <meta name="keywords" content="Python in Practice, textbook, errata"/>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Python in Practice</h1>
+<h2 class="subtitle2">Errata</h2>
+<h3 class="subsubtitle">ISBN-10: 0321905636&nbsp;&ndash;&nbsp;ISBN-13:
+978-0321905635</h3>
+<h3 class="subsubtitle"><span style="color: red;">Dr Dobbs JOLT best
+book award winner</span></h3>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link"><a href="pipbook.html">Python in
+Practice</a></span> &bull;
+<span class="nav-link-sub"><a href="pipbook.html#toc">Contents</a></span> &bull;
+<span class="nav-link-sub"><a href="pipbook.html#cover">Cover</a></span> &bull;
+<span class="nav-link-sub"><a
+href="pipbook.html#eg">Downloads</a></span> &bull;
+<span class="nav-here-sub">Errata</span> &bull;
+<span class="nav-link-sub"><a href="pipbook.html#trans">Translations</a></span>
+</div>
+
+<!-- Body -->
+<div style="overflow-x:auto; display: block; border-collapse: collapse;">
+<table class="eth">
+<tr>
+<td style="background-color: lightcyan;"  class="sectionheading">Issue</td>
+<td style="background-color: lightcyan;"  class="sectionheading">Resolution</td>
+<td style="background-color: lightcyan;"  class="sectionheading">Reporter</td>
+</tr>
+
+<tr><td class="etd" >Page 36. Possible Error</td>
+<td class="etd" >A code snippet on this page refers to the
+<code>Qtrac.Requirer</code> class which isn't shown in the book but is
+included in the source in the file <code>Qtrac.py</code>. According to
+the reporter the <code>__subclasshook__()</code> method is incorrect.
+Here's the reporter's version:
+<pre>
+@classmethod
+def __subclasshook__(Class, Subclass):
+    methods = set()
+    for Superclass in Class.__mro__:
+	if hasattr(Superclass, "required_methods"):
+	    methods |= set(Superclass.required_methods)
+    if not methods:
+	return NotImplemented
+    attributes = collections.ChainMap(*(Superclass.__dict__
+	    for Superclass in Subclass.__mro__))
+    if all(method in attributes for method in methods):
+	return True
+    return NotImplemented
+</pre>
+</td>
+<td class="etd" >Paolo Pastori</td></tr>
+
+<tr><td class="etd" >Page 111. Possible Error</td>
+<td class="etd" >The reporter claims that the <code>def update</code>
+method on this page uses an incorrect expression to set
+<code>tippingPoint</code>. The reporter says the code should be:
+<pre>
+tippingPoint = round((model.value - model.minimum) * self.length /
+                     (model.maximum - model.minimum))
+</pre>
+<td class="etd" >Paolo Pastori</td></tr>
+
+<tr><td class="etd" >Page 174. Error</td>
+<td class="etd" >In the paragraph beginning “After each
+future...” delete the phrase “returns immediately and” from the second
+sentence. (If you want an immediate return pass <code>wait=False</code>.)</td>
+<td class="etd" >Hyunsok Oh</td></tr>
+
+<!--
+
+<tr><td class="etd" ></td>
+<td class="etd" ></td>
+<td class="etd" ></td></tr>
+
+-->
+</table>
+</div>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>

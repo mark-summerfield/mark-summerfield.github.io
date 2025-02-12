@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>DiffPDF Changes &mdash; PDF comparison application changes</title>
+    <meta name="description" content="Changes in all versions of
+the DiffPDF PDF comparison application."/>
+    <meta name="keywords" content="Compare, PDF, ComparePDF, DiffPDF,
+comparepdfcmd, PDF comparison, compare PDF, QA, quality assurance,
+automated testing, changes"/>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">DiffPDF Changes</h1>
+<h2 class="subtitle">DiffPDF is used to compare two PDF
+files&mdash;textually or visually.</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link-sub"><a
+href="diffpdf.html#screen">Screenshot</a></span> &bull;
+<span class="nav-link-sub"><a href="diffpdf.html#csv">Example text
+report</a></span> &bull;
+<span class="nav-here-sub">Changes</span>
+</div>
+
+<!-- Body -->
+
+<p class="blue">This software is no longer for sale.</p>
+
+<h3>6.2.0-pe “perpetual edition”</h3>
+<ul>
+<li>Same functionality as 6.1.1.</li>
+<li>This is the final version of the software. It does not need or use a license key.</li>
+</ul>
+
+<h3>6.1.1</h3>
+<ul>
+<li>License clarification.</li>
+</ul>
+
+<h3>6.1.0</h3>
+<ul>
+<li>Switched to annual license keys only. These are not tied to the
+hardware and may be transferred (moved) freely from one computer to
+another. These licenses can be purchased singly. (Existing “full”
+license keys continue to work normally.) Click Help→About to see which
+kind of license is in use and when it expires.</li>
+<li>License changes.</li>
+</ul>
+
+<h3>6.0.8</h3>
+<ul>
+<li>License changes.</li>
+</ul>
+
+<hr>
+
+<h3>6.0.7</h3>
+<ul>
+<li><i>We strongly recommend setting the number of cores</i> DiffPDF
+<i>uses to the number of cores in your CPU, since doing so may provide a
+considerable speedup if the automatic core detection has underestimated.
+See the manual's “Improving Comparison Speed” section.</i></li>
+<li>Library updates.</li>
+<li>License changes.</li>
+</ul>
+
+<h3>6.0.6</h3>
+<ul>
+<li>The Register Copy button has been reenabled. The problem is due to a
+Windows clipboard reliability issue. If copying the Computer&nbsp;ID
+fails, open <code>C:\Users\<i>&lt;username&gt;</i>\cid.txt</code> in
+Notepad and copy it from there.
+<li>Minor internal improvements and library updates.</li>
+</ul>
+
+<h3>6.0.5</h3>
+<ul>
+<li>The Register Copy button has been disabled since it doesn't
+currently work. To copy the Computer ID to register a license key,
+either type it manually, or better still copy it from the file 
+<code>C:\Users\<i>&lt;username&gt;</i>\AppData\Local\Temp\cid.txt</code>.
+</li>
+<li>Dragging and dropping files no longer works reliably so has been
+dropped.</li>
+</ul>
+
+<h3>6.0.4</h3>
+<ul>
+<li>This version is significantly faster on Windows&nbsp;10 than on
+Windows&nbsp;7.
+<li>Minor internal improvements, library updates, and a tiny
+error-message-related bug fix.</li>
+</ul>
+
+<h3>6.0.3</h3>
+<ul>
+<li>Minor internal improvements and library updates.</li>
+</ul>
+
+<h3>6.0.2</h3>
+<ul>
+<li>Various minor internal improvements and library updates. These
+should make some comparisons slightly faster.</li>
+</ul>
+
+<h3>6.0.1</h3>
+<ul>
+<li>Various minor internal improvements and library updates. These
+should make word-mode comparisons slightly faster in some cases.</li>
+</ul>
+
+<h3>6.0.0</h3>
+<ul>
+<li>Added support for high quality PDF report output. Version&nbsp;5
+produced its PDF reports by “photographing” pages from the original
+PDFs. Version&nbsp;6 copies the actual pages from the original PDFs.
+This is faster and means that if the original pages are scalable, then
+the report will scale too, i.e., you can zoom in as much as you like on
+the report PDF and it will always be clear and sharp.</li>
+<li>Various minor internal improvements and library updates.</li>
+<li>DiffPDF&nbsp;6 is a 64-bit application that requires 64-bit Windows.
+DiffPDF&nbsp;5 continues to be supported and
+remains on sale for the benefit of those who require a 32-bit
+application.</li>
+</ul>
+
+<h3>5.9.5</h3>
+<ul>
+<li>Added support for doing appearance mode comparisons with the “new”
+renderer. In some rare cases the “old” renderer doesn't detect some
+texture or gradient fill differences&mdash;but the new renderer does.</li>
+</ul>
+
+<h3>5.9.4</h3>
+<ul>
+<li>Updated libraries, including the PDF library.</li>
+</ul>
+
+<h3>5.9.3</h3>
+<ul>
+<li>The first time DiffPDF is run it will automatically attempt to
+acquire a free trial license key over the internet and be ready for use
+immediately. (This means that the very first startup may take slightly
+longer than normal.)</li>
+<li>Updated some libraries.</li>
+</ul>
+
+<h3>5.9.2</h3>
+<ul>
+<li>Usability improvement: if you ask for a PDF report, when the report
+is ready you are offered the option to view it in your PDF reader.</li>
+<li>Updated libraries to make DiffPDF slightly faster and use less
+memory.</li>
+<li>Log files (which were normally empty) are no longer created.</li>
+<li>Updated and clarified the license.</li>
+</ul>
+
+<h3>5.9.1</h3>
+<ul>
+<li>Updated some libraries (bug fixes and a tiny speed improvement).</li>
+<li>Updated the license.</li>
+</ul>
+
+<h3>5.9.0</h3>
+<ul>
+<li>Updated to use a new PDF library that supports the new PDF&nbsp;2
+standard, in addition to the existing PDF&nbsp;1.<i>x</i> standards that
+previous versions support. In many use cases the new library uses less
+memory and is faster.</li>
+</ul>
+
+<h3>5.8.2</h3>
+<ul>
+<li>A new <code>.csv</code> report format can be chosen by checking the
+Report option's New CSV Format checkbox. This is more robust than the
+old format and is compatible with new product developments.
+<li>Acquiring a free trial key should be a tiny bit easier since
+DiffPDF now attempts to pre-fill-in the Computer&nbsp;ID.</li>
+</ul>
+
+<h3>5.8.1</h3>
+<ul>
+<li>Optimizations have been applied to the Standard text comparison
+algorithm which produce noticable speedups in many cases. (The most
+important optimizations are only available in 64-bit editions. These
+editions can run more than 10% faster&mdash;depending on the PDFs being
+compared&mdash;at the expense of using more memory.)</li>
+</ul>
+
+<h3>5.7.0</h3>
+<ul>
+<li>Replaced the options tabs with an easier-to-use combobox plus
+options panels combination. This also takes up much less vertical space.
+</li>
+</ul>
+
+<h3>5.6.8</h3>
+<ul>
+<li>
+Added a new Ignore Hyphens checkbox in the Text Modes tab. This defaults
+to unchecked. If you check it hyphens will be ignored. This means that,
+for example, <i>one&ndash;two</i> is treated as <i>onetwo</i>. This
+works even if <i>two</i> is on the next line.
+</li>
+<li>PDFs (and therefore reports) can now be zoomed up to 800%. (The
+previous limit was 400%.) Zooming takes more memory and CPU time, e.g.,
+200% takes 4x the memory and CPU, and 400% takes 16x the memory and CPU,
+so zooming beyond 400% is best used only on a high performance computer
+with plenty of RAM and using a 64-bit version of DiffPDF.</li>
+</ul>
+
+<h3>5.6.7</h3>
+<ul>
+<li>Updated&mdash;and slightly faster&mdash;PDF library.</li>
+</ul>
+
+<h3>5.6.6</h3>
+<ul>
+<li>Improved PDF report output to use Portrait/Landscape more
+appropriately when outputting the changes for only one of the two
+PDFs.</li>
+<li>Tiny minor internal improvements.</li>
+</ul>
+
+<h3>5.6.5</h3>
+<ul>
+<li>For report types that have titles, the title now shows each PDF's
+filename with its full absolute path (previously the absolute or
+relative path was shown).
+</li>
+<li>Added a new Path in Title checkbox to the Reports tab. This is
+checked by default in which case DiffPDF has the same behavior
+as previous versions, but which if <i>unchecked</i> will
+mean that report titles contain filenames without paths.</li>
+<li>Added a new Compare Zoomed checkbox to the Appearance Mode tab.
+(This is only needed in very rare cases as explained in the manual.)</li>
+<li>Improved error logging.</li>
+<li>Various internal improvements.</li>
+<li>Updated some of the libraries that DiffPDF uses.</li>
+</ul>
+
+<h3>5.6.4</h3>
+<ul>
+<li>Fixed a bug which caused missing pages to always be the size of the
+first page rather than of the corresponding page. This only affects
+PDFs which have different numbers of different-sized pages.</li>
+<li>Updated the PDF library. This improves rendering and accuracy in
+some quite rare cases.</li>
+</ul>
+
+<h3>5.6.3</h3>
+<ul>
+<li>Added an Always Compare Afresh checkbox&mdash;default
+unchecked&mdash;to the Application tab. If checked, DiffPDF will not
+cache its results, and will perform every comparison from scratch. This
+is useful if one or both PDFs is being changed between comparisons.</li>
+<li>Allow the zoom to go up to 400%&mdash;this is fine (although maybe
+slow) for viewing, but is not recommended for PDF reports as it would
+make them extremely slow to produce. (For reporting, the zoom is best
+set to 100% or 150%.)</li>
+<li>Updated the PDF library. This improves rendering and accuracy in
+some very rare corner cases. Also, the library is slightly faster.</li>
+</ul>
+
+<h3>5.6.2</h3>
+<ul>
+<li>The Swap button now not only swaps the two PDFs, but also their
+Pages.</li>
+<li>The Application tab's Save Memory checkbox now defaults to being
+unchecked. We recommend <i>unchecking</i> the Save Memory checkbox
+unless you are comparing large (1,000+ page) PDFs and need to save
+memory.</li>
+<li>Updated the About box and License to ensure LGPL compliance.</li>
+</ul>
+
+<h3>5.6.1</h3>
+<ul>
+<li>Added a new Save Memory checkbox to the Application tab that is
+checked by default. If unchecked (and after DiffPDF has been restarted),
+some rare PDFs that could not be rendered before (and therefore could
+not be compared), will now be able to be rendered and compared&mdash;at
+the cost of using a lot more memory.</li>
+</ul>
+
+<h3>5.6.0</h3>
+<ul>
+<li>Password-protected PDFs should now be comparable again (providing you
+enter the correct password).</li>
+</ul>
+
+<h3>5.5.2</h3>
+<ul>
+<li>Fixed bug that prevented the change bar from being switched off, and
+now correctly remember whether the bar is on or off between sessions.</li>
+</ul>
+
+<h3>5.5.1</h3>
+<ul>
+<li>Added a new Report PDF Changes checkbox that if checked will cause
+DiffPDF to watch the PDFs and report if they are changed in the status
+area.</li>
+<li>Minor bug fixes and improvements.</li>
+</ul>
+
+<h3>5.5.0</h3>
+<ul>
+<li>Added a new “Multi-Column” comparison algorithm that can produce much
+better results for multi-column PDFs than the Standard algorithm. The
+comparison algorithm is set in the Text Modes tab.
+</li>
+<li>A new Column Tolerance option is available in addition to the
+existing Line Tolerance option&mdash;both of these are set in the Text
+Modes tab, and either or both can be used to tweak the Multi-Column
+algorithm's behavior.</li>
+<li>Added a new Normalize Ligatures checkbox in the Text Modes tab.
+The default is unchecked (the current behavior). If checked, ligatures are
+treated as if spelled out, e.g., <code>ﬁ</code> = <code>fi</code>, <code>ﬂ</code> =
+<code>fl</code>, etc.</li>
+<li>DiffPDF is now available as a 32-bit or a 64-bit application. The
+32-bit version will work on 32-bit <i>and</i> 64-bit Windows, whereas
+the 64-bit version will work only on 64-bit Windows. The advantage of
+the 64-bit version is that it does not have the 2GB memory limit that
+32-bit applications have. This makes it possible to compare huge PDFs
+using Appearance mode&mdash;providing the machine has enough free
+memory.</li>
+<li>Comparisons now use less memory&mdash;considerably less when using
+Appearance mode.</li>
+<li>Numerous minor improvements.</li>
+</ul>
+
+<h3>5.3.1</h3>
+<ul>
+<li>The license has changed to allow for a license key to be reissued at
+most once, within one year of purchase. In effect this allows a key to
+be transferred if a computer breaks or is replaced. For the precise
+terms, see the <i>diffpdf-license.pdf</i>.
+</ul>
+
+<h3>5.3.0</h3>
+<ul>
+<li>The Computer ID used for license keys is now based on the CPU and
+Motherboard only, and is no longer dependent on the BIOS. This means
+that license keys issued on and from 2015-06-26 for version 5.3.0 and
+later will not be affected by BIOS changes. Old license keys will
+continue to work (providing the BIOS, CPU, and Motherboard are
+unchanged).</li>
+</ul>
+
+<h3>5.2.1</h3>
+<ul>
+<li>Comparisons are now faster in many cases.</li>
+<li>It is now possible to set up to 20 rectangles to exclude (the limit
+in previous versions was 5).</li>
+<li>Clicking the PDF views will only set corners, margins, or rectangles
+if the Show Options checkbox is checked&mdash;this is to avoid setting
+them accidentally.</li>
+<li>Updated some of the libraries used by DiffPDF. This should ensure
+that some very rare PDFs that couldn't previously be rendered are now
+rendered correctly</li>
+</ul>
+
+<h3>5.2.0</h3>
+<ul>
+<li>Eliminated some rare false positives.</li>
+<li>Fixed a bug in page range handling that caused problems in some rare
+cases.</li>
+<li>Increased the pairs limit (how many pairs of pages can be compared
+as if one very long page) from 1,000 to 5,000. Setting pairs to 1 (the
+default) and using page ranges is still to be preferred.</li>
+<li>Subtle user interface bug fixes to ensure that comparisons are
+redone when appearance comparison settings are changed.</li>
+<li>Small and subtle user interface improvements, including new icons.</li>
+<li>Updated some of the libraries used by DiffPDF.</li>
+</ul>
+
+<h3>5.1.2</h3>
+<ul>
+<li>Added a Copy Exclusions button to the Application tab: click this to
+copy the excluded corners, margins, and rectangles to the clipboard in
+<code>.dpc</code> format ready to be pasted into a diffpdfc <code>.dpc</code>
+configuration file.</li>
+<li>Updated some of the libraries used by DiffPDF.</li>
+</ul>
+
+<h3>5.1.1</h3>
+<ul>
+<li>Bug fix: rectangle color and style are now correctly applied.</li>
+</ul>
+
+<h3>5.1.0</h3>
+<ul>
+<li>Added support for arbitrary rectangle exclusion (in <i>addition</i>
+to the existing support for margin and corner exclusion). This means
+that any arbitrary rectangles anywhere on the page can be excluded from
+comparisons.</li>
+<li>Corners and margins exculsions now use whole numbers of points to be
+consistent with rectangle exclusions.</li>
+<li>Appearance accuracy now uses whole number percentages.</li>
+<li>By default the Control Panel always appears on the left of the
+window, with the two PDF View Panels in the middle and right.
+It is now possible to choose any one of four window layouts in the
+Application tab:<br>
+<img alt="layout1" src="images/layout1.png" width="32" height="32">
+<img alt="layout2" src="images/layout2.png" width="32" height="32">
+<img alt="layout3" src="images/layout3.png" width="32" height="32">
+<img alt="layout4" src="images/layout4.png" width="32" height="32">
+</li>
+<li>It is now possible to set the “Missing Page” text to any text you
+like in the Appearance tab's Missing Page Text line edit.</li>
+</ul>
+
+<h3>5.0.0</h3>
+<ul>
+<li>Added the Accuracy option in the Appearance settings tab. By default
+appearance mode comparisons compare every corresponding square exactly,
+pixel for pixel, i.e., comparison accuracy is 100%. In some situations
+it is useful to consider pages that are <i>almost</i> identical to be
+the same&mdash;this can now be done by setting the accuracy to less than
+100% (e.g., to 99% or less).</li>
+<li>Added support for remote deployment (i.e., bypassing the Register
+window and avoiding the need to use the <code>.msi</code> installer on
+individual computers), for customers who buy at least ten licenses.</li>
+<li>Unlike version 4.<i>x</i>, password-protected PDFs cannot be
+compared. We hope to reinstate this functionality in a later 5.<i>x</i>
+release.</li>
+<li>Implemented a new license key scheme, and updated the license terms
+to match.
+</li>
+<li>It should now be possible to compare huge PDFs (those with thousands
+or even tens of thousands of pages).</li>
+<li>Improved the comparison speed. For PDFs in the tens of pages the
+improvement could be 5% or more; for PDFs in the hundreds of pages the
+improvement could be 30% or more, and for thousand page plus PDFs the
+improvement could be 40% or more.</li>
+<li>Reduced memory consumption by up to 50% for large PDFs.</li>
+</ul>
+
+<h3>4.1.6</h3>
+<ul>
+<li>In some rare cases a valid license key could wrongly be identified
+as invalid: this has now been fixed.</li>
+</ul>
+
+<h3>4.1.5</h3>
+<ul>
+<li>Reintroduced the <code>.log</code> report type since some customers are
+using it.</li>
+</ul>
+
+<h3>4.1.4</h3>
+<ul>
+<li>Bug fix. If the number of cores cannot be detected the program
+defaults to 1; previously it silently failed. This can be overridden by
+checking the Show Options checkbox, clicking the Application tab, and
+setting the Cores spinbox to the actual number of cores the computer
+has.
+<li>Dropped the <code>.log</code> report type.</li>
+</ul>
+
+<h3>4.1.3</h3>
+<ul>
+<li>The maximum square size is now 144 pt to allow for coarser-grained
+appearance comparisons.</li>
+<li>The license key is more robust in the face of changing network
+configurations.</li>
+</ul>
+
+<h3>4.1.2</h3>
+<ul>
+<li>Added <code>.log</code> report type that produces basic summary
+information.</li>
+<li>Fixed a bug where PDF report pages got smaller and smaller.</li>
+<li>Added a paragraph to the license clarifying use within virtual
+machines.</li>
+<li>Changed all website and documentation links from
+<a href="https://diffpdf.appspot.com">diffpdf.appspot.com</a> to
+<a href="https://www.qtrac.eu">www.qtrac.eu</a>.
+</li>
+</ul>
+
+<h3>4.1.1</h3>
+<ul>
+<li>Bug fix. In rare cases PDF reports could be missing a page;
+this has been fixed.</li>
+<li>Now gives a percentage indication of approximately how different the
+PDFs are overall.</li>
+<li>Tiny cosmetic change to the button layout.</li>
+</ul>
+
+<h3>4.1.0</h3>
+<ul>
+<li>Improved speed&mdash;up to 10% faster for book-length documents.</li>
+<li>Added a “Swap” button to make it easy to swap the left and right
+PDFs.</li>
+<li>The page list view now gives a visual and percentage indication of
+approximately how different pages are.</li>
+<li>Added indicators to the toolbox tabs to make it more obvious that
+they are clickable and whether they are “open”.</li>
+<li>Improved the button arrangement.</li>
+<li>Bug fixes. PDF filenames and page ranges can no longer be changed
+during a comparison.</li>
+</ul>
+
+<h3>4.0.5</h3>
+<ul>
+<li>Subtle algorithm improvement which eliminates some rare false
+positives.</li>
+<li>PDF report headers now end with the program name <i>and</i> version
+rather than just the program name.</li>
+</ul>
+
+<h3>4.0.4</h3>
+<ul>
+<li>Bug fix. In rare cases margin exclusion didn't always work correctly
+in text modes&mdash;this has now been fixed.</li>
+</ul>
+
+<h3>4.0.3</h3>
+<ul>
+<li>Bug fix. Whitespace is now fully normalized. This means that all
+whitespace characters (space, non-breaking space, etc.), are treated as
+a space (i.e., as a word separator)&mdash;this reduces false positives
+in some cases.</li>
+</ul>
+
+<h3>4.0.2</h3>
+<ul>
+<li>Improved PDF library: this produces more accurate results, but can
+be slightly slower for book-length documents.</li>
+<li>More attractive splitters.</li>
+</ul>
+
+<h3>4.0.1</h3>
+<ul>
+<li>Startup is now much faster.</li>
+<li>The line tolerance algorithm is now specified by name (Standard or
+Special) rather than by number.</li>
+<li>Tiered price discounts are available when buying at least 10
+licenses.</li>
+<li>The About window now shows the computer ID. This is useful for
+identifying the computer for those who have bought multiple license
+keys.</li>
+</ul>
+
+<h3>4.0.0</h3>
+<ul>
+<li>Added a Show Inserted/Deleted Pages text mode option. This can
+result in more understandable results in some cases when using a
+Pairs setting greater than one.</li>
+<li>Changed how license keys work so that they are now tied to the
+computer DiffPDF runs on rather than to the licensee's name. The
+Register window has been updated to reflect this change.</li>
+<li>Changed the license terms to match how the new license keys
+work.</li>
+</ul>
+
+<h3>3.5.1</h3>
+<ul>
+<li>The automatic setting of Pairs to the page count of the longest
+PDF now works correctly. (Previously it only worked the <i>second</i>
+time Compare was clicked.)</li>
+</ul>
+
+<h3>3.5.0</h3>
+<ul>
+<li>It is now possible to compare password-protected PDFs&mdash;providing
+you enter the correct password when prompted.</li>
+<li>Completely rewritten the code for handling page ranges. This fixes a
+bug. It has also resulted in comparisons between page ranges being
+faster&mdash;much faster in the case of comparing relatively few pages out
+of PDFs that have many pages.</li>
+<li>By default the Pairs is set to 1 at startup. It is
+now possible exercise more control over this setting's behavior.</li>
+<li>Applied various small bug fixes including using the correct
+(logical) page number in the title of PDF reports.</li>
+</ul>
+
+<h3>3.4.4</h3>
+<ul>
+<li>Added an additional command line option to make it more convenient
+to run DiffPDF from within another program.</li>
+<li>Added a tiny Visual Basic example function to show how one might
+call DiffPDF from a Visual Basic program.</li>
+<li>Some internal changes so that DiffPDF and diffpdfc might be
+able to coexist in the same directory&mdash;although this is not recommended
+or supported.</li>
+</ul>
+
+<h3>3.4.3</h3>
+<ul>
+<li>Updated one of the libraries that DiffPDF depends on.</li>
+<li>Finally found and fixed the problem where in rare cases the
+Register window would say that a valid license key is invalid.</li>
+</ul>
+
+<h3>3.4.2</h3>
+<ul>
+<li>Applied another fix to stop the Register window saying that a
+valid license key is invalid.</li>
+</ul>
+
+<h3>3.4.1</h3>
+<ul>
+<li>Changed the default insertion highlighting color to cyan (from
+blue); and changed the default highlighting <i>x</i> extend to 4.0 points
+(from 2.5). Since the highlighting settings are remembered between
+sessions, we recommend upgraders manually set the new defaults to try
+them out.</li>
+<li>Changed the selection rectangle's color from cyan to green.</li>
+<li>Applied another fix to stop the Register window saying that a
+valid license key is invalid.</li>
+</ul>
+
+<h3>3.4.0</h3>
+<ul>
+<li>It is now possible to copy selected text to the clipboard.</li>
+<li>Some tiny efficiency improvements.</li>
+</ul>
+
+<h3>3.3.3</h3>
+<ul>
+<li>Tweaked the main window so that the splitters take up less
+horizontal space and slightly reduced the space within the window's
+borders&mdash;all to make more room for showing the PDFs.</li>
+<li>Introduced a new (and hopefully final) fix to stop the Register
+window saying that a valid license key is invalid.</li>
+</ul>
+
+<h3>3.3.2</h3>
+<ul>
+<li>Implemented a new more robust and general fix for landscape-oriented
+and other rotated pages. Now the page views and all reports work
+correctly for rotated pages in all modes (Appearance,
+Characters, and Words).</li>
+</ul>
+
+<h3>3.3.1</h3>
+<ul>
+<li>Fixed the handling of landscape-oriented pages, that is, pages
+rotated by 90&deg;. The page views and visual reports now correctly
+show the whole page with differences correctly shown. Text reports'
+differences now have the correct coordinates. Note that while the
+Appearance and Words comparison modes work correctly for
+landscape pages, currently, Characters mode does not. (Fixed in 3.3.2.)</li>
+<li>Fixed the change bar that is shown in the page views and visual text
+mode reports when the Preview First Page checkbox is checked so that it
+is always visible even when the page views and reports are zoomed to
+less than 100%.</li>
+</ul>
+
+<h3>3.3.0</h3>
+<ul>
+<li>Added support for passing PDF filenames on the command line to help
+those who want to automatically invoke DiffPDF as part of a larger
+process.</li>
+<li>Various minor code cleanups and some tiny efficiency
+improvements.</li>
+</ul>
+
+<h3>3.2.0</h3>
+<ul>
+<li>Implemented line tolerance algorithm 6 which can produce better
+results in certain rare cases. The default is algorithm 5.</li>
+<li>Fixed a bug that meant that navigating to the very first page using
+the global keyboard shortcut (F5) didn't work.</li>
+<li>Slightly improved the 3.1.3 bug fix by making it more general.</li>
+</ul>
+
+<h3>3.1.3</h3>
+<ul>
+<li>Fixed a subtle bug that resulted in highlighting being painted in
+the wrong places in very rare cases.</li>
+</ul>
+
+<h3>3.1.2</h3>
+<ul>
+<li>Added global keyboard shortcuts for navigating to the previous
+(F5) or next (F6) different pair of pages.</li>
+<li>Fixed a minor bug in the Register window.</li>
+</ul>
+
+<h3>3.1.1</h3>
+<ul>
+<li>Added support for using the old or new renderer for viewing pages
+and for visual (i.e., PDF) reports, since in some rare cases the old
+renderer is better than the new one.</li>
+</ul>
+
+<h3>3.1.0</h3>
+<ul>
+<li>DiffPDF now uses a much better PDF rendering library that produces
+clearer and sharper PNG and PDF reports. This also fixes a rare bug
+where some images were rendered as black rectangles.</li>
+<li>Added support for highlighting modes when doing Appearance
+comparisons.</li>
+<li>Added report options to allow PDF reports to output both pairs of
+pages (the default, and what all previous versions do), or to output
+only the first or second PDF's pages.</li>
+<li>Removed the Advanced tab and replaced it with an Appearance Mode tab
+and a Text Modes tab which between them have all the advanced
+options.</li>
+</ul>
+
+<h3>3.0.2</h3>
+<ul>
+<li>Increased the experimental Pairs limit to 1000 for
+those with extremely powerful computers.</li>
+<li>Cosmetic improvement to the appearance of the splitter
+controls.</li>
+<li>Minor cosmetic improvement to how processing time is displayed.</li>
+</ul>
+
+<h3>3.0.1</h3>
+<ul>
+<li>Fixed a bug that meant in rare cases a valid registration key was
+treated as invalid in the Register window. (A workaround for older
+versions is to delete the last character of the name and then retype
+it.)</li>
+</ul>
+
+<h3>3.0.0</h3>
+<ul>
+<li>First public release of this DiffPDF 2 successor. DiffPDF 2 uses a
+single core no matter how many the computer has, whereas DiffPDF 3 uses
+all available cores. This means that DiffPDF 3 is as fast on dual core
+computers and faster on quad core or better computers. Furthermore
+DiffPDF 3 can highlight insertions, deletions, and replacements (as
+well as do the plain difference highlighting that DiffPDF 2 does), and
+DiffPDF 3 uses a more sophisticated text comparison algorithm that
+produces fewer false positives. DiffPDF 3 also offers more reporting
+options and uses the same PDF comparison engine as the command line
+diffpdfc tool.</li>
+</ul>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>

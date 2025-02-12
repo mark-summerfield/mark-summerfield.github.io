@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Make Your Own Hex Viewer &mdash; Python article</title>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Make Your Own Hex Viewer</h1>
+<h2 class="subtitle">First published in Micro Mart #1430, September 2016</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link-sub"><a href="pytips.html">Python Programming Tips</a></span>
+</div>
+
+<!-- Body -->
+<div class="shout">
+<p>
+It is sometimes useful to see the raw bytes in a file, and for files
+that contain text, to see what those bytes look like as characters in
+various different encodings. In this article we'll review a complete
+Python GUI program&mdash;short enough to type in&mdash;that provides this
+facility, and shows how easy it is to create small graphical tools using
+Python's built-in <code>tkinter</code> library.
+</p>
+
+</div>
+
+<p>
+Here's the application shown running on Windows&mdash;it also runs on
+Linux and should work on any Unix/BSD system.
+</p>
+
+<div>
+<img src="images/hexview_M1.png" alt="The Hex View application" width="400"
+height="719"><img src="images/hexview_M2.png" alt="The Hex View application"
+width="287" height="719">
+</div>
+
+<p>
+All the code should be put in a single plain text file called, say,
+<code>hexview.pyw</code>. The file could be created by the IDLE editor
+(which comes with Python&mdash;just, start it and then click
+File&rarr;New File, and type in the code), or any other modern
+Python-savvy code editor or IDE (e.g., the good and free <a
+href="https://notepad-plus-plus.org">Notepad++</a> on Windows).
+</p>
+
+<p>
+We'll review the application's code in order from beginning to end, and
+so we will start with the imports.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #408080; font-style: italic">#!/usr/bin/env python3</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">os</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">sys</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">tkinter</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">tk</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">tkinter.ttk</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">ttk</span>
+<span style="color: #008000; font-weight: bold">import</span> <span style="color: #0000FF; font-weight: bold">tkinter.filedialog</span> <span style="color: #008000; font-weight: bold">as</span> <span style="color: #0000FF; font-weight: bold">filedialog</span>
+<span style="color: #008000; font-weight: bold">try</span>:
+    Spinbox <span style="color: #666666">=</span> ttk<span style="color: #666666">.</span>Spinbox
+<span style="color: #008000; font-weight: bold">except</span> <span style="color: #D2413A; font-weight: bold">AttributeError</span>:
+    Spinbox <span style="color: #666666">=</span> tk<span style="color: #666666">.</span>Spinbox
+</pre></div>
+
+<p>
+Most GUI libraries have so many components that people often use star
+imports, for example: <code>from tkinter.tk import *; from tkinter.ttk import
+*</code>. However, I prefer to simply use shorter names (<code>tk</code>,
+<code>ttk</code>, and
+<code>filedialog</code>) so that I can see what comes from where. Incidentally, the
+first line is just a comment&mdash;but one that is used to determine which
+Python to use, so while not strictly necessary, I recommend always
+starting with it, even on Windows.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">APPNAME <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;Hex View&quot;</span>
+BLOCK_WIDTH <span style="color: #666666">=</span> <span style="color: #666666">16</span>
+BLOCK_HEIGHT <span style="color: #666666">=</span> <span style="color: #666666">32</span>
+BLOCK_SIZE <span style="color: #666666">=</span> BLOCK_WIDTH <span style="color: #666666">*</span> BLOCK_HEIGHT
+ENCODINGS <span style="color: #666666">=</span> (<span style="color: #BA2121">&quot;ASCII&quot;</span>, <span style="color: #BA2121">&quot;CP037&quot;</span>, <span style="color: #BA2121">&quot;CP850&quot;</span>, <span style="color: #BA2121">&quot;CP1140&quot;</span>, <span style="color: #BA2121">&quot;CP1252&quot;</span>,
+             <span style="color: #BA2121">&quot;Latin1&quot;</span>, <span style="color: #BA2121">&quot;ISO8859_15&quot;</span>, <span style="color: #BA2121">&quot;Mac_Roman&quot;</span>, <span style="color: #BA2121">&quot;UTF-8&quot;</span>,
+             <span style="color: #BA2121">&quot;UTF-8-sig&quot;</span>, <span style="color: #BA2121">&quot;UTF-16&quot;</span>, <span style="color: #BA2121">&quot;UTF-32&quot;</span>)
+</pre></div>
+
+<p>
+These are the constants we'll need. The application will show 512 bytes
+at a time from a given byte offset using two digit hex numbers (00-FF)
+for each byte. It will also show those bytes as text using a
+user-specified encoding. Python supports lots of different text
+encodings: here we've just put in some common ones; you can easily add
+as many more as you like.
+</p>
+
+<p>
+The application's functionality is encapsulated in its
+<code>MainWindow</code> class,
+which we'll review method by method.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">MainWindow</span>:
+
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, parent):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>parent <span style="color: #666666">=</span> parent
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>create_variables()
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>create_widgets()
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>create_layout()
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>create_bindings()
+        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #008000">len</span>(sys<span style="color: #666666">.</span>argv) <span style="color: #666666">&gt;</span> <span style="color: #666666">1</span>:
+            <span style="color: #008000">self</span><span style="color: #666666">.</span>_open(sys<span style="color: #666666">.</span>argv[<span style="color: #666666">1</span>])
+</pre></div>
+
+<p>
+When a <code>MainWindow</code> is created we store the <code>parent</code> that's passed in and
+then use separate methods to set up various aspects of the user
+interface. At the end we check to see if a filename was given on the
+command line (<code>sys.argv[0]</code> contains the name of the program,
+<code>sys.argv[1]</code>
+and so on&mdash;if present&mdash;contain the command line arguments), and if
+an argument is given, we assume it is a filename and attempt to open it
+using the private <code>MainWindow._open()</code> method shown later.
+</p>
+
+<p>
+Note that the <code>__init__()</code> method&mdash;and all the methods that follow it
+(those whose first argument is self)&mdash;should be indented under the
+<code>MainWindow</code> class declaration.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">create_variables</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>filename <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">None</span>
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>offset <span style="color: #666666">=</span> tk<span style="color: #666666">.</span>IntVar()
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>offset<span style="color: #666666">.</span>set(<span style="color: #666666">0</span>)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>encoding <span style="color: #666666">=</span> tk<span style="color: #666666">.</span>StringVar()
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>encoding<span style="color: #666666">.</span>set(ENCODINGS[<span style="color: #666666">0</span>])
+</pre></div>
+
+<p>
+We keep track of the name of the file we're showing using a normal
+string. But for the offset and encoding we create an <code>IntVar</code> and a
+<code>StringVar</code>. These are special <code>tkinter</code>-specific types that hold a value
+(an <code>int</code> and a <code>str</code>) which is set using a <code>set()</code> method and retrieved using
+a <code>get()</code> method. We'll see shortly why we need to use these types.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">create_widgets</span>(<span style="color: #008000">self</span>):
+        frame <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>frame <span style="color: #666666">=</span> ttk<span style="color: #666666">.</span>Frame(<span style="color: #008000">self</span><span style="color: #666666">.</span>parent)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>openButton <span style="color: #666666">=</span> ttk<span style="color: #666666">.</span>Button(frame, text<span style="color: #666666">=</span><span style="color: #BA2121">&quot;Open...&quot;</span>, underline<span style="color: #666666">=0</span>,
+                                     command<span style="color: #666666">=</span><span style="color: #008000">self</span><span style="color: #666666">.</span>open)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>offsetLabel <span style="color: #666666">=</span> ttk<span style="color: #666666">.</span>Label(frame, text<span style="color: #666666">=</span><span style="color: #BA2121">&quot;Offset&quot;</span>, underline<span style="color: #666666">=1</span>)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>offsetSpinbox <span style="color: #666666">=</span> Spinbox(
+            frame, from_<span style="color: #666666">=0</span>, textvariable<span style="color: #666666">=</span><span style="color: #008000">self</span><span style="color: #666666">.</span>offset, increment<span style="color: #666666">=</span>BLOCK_SIZE)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>encodingLabel <span style="color: #666666">=</span> ttk<span style="color: #666666">.</span>Label(frame, text<span style="color: #666666">=</span><span style="color: #BA2121">&quot;Encoding&quot;</span>, underline<span style="color: #666666">=0</span>)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>encodingCombobox <span style="color: #666666">=</span> ttk<span style="color: #666666">.</span>Combobox(
+            frame, values<span style="color: #666666">=</span>ENCODINGS, textvariable<span style="color: #666666">=</span><span style="color: #008000">self</span><span style="color: #666666">.</span>encoding,
+            state<span style="color: #666666">=</span><span style="color: #BA2121">&quot;readonly&quot;</span>)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>quitButton <span style="color: #666666">=</span> ttk<span style="color: #666666">.</span>Button(frame, text<span style="color: #666666">=</span><span style="color: #BA2121">&quot;Quit&quot;</span>, underline<span style="color: #666666">=0</span>,
+                                     command<span style="color: #666666">=</span><span style="color: #008000">self</span><span style="color: #666666">.</span>quit)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>create_view()
+</pre></div>
+
+<p>
+The user interface has an outer frame (the visible window) which
+contains a couple of buttons (Open and Quit), some labels, and a spinbox
+and a combobox. Every widget must have a parent (given as the first
+argument to its constructor). Widgets from the <code>ttk</code> module are styled to
+look native, unlike those from the <code>tk</code> module, so we prefer
+<code>ttk</code> widgets
+where available.
+</p>
+
+<p>
+There are more <code>ttk</code> widgets than <code>tk</code> ones, with most
+<code>ttk</code> widgets
+superceding existing <code>tk</code> ones of the same name, and some
+entirely new <code>ttk</code>
+widgets not present in <code>tk</code>. However, there are a few <code>tk</code> widgets that have
+no <code>ttk</code> equivalents.
+</p>
+
+<p>
+When a button is clicked, the function or bound method given as its
+command will be called. If an underline is specified, Tk will underline
+that character (e.g., the ‘O’ in “<u>O</u>pen” and the first ‘f’ in
+“O<u>f</u>fset”).
+These underlines are used as visual cues telling the user that a press
+of Alt+<i>underlined_letter</i> will perform an action. In the case of a
+button, the press should have the same effect as clicking&mdash;but we
+must program the behaviour ourselves, as we will see in the
+<code>create_bindings()</code> method.
+</p>
+
+<p>
+The spinbox's <code>textvariable</code> is set to the <code>self.offset</code> (of type
+<code>tk.IntVar</code>). This means that if we change <code>self.offset</code> programmatically
+(by calling <code>self.offset.set()</code>), the value set will automatically be
+reflected in the spinbox&mdash;which is why we needed to use a
+<code>tk.IntVar</code>
+rather than a plain <code>int</code>. Correspondingly, if the user interactively
+changes the value in the spinbox, the value they set will be reflected
+back into the <code>self.offset</code>. In other words, the spinbox and its
+<code>textvariable</code> (<code>self.offset</code> of type <code>tk.IntVar</code>) are automatically
+synchronized. The same principle applies to the combobox and the
+<code>self.encoding</code> (of type <code>tk.StringVar</code>)&mdash;except that here a string is
+used rather than a number.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">create_view</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>viewText <span style="color: #666666">=</span> tk<span style="color: #666666">.</span>Text(<span style="color: #008000">self</span><span style="color: #666666">.</span>frame, height<span style="color: #666666">=</span>BLOCK_HEIGHT,
+                                width<span style="color: #666666">=2</span> <span style="color: #666666">+</span> (BLOCK_WIDTH <span style="color: #666666">*</span> <span style="color: #666666">4</span>))
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>viewText<span style="color: #666666">.</span>tag_configure(<span style="color: #BA2121">&quot;ascii&quot;</span>, foreground<span style="color: #666666">=</span><span style="color: #BA2121">&quot;green&quot;</span>)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>viewText<span style="color: #666666">.</span>tag_configure(<span style="color: #BA2121">&quot;error&quot;</span>, foreground<span style="color: #666666">=</span><span style="color: #BA2121">&quot;red&quot;</span>)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>viewText<span style="color: #666666">.</span>tag_configure(<span style="color: #BA2121">&quot;hexspace&quot;</span>, foreground<span style="color: #666666">=</span><span style="color: #BA2121">&quot;navy&quot;</span>)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>viewText<span style="color: #666666">.</span>tag_configure(<span style="color: #BA2121">&quot;graybg&quot;</span>, background<span style="color: #666666">=</span><span style="color: #BA2121">&quot;lightgray&quot;</span>)
+</pre></div>
+
+<p>
+Tk provides a <code>tk.Text</code> widget which can display styled (“rich”) text.
+</p>
+
+<p>
+It is possible to make a <code>tk.Text</code> widget support styled text editing up
+to a point, but I've certainly never found a way to turn it into a fully
+fledged styled text editor (so show me if you have!). Furthermore,
+<code>tk.Text</code> has no built-in support for reading or writing styled text. Both
+can be done using say, HTML, but we'd have to write our own code to do
+it.
+</p>
+
+<p>
+We can add as many tags as we like to a <code>tk.Text</code> widget, each with a
+unique name (e.g., “error”), and with any number of configurable
+properties. Here we just set colors, but it is possible to set font
+attributes too. The tags themselves do nothing unless applied to
+inserted text as we'll see further on.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">create_layout</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">for</span> column, widget <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">enumerate</span>((
+                <span style="color: #008000">self</span><span style="color: #666666">.</span>openButton, <span style="color: #008000">self</span><span style="color: #666666">.</span>offsetLabel, <span style="color: #008000">self</span><span style="color: #666666">.</span>offsetSpinbox,
+                <span style="color: #008000">self</span><span style="color: #666666">.</span>encodingLabel, <span style="color: #008000">self</span><span style="color: #666666">.</span>encodingCombobox,
+                <span style="color: #008000">self</span><span style="color: #666666">.</span>quitButton)):
+            widget<span style="color: #666666">.</span>grid(row<span style="color: #666666">=0</span>, column<span style="color: #666666">=</span>column, sticky<span style="color: #666666">=</span>tk<span style="color: #666666">.</span>W)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>viewText<span style="color: #666666">.</span>grid(row<span style="color: #666666">=1</span>, column<span style="color: #666666">=0</span>, columnspan<span style="color: #666666">=6</span>, sticky<span style="color: #666666">=</span>tk<span style="color: #666666">.</span>NSEW)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>frame<span style="color: #666666">.</span>grid(row<span style="color: #666666">=0</span>, column<span style="color: #666666">=0</span>, sticky<span style="color: #666666">=</span>tk<span style="color: #666666">.</span>NSEW)
+</pre></div>
+
+<p>
+Tkinter has various layout managers, but the easiest to use is
+<code>grid</code>.
+Here we've put almost all the widgets as a single row along the top and
+then put the <code>self.viewText</code> (of type <code>tk.Text</code>) below and set it to fill
+the frame it is contained in (apart from the row of widgets above it).
+And at the end we tell the containing frame to fill the application's
+window.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">create_bindings</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">for</span> keypress <span style="color: #AA22FF; font-weight: bold">in</span> (<span style="color: #BA2121">&quot;&lt;Control-o&gt;&quot;</span>, <span style="color: #BA2121">&quot;&lt;Alt-o&gt;&quot;</span>):
+            <span style="color: #008000">self</span><span style="color: #666666">.</span>parent<span style="color: #666666">.</span>bind(keypress, <span style="color: #008000">self</span><span style="color: #666666">.</span>open)
+        <span style="color: #008000; font-weight: bold">for</span> keypress <span style="color: #AA22FF; font-weight: bold">in</span> (<span style="color: #BA2121">&quot;&lt;Control-q&gt;&quot;</span>, <span style="color: #BA2121">&quot;&lt;Alt-q&gt;&quot;</span>, <span style="color: #BA2121">&quot;&lt;Escape&gt;&quot;</span>):
+            <span style="color: #008000">self</span><span style="color: #666666">.</span>parent<span style="color: #666666">.</span>bind(keypress, <span style="color: #008000">self</span><span style="color: #666666">.</span>quit)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>parent<span style="color: #666666">.</span>bind(<span style="color: #BA2121">&quot;&lt;Alt-f&gt;&quot;</span>,
+                         <span style="color: #008000; font-weight: bold">lambda</span> <span style="color: #666666">*</span>args: <span style="color: #008000">self</span><span style="color: #666666">.</span>offsetSpinbox<span style="color: #666666">.</span>focus())
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>parent<span style="color: #666666">.</span>bind(<span style="color: #BA2121">&quot;&lt;Alt-e&gt;&quot;</span>,
+                         <span style="color: #008000; font-weight: bold">lambda</span> <span style="color: #666666">*</span>args: <span style="color: #008000">self</span><span style="color: #666666">.</span>encodingCombobox<span style="color: #666666">.</span>focus())
+        <span style="color: #008000; font-weight: bold">for</span> variable <span style="color: #AA22FF; font-weight: bold">in</span> (<span style="color: #008000">self</span><span style="color: #666666">.</span>offset, <span style="color: #008000">self</span><span style="color: #666666">.</span>encoding):
+            variable<span style="color: #666666">.</span>trace_variable(<span style="color: #BA2121">&quot;w&quot;</span>, <span style="color: #008000">self</span><span style="color: #666666">.</span>show_block)
+</pre></div>
+
+<p>
+Apart from the last loop, this method is used to create keyboard
+bindings. The first two allow users to press Ctrl+O or Alt+O to
+click the Open button, and the second two let users press the Quit
+button by pressing either Ctrl+Q, Alt+Q, or Escape. If the user presses
+Alt+F we give the keyboard focus to the offset spinbox, and if they
+press Alt+E we give the focus to the encoding combobox.
+</p>
+
+<p>
+After the user has clicked Open and chosen a file to view, we show the
+file's first block using the current encoding. If the user wants to view
+another block or change the encoding they can use the spinbox and
+combobox. This works because in this method's last loop we have told Tk
+that whenever a new value is written to the <code>self.offset</code>
+(<code>tk.IntVar</code>) or
+<code>self.encoding</code> (<code>tk.StringVar</code>) using their
+<code>set()</code> methods, Tk should call
+the <code>show_block()</code> method.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">show_block</span>(<span style="color: #008000">self</span>, <span style="color: #666666">*</span>args):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>viewText<span style="color: #666666">.</span>delete(<span style="color: #BA2121">&quot;1.0&quot;</span>, <span style="color: #BA2121">&quot;end&quot;</span>)
+        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #AA22FF; font-weight: bold">not</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>filename:
+            <span style="color: #008000; font-weight: bold">return</span>
+        <span style="color: #008000; font-weight: bold">with</span> <span style="color: #008000">open</span>(<span style="color: #008000">self</span><span style="color: #666666">.</span>filename, <span style="color: #BA2121">&quot;rb&quot;</span>) <span style="color: #008000; font-weight: bold">as</span> file:
+            <span style="color: #008000; font-weight: bold">try</span>:
+                file<span style="color: #666666">.</span>seek(<span style="color: #008000">self</span><span style="color: #666666">.</span>offset<span style="color: #666666">.</span>get(), os<span style="color: #666666">.</span>SEEK_SET)
+                block <span style="color: #666666">=</span> file<span style="color: #666666">.</span>read(BLOCK_SIZE)
+            <span style="color: #008000; font-weight: bold">except</span> <span style="color: #D2413A; font-weight: bold">ValueError</span>: <span style="color: #408080; font-style: italic"># Empty offsetSpinbox</span>
+                <span style="color: #008000; font-weight: bold">return</span>
+        rows <span style="color: #666666">=</span> [block[i:i <span style="color: #666666">+</span> BLOCK_WIDTH]
+                <span style="color: #008000; font-weight: bold">for</span> i <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #666666">0</span>, <span style="color: #008000">len</span>(block), BLOCK_WIDTH)]
+        <span style="color: #008000; font-weight: bold">for</span> row <span style="color: #AA22FF; font-weight: bold">in</span> rows:
+            <span style="color: #008000">self</span><span style="color: #666666">.</span>show_bytes(row)
+            <span style="color: #008000">self</span><span style="color: #666666">.</span>show_line(row)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>viewText<span style="color: #666666">.</span>insert(<span style="color: #BA2121">&quot;end&quot;</span>, <span style="color: #BA2121">&quot;</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>)
+</pre></div>
+
+<p>
+This method (and its helpers, below) is the heart of the application. It
+begins by deleting all the text in the <code>self.viewText</code> widget (from line 1,
+column 0 to the end&mdash;the widget uses 1-based line numbers and 0-based
+column numbers). If there's no filename, we're done. Otherwise we open
+the file in read-only binary mode, seek to the given byte offset, and
+read up to one block (512 bytes).
+</p>
+
+<p>
+Once we have the block we need to split it into rows, each one
+containing <code>BLOCK_WIDTH</code> bytes. This is done in a single statement
+(<code>rows = ...</code>) where we step through the block from beginning to end in
+<code>BLOCK_WIDTH</code> steps and creating a list of bytes objects (i.e., read-only
+byte arrays) of <code>BLOCK_WIDTH</code> bytes using a list comprehension.
+</p>
+
+<p>
+Alternatively we could have done:</p>
+<pre><code>rows = []
+for i in range(0, len(block), BLOCK_WIDTH):
+    rows.append(block[i:i + BLOCK_WIDTH])</code></pre>
+
+
+<p>
+At the end of the method we iterate over each row and show its bytes
+followed by the decoded text represented by those bytes in the
+<code>self.viewText</code> widget, and finish by adding a newline at the end.
+</p>
+
+<p>
+Is it inefficient opening the file every time we need to show a 512 byte
+block, and then closing it again? In theory, yes, but in practice it
+doesn't matter. First, because a modern operating system will read not
+just 512 bytes but a bigger chunk (4K, 8K, 16K or more), and this will
+stay in a RAM buffer so most subsequent calls will be to RAM not disk.
+Second, even if we set an offset that's outside the buffer and require a
+fresh disk read, by the time the user has finished changing the
+spinbox's offset (e.g., by pressing and releasing the Up arrow key, or
+by entering a number), the computer has about 200 milliseconds to
+respond before the user will notice any delay. This is far more time
+than is needed to do a disk read (even from a physical spinning disk),
+and repopulate the self<code>.viewText</code> <code>tk.Text</code> widget.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">show_bytes</span>(<span style="color: #008000">self</span>, row):
+        <span style="color: #008000; font-weight: bold">for</span> byte <span style="color: #AA22FF; font-weight: bold">in</span> row:
+            tags <span style="color: #666666">=</span> ()
+            <span style="color: #008000; font-weight: bold">if</span> byte <span style="color: #AA22FF; font-weight: bold">in</span> b<span style="color: #BA2121">&quot;</span><span style="color: #BB6622; font-weight: bold">\t\n\r\v\f</span><span style="color: #BA2121">&quot;</span>:
+                tags <span style="color: #666666">=</span> (<span style="color: #BA2121">&quot;hexspace&quot;</span>, <span style="color: #BA2121">&quot;graybg&quot;</span>)
+            <span style="color: #008000; font-weight: bold">elif</span> <span style="color: #666666">0x20</span> <span style="color: #666666">&lt;</span> byte <span style="color: #666666">&lt;</span> <span style="color: #666666">0x7F</span>:
+                tags <span style="color: #666666">=</span> (<span style="color: #BA2121">&quot;ascii&quot;</span>,)
+            <span style="color: #008000">self</span><span style="color: #666666">.</span>viewText<span style="color: #666666">.</span>insert(<span style="color: #BA2121">&quot;end&quot;</span>, <span style="color: #BA2121">&quot;{:02X}&quot;</span><span style="color: #666666">.</span>format(byte), tags)
+            <span style="color: #008000">self</span><span style="color: #666666">.</span>viewText<span style="color: #666666">.</span>insert(<span style="color: #BA2121">&quot;end&quot;</span>, <span style="color: #BA2121">&quot; &quot;</span>)
+        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #008000">len</span>(row) <span style="color: #666666">&lt;</span> BLOCK_WIDTH:
+            <span style="color: #008000">self</span><span style="color: #666666">.</span>viewText<span style="color: #666666">.</span>insert(<span style="color: #BA2121">&quot;end&quot;</span>, <span style="color: #BA2121">&quot; &quot;</span> <span style="color: #666666">*</span> (BLOCK_WIDTH <span style="color: #666666">-</span> <span style="color: #008000">len</span>(row)) <span style="color: #666666">*</span> <span style="color: #666666">3</span>)
+</pre></div>
+
+<p>
+This method iterates over every byte in the row it is given and adds
+each one to the <code>self.viewText</code> widget. If the byte is whitespace or in the
+printable 7-bit ASCII range, we add suitable tags for coloring the
+foreground and/or background. We insert each byte as a two-digit
+uppercase hexadecimal number with the formatting tags followed by a
+plain unformatted space. If there are less than <code>BLOCK_WIDTH</code> bytes (e.g.,
+the last row of the file), we pad with spaces allowing three per byte,
+two for the hex digits, and one for the following space.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">show_line</span>(<span style="color: #008000">self</span>, row):
+        <span style="color: #008000; font-weight: bold">for</span> char <span style="color: #AA22FF; font-weight: bold">in</span> row<span style="color: #666666">.</span>decode(<span style="color: #008000">self</span><span style="color: #666666">.</span>encoding<span style="color: #666666">.</span>get(), errors<span style="color: #666666">=</span><span style="color: #BA2121">&quot;replace&quot;</span>):
+            tags <span style="color: #666666">=</span> ()
+            <span style="color: #008000; font-weight: bold">if</span> char <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #BA2121">&quot;</span><span style="color: #BB6622; font-weight: bold">\u2028\u2029\t\n\r\v\f\uFFFD</span><span style="color: #BA2121">&quot;</span>:
+                char <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;.&quot;</span>
+                tags <span style="color: #666666">=</span> (<span style="color: #BA2121">&quot;graybg&quot;</span> <span style="color: #008000; font-weight: bold">if</span> char <span style="color: #666666">==</span> <span style="color: #BA2121">&quot;</span><span style="color: #BB6622; font-weight: bold">\uFFFD</span><span style="color: #BA2121">&quot;</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #BA2121">&quot;error&quot;</span>,)
+            <span style="color: #008000; font-weight: bold">elif</span> <span style="color: #666666">0x20</span> <span style="color: #666666">&lt;</span> <span style="color: #008000">ord</span>(char) <span style="color: #666666">&lt;</span> <span style="color: #666666">0x7F</span>:
+                tags <span style="color: #666666">=</span> (<span style="color: #BA2121">&quot;ascii&quot;</span>,)
+            <span style="color: #008000; font-weight: bold">elif</span> <span style="color: #AA22FF; font-weight: bold">not</span> <span style="color: #666666">0x20</span> <span style="color: #666666">&lt;=</span> <span style="color: #008000">ord</span>(char) <span style="color: #666666">&lt;=</span> <span style="color: #666666">0xFFFF</span>: <span style="color: #408080; font-style: italic"># Tcl/Tk limit</span>
+                char <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;?&quot;</span>
+                tags <span style="color: #666666">=</span> (<span style="color: #BA2121">&quot;error&quot;</span>,)
+            <span style="color: #008000">self</span><span style="color: #666666">.</span>viewText<span style="color: #666666">.</span>insert(<span style="color: #BA2121">&quot;end&quot;</span>, char, tags)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>viewText<span style="color: #666666">.</span>insert(<span style="color: #BA2121">&quot;end&quot;</span>, <span style="color: #BA2121">&quot;</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>)
+</pre></div>
+
+<p>
+After writing the bytes in hex, this method is used to write them as
+text. We decode the bytes into characters using the encoding set by the
+user, replacing any that can't be decoded by the Unicode U+FFFD
+replacement character. If the character is a Unicode whitespace or the
+replacement character we represent it with a full-stop and also set a
+tag color. If the character is outside the Basic Multilingual Plane
+(BMP), we represent it with a question mark and set the error tag
+color. (Python strings can handle all Unicode characters, but
+unfortunately <code>tkinter</code> widgets are limited to those in the BMP.) Once we
+have the character to display and its tags, we insert it into the
+<code>self.viewText</code> widget. And after all the row's characters have been
+inserted, we insert a newline ready for the next row.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">open</span>(<span style="color: #008000">self</span>, <span style="color: #666666">*</span>args):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>viewText<span style="color: #666666">.</span>delete(<span style="color: #BA2121">&quot;1.0&quot;</span>, <span style="color: #BA2121">&quot;end&quot;</span>)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>offset<span style="color: #666666">.</span>set(<span style="color: #666666">0</span>)
+        filename <span style="color: #666666">=</span> filedialog<span style="color: #666666">.</span>askopenfilename(title<span style="color: #666666">=</span><span style="color: #BA2121">&quot;Open — {}&quot;</span><span style="color: #666666">.</span>format(
+                                              APPNAME))
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_open(filename)
+</pre></div>
+
+<p>
+When the user clicks the Open button this method is called. It starts by
+clearing the <code>self.viewText</code> widget and then sets the offset to 0. It then
+pops up the platform-specific file open dialog and then calls the same
+private <code>MainWindow._open()</code> method that we saw called in the
+<code>__init__()</code>
+method.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">_open</span>(<span style="color: #008000">self</span>, filename):
+        <span style="color: #008000; font-weight: bold">if</span> filename <span style="color: #AA22FF; font-weight: bold">and</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>exists(filename):
+            <span style="color: #008000">self</span><span style="color: #666666">.</span>parent<span style="color: #666666">.</span>title(<span style="color: #BA2121">&quot;{} — {}&quot;</span><span style="color: #666666">.</span>format(filename, APPNAME))
+            size <span style="color: #666666">=</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>getsize(filename)
+            size <span style="color: #666666">=</span> (size <span style="color: #666666">-</span> BLOCK_SIZE <span style="color: #008000; font-weight: bold">if</span> size <span style="color: #666666">&gt;</span> BLOCK_SIZE <span style="color: #008000; font-weight: bold">else</span>
+                    size <span style="color: #666666">-</span> BLOCK_WIDTH)
+            <span style="color: #008000">self</span><span style="color: #666666">.</span>offsetSpinbox<span style="color: #666666">.</span>config(to<span style="color: #666666">=</span><span style="color: #008000">max</span>(size, <span style="color: #666666">0</span>))
+            <span style="color: #008000">self</span><span style="color: #666666">.</span>filename <span style="color: #666666">=</span> filename
+            <span style="color: #008000">self</span><span style="color: #666666">.</span>show_block()
+</pre></div>
+
+<p>
+This method begins by checking to see if the filename it was given is
+non-empty (and not None) and exists in the file system. If these checks
+pass, the method next updates the application's title to include the
+filename. It then computes the maximum offset to allow&mdash;a value less
+than the number of bytes so that if the user runs the spinbox to its
+maximum, some bytes from the file will still be visible. Then the
+filename is stored and <code>show_block()</code> is called to show the file's first
+block.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">quit</span>(<span style="color: #008000">self</span>, event<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">None</span>):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>parent<span style="color: #666666">.</span>destroy()
+</pre></div>
+<p>
+</p>
+
+<p>
+If the user clicks the Quit button (or clicks the window's X close
+button), this method is called. It tells the parent (the <code>app</code> variable)
+to destroy itself leading to a clean termination. This is the last
+<code>MainWindow</code> method.
+</p>
+
+<p>
+The final few lines are top-level, that is, not indented at all.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">app <span style="color: #666666">=</span> tk<span style="color: #666666">.</span>Tk()
+app<span style="color: #666666">.</span>title(APPNAME)
+window <span style="color: #666666">=</span> MainWindow(app)
+app<span style="color: #666666">.</span>protocol(<span style="color: #BA2121">&quot;WM_DELETE_WINDOW&quot;</span>, window<span style="color: #666666">.</span>quit)
+app<span style="color: #666666">.</span>resizable(width<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>, height<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">False</span>)
+app<span style="color: #666666">.</span>mainloop()
+</pre></div>
+
+<p>
+Tkinter doesn't really have an application object, instead it provides
+an invisible top-level window which we use as the parent of a real
+visible window. If the user clicks the application window's X close
+button the <code>MainWindow</code>'s <code>quit()</code> method will be called. Since we always
+show a fixed block of 512 bytes we've made the window non-resizable.
+Calling <code>mainloop()</code> starts the GUI event loop and the method doesn't
+return until the application is terminated.
+</p>
+
+<p>
+There are many improvements that could be made. One would be to color
+alternate rows with different backgrounds such as white and a very light
+color, to make them easier to see. Another would be to add a vertical
+scrollbar with the same range as the offset spinbox and synchronized
+using the same <code>self.offset</code> <code>tk.IntVar</code>. (In this case we'd probably be
+best off setting the offset spinbox's <i>to</i> value to the full size of the
+file.)
+</p>
+
+<p>
+There are many Python GUI libraries available. Tkinter is small, fast,
+and comes with Python&mdash;it is excellent for creating tiny applications
+like Hex View. But for more substantial applications, especially those
+requiring sophisticated custom widgets, I recommend using <a
+href="https://wiki.qt.io/PySide">PySide</a> (which
+is what I use), or <a
+href="https://riverbankcomputing.com/news">PyQt</a>, or <a
+href="https://wxpython.org/">wxPython</a> instead.
+</p>
+
+<p>For more see <a href="pytips.html">Python Programming Tips</a></p>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>

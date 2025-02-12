@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Gravitate &mdash; game like samegame or tilefall</title>
+    <meta name="description" content="Gravitate game"/>
+    <meta name="keywords" content="game, gravitate, tilefall, samegame"/>
+<!--[if IE]><script src="excanvas.js"></script><![endif]-->
+<script src="Gravitate.js"></script>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Gravitate</h1>
+<h2 class="subtitle">A samegame/tilefall-like game</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<!-- Body -->
+<canvas id="canvas" width="360" height="360" style="margin-left: 1em;">
+</canvas>
+
+<p style="margin-left: 1em;">
+<button onclick="newGame()">New Game</button>
+&nbsp;&nbsp;<b id="message"></b>
+</p>
+
+<p style="margin-left: 1em;" class="shout">
+The purpose of the game is to remove all the tiles. Click a tile to
+remove it and any vertically or horizontally adjoining tiles of the same
+color. (So, clicking a tile with no neighbours of the same color does
+nothing.) The more tiles that are removed in one go, the bigger the
+score.
+</p>
+
+<p class="eucra">
+In view of the EU’s <a
+href="https://en.wikipedia.org/wiki/Cyber_Resilience_Act">Cyber
+Resilience Act</a> and an abundance of caution, we have withdrawn all
+our free software.
+</p>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+
+<script>
+function mouseClick(event) {
+    var x, y;
+    var canvas = document.getElementById("canvas");
+    if (event.pageX != undefined && event.pageY != undefined) {
+	x = event.pageX;
+	y = event.pageY;
+    }
+    else { // Firefox
+	x = event.clientX + document.body.scrollLeft +
+	    document.documentElement.scrollLeft;
+	y = event.clientY + document.body.scrollTop +
+	    document.documentElement.scrollTop;
+    }
+    handleClick(x - canvas.offsetLeft, y - canvas.offsetTop);
+}
+
+var canvas = document.getElementById("canvas");
+canvas.addEventListener("mousedown", mouseClick, false);
+
+newGame();
+</script>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>

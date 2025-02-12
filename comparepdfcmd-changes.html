@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>com&shy;pare&shy;pdf&shy;cmd Changes &mdash; PDF comparison console tool
+changes</title>
+    <meta name="description" content="Changes to the comparepdfcmd
+commercial Windows PDF comparison command line tool."/>
+    <meta name="keywords" content="Compare, PDF, ComparePDF, DiffPDF,
+comparepdfcmd, PDF comparison, compare PDF, QA, quality assurance,
+automated testing, changes"/>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">com&shy;pare&shy;pdf&shy;cmd changes</h1>
+<h2 class="subtitle">com&shy;pare&shy;pdf&shy;cmd is used to compare two PDF
+files&mdash;textually or visually.</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link-sub"><a href="comparepdfcmd.html#inuse">Example
+Usages</a></span> &bull;
+<span class="nav-link-sub"><a href="comparepdfcmd.html#png">Example 
+report</a></span> &bull;
+<span class="nav-here-sub">Changes</span> <!-- &bull;
+<span class="nav-link-sub"><a href="comparepdfcmd.html#old">Old versions</a></span>
+-->
+</div>
+
+<!-- Body -->
+
+<p class="blue">This software is no longer for sale.</p>
+
+<h3>2.5.0-pe “perpetual edition”</h3>
+<ul>
+<li>Same functionality as 2.4.2.</li>
+<li>This is the final version of the software. It does not need or use a license key.</li>
+</ul>
+
+<h3>2.4.2</h3>
+<ul>
+<li>New <code>.csv</code> output format. By default
+<code>comparepdfcmd</code> will output in the “normal” <code>.csv</code>
+format. However, if the <code>-C</code> or <code>--config</code> option
+is used and the configuration file contains the lines:
+<pre>
+[report]
+csv=special
+</pre>
+then the new format will be used. These formats are both described in
+the manual.
+</li>
+<li>Fixed bug which meant that some PDF reports did not show the
+changes. This bug is <i>extremely</i> rare and due to a bug in the PDF
+library which we use and which we have now worked around.</li>
+</ul>
+
+<h3>2.4.1</h3>
+<ul>
+<li>License clarification.</li>
+</ul>
+
+<h3>2.4.0</h3>
+<ul>
+<li>Switched to annual license keys only. These are not tied to the
+hardware and may be transferred (moved) freely from one computer to
+another. These licenses can be purchased singly. (Existing “full”
+license keys continue to work normally.) Run <code>comparepdfcmd.exe
+-h</code> to see (at the end) which license key is in use, what its
+expiry is, and where the key is located.</li>
+<li>License changes.</li>
+</ul>
+
+<h3>2.3.3</h3>
+<ul>
+<li>License changes.</li>
+</ul>
+
+<hr>
+
+<h3>2.3.2</h3>
+<ul>
+<li>Library updates.</li>
+<li>License changes.</li>
+</ul>
+
+<h3>2.3.1</h3>
+<ul>
+<li>Updated libraries—in many cases, faster than ever.</li>
+<li>A Windows update caused <code>comparepdfcmd.exe cid</code> to
+<i>sometimes</i> output
+<code>WMI error: HRESULT Call failed with: 0x80010119</code>.
+This should now be fixed.</li>
+</ul>
+
+<h3>2.3.0</h3>
+<ul>
+<li>Added new <code>[report]</code> option <code>scalablepdf=true</code>. By
+default <i>comparepdfcmd</i> outputs scalable PDF reports, but in some rare
+cases this can fail. For such cases use a configuration file with a
+<code>[report]</code> section that has <code>scalablepdf=false</code>; this will
+output PDF reports the same way that <i>diffpdfc</i> does.</li>
+<li>Updated libraries and various minor code improvements.</li>
+</ul>
+
+<h3>2.2.3</h3>
+<ul>
+<li>Updated libraries and various minor code improvements. In some
+cases, slightly faster (especially on Windows 7).</li>
+</ul>
+
+<h3>2.2.2</h3>
+<ul>
+<li>Updated libraries and various minor code improvements. In many
+cases, significantly faster on Windows 7.</li>
+</ul>
+
+<h3>2.2.1</h3>
+<ul>
+<li>Fixed a subtle bug where pages with no text produced an error. Now
+they compare correctly.</li>
+<li>Updated libraries and various minor code improvements.</li>
+</ul>
+
+<h3>2.2.0</h3>
+<ul>
+<li>Updated libraries and various minor code improvements. This should
+result in slightly improved performance in some cases.</li>
+</ul>
+
+<h3>2.1.9</h3>
+<ul>
+<li>Updated the application, license, and documentation to use
+<span class="tt">www.diffpdf.com</span> in favor of <span class="tt">www.qtrac.eu</span>. This should
+make no practical difference since both domains are synonyms (which
+map to <span class="tt">diffpdf.appspot.com</span> under the hood). We've done this in
+case the rules for <span class="tt">.eu</span> domains change in the future.</li>
+<li>Various library updates. Overall these result in our test suite
+running noticably faster although the speed benefits vary from case to
+case.</li>
+<li>Fixed a tiny robustness issue for a very rare corner case.</li>
+</ul>
+
+<h3>2.1.8</h3>
+<ul>
+<li>Fixed a tiny subtle long-standing bug where setting
+<code>normalize-hyphens</code>, <code>ignore-hyphens</code>, and
+<code>normalize-ligatures</code>, in a <code>.ini</code> configuration
+file, was ignored. Now they are correctly recognized.</li>
+<li>Minor library updates.</li>
+</ul>
+
+<h3>2.1.7</h3>
+<ul>
+<li>Added support for doing appearance mode comparisons with the “new”
+renderer. In some rare cases the “old” renderer doesn't detect some
+texture or gradient fill differences&mdash;but the new renderer does.</li>
+<li>Minor library updates.</li>
+</ul>
+
+<h3>2.1.6</h3>
+<ul>
+<li>Added support for the <code>-D</code> or <code>--maxdirdepth</code> option.
+By default when comparing two folders of PDFs,
+<code>com&shy;pare&shy;pdf&shy;cmd.exe</code> looks in the folders specified, <i>and</i>
+their subfolders, and subsubfolders, and so on. Using <code>-D 1</code>
+ensures that only the specified folders are looked in and all subfolders
+are ignored.</li>
+<li>Fixed a bug that meant an error message was output at the start of
+the <code>--help</code> text.</li>
+</ul>
+
+<h3>2.1.5</h3>
+<ul>
+<li>When reading configuration and key files, ignores the BOM (byte
+order mark) if present. (For example, Notepad sometimes saves files with
+a BOM in UTF-8 mode.)</li>
+<li>Updated libraries.</li>
+</ul>
+
+<h3>2.1.4</h3>
+<ul>
+<li>Updated libraries, including the PDF library.</li>
+</ul>
+
+<h3>2.1.3</h3>
+<ul>
+<li>The <code>cid.exe</code> application is no longer needed or supplied
+(which is why the <code>.zip</code> is smaller), since
+<code>com&shy;pare&shy;pdf&shy;cmd.exe</code> can now discover the Computer&nbsp;ID for
+itself. This should make startup times slightly faster.</li>
+<li>Updated libraries and various internal improvements.</li>
+</ul>
+
+<h3>2.1.2</h3>
+<ul>
+<li>Fixed a bug which meant that PNG reports sometimes showed the wrong
+path.</li>
+<li>(Internal changes: replaced <code>sharedlib</code> with
+<code>libloading</code> for DLLs, and changed internal PDF-handling APIs;
+replaced <code>error-chain</code> with <code>XError</code> and made minor
+changes to some error messages.)</li>
+</ul>
+
+<h3>2.1.1</h3>
+<ul>
+<li>Added a new <code>.ini</code> configuration file option in the
+<code>[report]</code> section, <code>show-field-content</code>. This defaults to
+<code>false</code>. If you use a configuration file with this set to
+<code>true</code>, then the content of form fields will be output in PDF
+reports. (This is done automatically for other report formats.)</li>
+</ul>
+
+<h3>2.1.0</h3>
+<ul>
+<li>Updated libraries and various internal improvements.</li>
+<li>Added support for annual license keys. These are not tied to the
+hardware, so are ideal for virtual machines. However, they are only
+available in selected countries to selected customers, and have a
+minimum order, so the minimum purchase is at least $1,800 USD.</li>
+</ul>
+
+<h3>2.0.2</h3>
+<ul>
+<li>Fixed some small bugs in messages about free trial expiry.</li>
+</ul>
+
+<h3>2.0.1</h3>
+<ul>
+<li>Updated libraries and various internal improvements.</li>
+<li>Fixed bug which could have made acquiring and registering a full
+license key fail. (The web site now works around the bug, so registering
+should always succeed even with version 2.0.0.)</li>
+</ul>
+
+<h3>2.0.0</h3>
+<ul>
+<li>Password-protected PDFs can now be compared if you give the
+password(s) on the command line. (See the <code>--password1</code> and
+<code>--password2</code> command line options.)</li>
+<li>The colors used to highlight differences in PDF and PNG reports can
+now be customized. (See the Color Options described in the manual.)</li>
+<li>Difference reports can now be output in XML format, in addition to
+CSV, JSON, PDF, and PNG.</li>
+<li>By default JSON and XML reports are human-readable, but they can be
+minimized using the <code>compact</code> configuration file option.</li>
+<li>Updated libraries and various internal improvements.</li>
+</ul>
+
+<h3>1.3.0</h3>
+<ul>
+<li>Implemented an optimization which can improve speed by a few percent
+in many cases.</li>
+<li>Updated libraries and minor internal improvements.</li>
+</ul>
+
+<h3>1.2.2</h3>
+<ul>
+<li>Updated libraries and minor internal improvements.</li>
+<li>Updated so that it is compatible with MyCommerce Share-IT Order IDs
+as well as the old MyCommerce RegNow Order IDs.</li>
+</ul>
+
+<h3>1.2.1</h3>
+<ul>
+<li>Updated some libraries (bug fixes and a tiny speed improvement).</li>
+<li>Improved some error handling and reporting.</li>
+<li>Updated the license.</li>
+</ul>
+
+<h3>1.2.0</h3>
+<ul>
+<li>Updated to use a new PDF library that supports the new PDF&nbsp;2
+standard, in addition to the existing PDF&nbsp;1.<i>x</i> standards that
+previous versions support. In many use cases the new library uses less
+memory and is faster.</li>
+<li>Updated some of the other libraries com&shy;pare&shy;pdf&shy;cmd uses.</li>
+</ul>
+
+<h3>1.1.8</h3>
+<ul>
+<li>Added a new <code>.ini</code> configuration file option in the
+<code>[report]</code> section, <code>path-in-title</code>. This defaults to
+<code>true</code>, which means that the full path of compared PDFs is
+included in reports. If set to <code>false</code>, then only the filenames
+of compared PDFs is included.</li>
+<li>Updated some of the libraries com&shy;pare&shy;pdf&shy;cmd uses.</li>
+</ul>
+
+<h3>1.1.7</h3>
+<ul>
+<li>Bug fix:&nbsp;The accuracy setting in a <code>.ini</code> configuration
+file is no longer ignored.</li>
+<li>Updated some of the libraries com&shy;pare&shy;pdf&shy;cmd uses.</li>
+</ul>
+
+<h3>1.1.6</h3>
+<ul>
+<li>Added a <code>scale</code> option which can be set in a <code>.ini</code>
+configuration file's <code>[report]</code> section. This only affects PNG
+reports. It allows PNG reports to have much higher resolution output if
+required.</li>
+<li>Updated some of the libraries com&shy;pare&shy;pdf&shy;cmd uses.</li>
+</ul>
+
+<h3>1.1.5</h3>
+<ul>
+<li>Added support for JSON reports (<code>.jsn</code> or <code>.json</code>).</li>
+<li>Updated some of the libraries com&shy;pare&shy;pdf&shy;cmd uses.</li>
+</ul>
+
+<h3>1.1.4</h3>
+<ul>
+<li>Added a <code>highlight-transparency</code> option which can be set in a
+<code>.ini</code> configuration file's <code>[general]</code> section. This
+makes it possible for you to set the balance between how visible
+the highlighting is vs.&nbsp;how clearly the highlighted differences
+show through.</li>
+<li>Changed the default highlight transparency to 80% for PDF difference
+reports (before it was 85%). This makes the highlighting stronger, and
+still leaves the differences visible. It also makes the highlighting
+consistent with PNG reports whose default has always been 80%.
+</ul>
+
+<h3>1.1.3</h3>
+<ul>
+<li>Minor updates to the manual and libraries used by com&shy;pare&shy;pdf&shy;cmd.</li>
+</ul>
+
+<h3>1.1.2</h3>
+<ul>
+<li>Eliminated the dependency on the Windows <code>wmic</code> program by
+bundling our <code>cid.exe</code> program in the package and using it to
+obtain the Computer&nbsp;ID.</li>
+</ul>
+
+<h3>1.1.1</h3>
+<ul>
+<li>Bug fix: com&shy;pare&shy;pdf&shy;cmd now correctly prevents overwriting the PDF
+files or folders being compared if the same file or folder is mistakenly
+used as the report file or folder.</li>
+</ul>
+
+<h3>1.1.0</h3>
+<ul>
+<li>Running <code>com&shy;pare&shy;pdf&shy;cmd.exe try</code> will try to acquire <i>and
+register</i> a free trial license key, so after running this command you
+can freely use com&shy;pare&shy;pdf&shy;cmd for up to 20 days. </li>
+<li>Added a <code>getkey</code> option. After you've bought one or more
+licenses, to acquire a license on a particular computer, once
+com&shy;pare&shy;pdf&shy;cmd has been installed on it, run <code>com&shy;pare&shy;pdf&shy;cmd.exe getkey
+<i>order-id</i></code> where <code><i>order-id</i></code> is the Order&nbsp;ID
+that appeared on the payment confirmation page (and which is also
+emailed to you). This will take you to the “get key” page with both the
+Order&nbsp;ID and Computer&nbsp;ID correctly filled in. Then, once
+you've clicked the issue license key button, you can register the key
+by running <code>com&shy;pare&shy;pdf&shy;cmd.exe register <i>key</i></code>.</li>
+<li>Added a <code>-s</code> or <code>--show</code> option. If the PDFs are
+different and <code>-r</code> or <code>--report</code> is used to get a PDF
+report, this option will make com&shy;pare&shy;pdf&shy;cmd show the report in your PDF
+reader.</li>
+<li>Added a <code>-m</code> or <code>--manual</code> or <code>manual</code> option.
+Use this option to show com&shy;pare&shy;pdf&shy;cmd's manual in your PDF reader.</li>
+<li>If you use the <code>license</code> option, com&shy;pare&shy;pdf&shy;cmd will show the
+license in your PDF reader rather than as text output to the console.</li>
+<li>If you use the <code>try</code> or <code>buy</code> option, com&shy;pare&shy;pdf&shy;cmd
+will try to open the web page you need to visit, in addition to
+explaining how to get a free trial or buy a license key.</li>
+</ul>
+
+<h3>1.0.1</h3>
+<ul>
+<li>When comparing two <i>folders</i> of PDF files, report folders and
+subfolder are now only created when necessary, i.e., when there are
+differences to save in a report.</li>
+</ul>
+
+<h3>1.0.0</h3>
+<ul>
+<li>First public release of this diffpdfc alternative.</li>
+</ul>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>

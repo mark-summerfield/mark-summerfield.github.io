@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Programming in Python 3 (First Edition) &mdash; book errata</title>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Programming in Python 3 (First Edition)</h1>
+<h2 class="subtitle2">Errata</h2>
+<h3 class="subsubtitle">ISBN-10: 0137129297&nbsp;&ndash;&nbsp;ISBN-13: 978-0137129294</h3>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link-sub"><a href="py3book1.html">First
+Edition</a></span> &bull;
+<span class="nav-link-sub-sub"><a
+href="py3book1.html#toc">Contents</a></span> &bull;
+<span class="nav-link-sub-sub"><a
+href="py3book1.html#cover">Cover</a></span> &bull;
+<span class="nav-link-sub-sub"><a
+href="py3book1.html#eg">Downloads</a></span> &bull;
+<span class="nav-link-sub-sub"><a
+href="py3book1.html#reviews">Reviews</a></span> &bull;
+<span class="nav-here-sub-sub">Errata</span>
+</div>
+
+<!-- Body -->
+<p style="background-color: pink; font-weight: bold">
+<b>This book has been superceded by <a href="py3book.html">Programming in
+Python&nbsp;3: A Complete Introduction to the Python Language (Second
+Edition)</a>.</b>
+</p>
+
+<p style="background-color: pink; text-align:center;">First Edition: Errata for All Printings</p>
+<div style="overflow-x:auto; display: block; border-collapse: collapse;">
+<table class="eth">
+<tr>
+<td class="sectionheading, eth">Issue</td>
+<td class="sectionheading, eth">Resolution</td>
+<td class="sectionheading, eth">Reporter</td>
+</tr>
+
+<tr><td class="etd" >Page 21. Clarification.</td>
+<td class="etd" >
+The book shows the following interactive session:
+<pre><code>
+&gt;&gt;&gt; a = "many paths"
+&gt;&gt;&gt; b = "many paths"
+&gt;&gt;&gt; a is b
+False
+</code>
+</pre>
+In some cases, comparing the identity of two strings or numbers, even if
+assigned separately as shown here, will return <code>True</code>. This is
+because some implementations of Python will reuse the same object (since
+the value is the same and is immutable), for the sake of efficiency.
+Of course, this is a reminder to compare values using <code>==</code> and
+<code>!=</code>, and to only use <code>is</code> and <code>is not</code> when comparing
+with <code>None</code> or when you really do want to see if two object
+references, rather than their values, are the same.
+</td>
+<td class="etd" >Robert Lummis; Leon Matthews</td></tr>
+
+<tr><td class="etd" >Page 54. <i>Python&nbsp;3.1 difference.</i></td>
+<td class="etd" >The floating-point number output shown on this
+page is different between Python&nbsp;3.0 and 3.1. This is because 3.1 uses a
+smarter algorithm for displaying floating-point numbers that shows as
+few digits as possible without loss of accuracy. Note though, that
+internally, Python&mdash;like practically every other
+language&mdash;stores most floating-point numbers as approximations, so
+the tiny amount of inaccuracy is still there, just less obvious.</td>
+<td class="etd" >Alexis Layton</td></tr>
+
+<tr><td class="etd" >Page 56. Incorrect word.</td>
+<td class="etd" >In Table 2.5's entry for
+<code>math.floor()</code>, replace "smallest" with "largest".</td>
+<td class="etd" >Benjamin Fischer</td></tr>
+
+<tr><td class="etd" >Page 57. Erroneous table entry.</td>
+<td class="etd" >In Table 2.6, delete the <code>math.sum()</code>
+entry, and in the index delete the <code>math.sum()</code> and <code>sum()
+(math)</code> entries. (The correct function is <code>math.fsum()</code> which
+is listed in Table 2.5, and is in the index.)</td>
+<td class="etd" >Ihar Hrachyshka</td></tr>
+
+<tr><td class="etd" >Page 66. Slightly misleading explanation.</td>
+<td class="etd" >The third paragraph describes the two colon
+slicing plus striding syntax, and says that you cannot omit the
+step&mdash;it should have said that you can omit it, but there's no
+point doing so. This is because if you omit the step, it defaults to 1,
+but that's the default anyway, so for a step size of 1, the one colon
+syntax is sufficient.</td>
+<td class="etd" >Tom Zych</td></tr>
+
+<tr><td class="etd" >Page 71. Incorrect code.</td>
+<td class="etd" >The code snippet at the bottom right of the
+page should have the line <code>result = "", "", s</code> not <code>result =
+s, "", ""</code>.</td>
+<td class="etd" >Takahiro Nagao</td></tr>
+
+<tr><td class="etd" >Pages 82 &amp; 88. Error in footnotes on both
+pages regarding Terminal.app on Mac.</td>
+<td class="etd" >The footnote on each of these pages says that
+Mac uses the Apple Roman encoding in Terminal.app and therefore cannot
+output all the Unicode characters. This is incorrect&mdash;happily the
+Mac uses UTF-8 and both the
+<code>print_unicode.py</code> and <code>quadratic.py</code> examples work fine on the
+Mac. (I made the mistake because I tested them on the Mac by running the
+book's test suite&mdash;which runs tests using the <code>subprocess</code>
+module&mdash;rather than directly at the console, and
+<code>subprocess</code> seems to use the Apple Roman encoding on Mac.)
+</td>
+<td class="etd" >Author</td></tr>
+
+<tr><td class="etd" >Page 94. Converting the text to HTML and
+truncating it has a subtle bug.</td>
+<td class="etd" >The code at the top of this page truncates
+HTML-escaped text, which means it might erroneously cut off the end of an
+HTML entity. Replace the top 6 lines with these 5 lines:
+<pre><code>
+    if len(field) &lt;= maxwidth:
+	field = escape_html(field)
+    else:
+	field = "{0} ...".format(escape_html(field[:maxwidth]))
+    print("&lt;td&gt;{0}&lt;/td&gt;".format(field))
+</code>
+</pre>
+Note also, that the single line of code quoted in the middle of the page
+suffers from the same problem and should be replaced with:
+<code>print("&lt;td&gt;{0}&lt;/td&gt;".format(escape_html(field[:maxwidth])))</code>.
+<br />
+(If you are using Python&nbsp;3.1 or later you can use <code>{}</code> instead of
+<code>{0}</code> throughout.)
+</td>
+<td class="etd" >Peter Bray</td></tr>
+
+<tr><td class="etd" >Page 117. Error regarding comparison
+operators.</td>
+<td class="etd" >The last paragraph says that dictionaries can
+be compared with <code>&lt;</code>, <code>&lt;=</code>, <code>==</code>,
+<code>!=</code>, <code>&gt;=</code>, and <code>&gt;</code>. This was true in
+Python&nbsp;2, but is (fortunately) not the case in Python&nbsp;3 where
+only <code>==</code> and <code>!=</code> are supported.
+</td>
+<td class="etd" >Jennifer Lindner</td></tr>
+
+<tr><td class="etd" >Page 121. Incorrect word.</td>
+<td class="etd" >In the second paragraph's second sentence,
+beginning "And we can use the union operator", replace "union" with
+"intersection".</td>
+<td class="etd" >Benjamin Fischer</td></tr>
+
+<tr><td class="etd" >Page 136. Incorrect number.</td>
+<td class="etd" >In the paragraph immediately above the Copying
+Collections subsubsection, the returned list should start with
+<code>-7.5</code> not <code>-7.3</code>.</td>
+<td class="etd" >Benjamin Fischer</td></tr>
+
+<tr><td class="etd" >Page 144. The <code>calculate_mode()</code>
+function works correctly but is needlessly complicated.</td>
+<td class="etd" >The <code>calculate_mode()</code> function only
+ever deals with integers, so it can be simplified.
+Change the list comprehension's
+<code>if</code> condition from
+<code>math.fabs(frequency - highest_frequency) &lt;= sys.float_info.epsilon
+</code>
+to
+<code>frequency == highest_frequency</code>.
+This change also affects the text, so replace the <i>second</i> sentence
+in the <i>second</i> paragraph that follows the code snippet (the one
+starting "Since the numbers may be floating-point"), with "We can
+compare using operator <code>==</code> since all the frequencies are
+integers."
+</td>
+<td class="etd" >Tim Pietzcker</td></tr>
+
+<tr><td class="etd" >Page 152. Slightly misleading description
+of using <code>return</code> in a <code>for</code> loop.</td>
+<td class="etd" >Replace the last sentence of the penultimate
+paragraph&mdash;the paragraph begins "If a <code>continue</code>", and the
+sentence to replace begins "If the loop is broken"&mdash;with:<br />
+"If the loop is broken out of due to a <code>break</code> statement, or
+a <code>return</code> statement (if the loop is in a function or method), or if
+an exception is raised, the <code>else</code> clause's suite is <i>not</i> executed.
+(If an exception occurs, Python skips the <code>else</code> clause and looks for
+a suitable exception handler&mdash;this is covered in the next section.)"
+</td>
+<td class="etd" >Peter Bray</td></tr>
+
+<tr><td class="etd" >Page 157. Incorrect exception mentioned.</td>
+<td class="etd" >In the second paragraph the exception
+mentioned should be <code>UnicodeDecodeError</code>, not
+<code>ValueError</code></td>
+<td class="etd" >Takahiro Nagao</td></tr>
+
+<tr><td class="etd" >Page 168. Wrong units of measurement.</td>
+<td class="etd" >For the <code>heron2()</code> function the units of
+measurement should be "square meters" and "square inches" (not plain
+meters and inches).</td>
+<td class="etd" >Peter Bray</td></tr>
+
+<tr><td class="etd" >Page 205. Incorrect word.</td>
+<td class="etd" >In the first paragraph change <code>--width</code>
+to <code>--maxwidth</code> (twice).</td>
+<td class="etd" >Takahiro Nagao</td></tr>
+
+<tr><td class="etd" >Page 231. Subtle incompleteness.</td>
+<td class="etd" >The third paragraph from the bottom says that
+custom classes support <code>==</code> by default and that the comparison
+always returns <code>False</code>. There is in fact one case where the
+comparison returns <code>True</code>&mdash;when a custom object is compared
+with itself.</td>
+<td class="etd" >Alexis Layton</td></tr>
+
+<tr><td class="etd" >Page 296. Incorrect class name.</td>
+<td class="etd" >In the first and second paragraphs, change
+<code>textwrap.TextWrap</code> to <code>textwrap.TextWrapper</code>.</td>
+<td class="etd" >Takahiro Nagao</td></tr>
+
+<tr><td class="etd" >Pages 398 &amp; 399. Localization issue.</td>
+<td class="etd" >The code at the bottom of page 398 and the
+first line of code on page 399 may not work in all locales. This is
+because the <code>subprocess</code> module always uses binary data but
+encodes/decodes using the local encoding&mdash;this has been reported as
+<a href="https://bugs.python.org/issue6135">bug 6135</a>
+and should be fixed in due course. If you get burnt by this the solution
+is to set <code>sys.stdin</code> to binary mode and do the decoding
+yourself. For all Python&nbsp;3.<i>x</i> versions this can be done by
+reading the data with <code>data = sys.stdin.buffer.read()</code>; and for Python&nbsp;3.1 and later it can be done by
+<code>sys.stdin = sys.stdin.detach()</code>, and then doing <code>data =
+sys.stdin.read()</code>&mdash;and in either case, decoding <code>data</code>,
+e.g., <code>lines = data.decode("utf8").splitlines()</code>.
+</td>
+<td class="etd" >Takahiro Nagao</td></tr>
+
+<tr><td class="etd" >Page 409. Incorrect URL.</td>
+<td class="etd" >In the fourth paragraph, change the URL to
+<a href="https://code.google.com/p/python-safethread/">code.google.com/p/python-safethread</a>.</td>
+<td class="etd" >Takahiro Nagao</td></tr>
+
+<tr><td class="etd" >Pages 421 &amp; 422; an explicit
+context manager is not needed for <code>gzip</code> with Python&nbsp;3.1.</td>
+<td class="etd" >From Python&nbsp;3.1, <code>gzip.GzipFile</code>
+supports the context manager protocol so it is not necessary to use
+<code>contextlib.closing()</code> or a custom context manager when handling
+a <code>gzip</code> file handle with Python&nbsp;3.1&mdash;unless you want
+backward compatibility with Python&nbsp;3.0. The techniques shown are
+still valid though, e.g., for classes that don't support the context
+manager protocol, and of course for programs that must support
+<code>gzip</code> for all Python&nbsp;3.<i>x</i> versions.</td>
+<td class="etd" >Author</td></tr>
+
+
+<tr><td class="etd" >Page 434. Subtle bug.</td>
+<td class="etd" >The <code>find_dvd()</code> function has a subtle
+bug. The fix is to replace the <code>enumerate()</code> line with these
+lines:<br/>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;matches = sorted(matches, key=str.lower)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;for i, match in enumerate(matches):</code>
+</td>
+<td class="etd" >Takahiro Nagao</td></tr>
+
+<tr><td class="etd" >Pages 461 &amp; 462; typos.</td>
+<td class="etd" >Change every occurrence of "W." to "W" (e.g.,
+in the name "James W Loewen")&mdash;or, alternatively, change the regex on
+page 459 to:<br/>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;name = re.sub(r"(?P&lt;forenames&gt;\w+\.?(?:\s+\w+\.?)*)\s+(?P&lt;surname&gt;\w+)",<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r"\g&lt;surname&gt;, \g&lt;forenames&gt;", name)
+</code>
+</td>
+<td class="etd" >Peter Bray</td></tr>
+</table>
+</div>
+
+<p style="background-color: pink; text-align:center;">First Edition: Errata for the
+First Printing only (additional to the errata above&mdash;these have
+been fixed in the Second and subsequent printings)</p>
+<div style="overflow-x:auto; display: block; border-collapse: collapse;">
+<table class="eth">
+<tr>
+<td style="background-color: lightcyan;"  class="sectionheading">Issue</td>
+<td style="background-color: lightcyan;"  class="sectionheading">Resolution</td>
+<td style="background-color: lightcyan;"  class="sectionheading">Reporter</td>
+</tr>
+
+<tr><td class="etd" >Page 4. Package names and availability
+are not as stated.</td>
+<td class="etd" >Only two installers appear to be available for
+Windows, a generic one (x86) and an AMD64-specific one; use the generic
+one unless you are sure you have an AMD64 processor. Fedora 10 does not
+have Python&nbsp;3 packages after all, so you must manually build from the
+sources. Ubuntu 8 does have Python&nbsp;3 packages&mdash;their names are
+<code>python3.0</code> for Python&nbsp;3, <code>idle-python3.0</code> for IDLE, and
+<code>python3.0-doc</code> for the documentation.</td>
+<td class="etd" >Author</td></tr>
+
+<tr><td class="etd" >Page 5. Executable names are not as stated.</td>
+<td class="etd" >The Python executable is called
+<code>python3.0</code> (or <code>python3.1</code> depending on which version you
+installed) and IDLE is called <code>idle</code>. In the book the names used
+throughout are <code>python3</code> and <code>idle3</code> to stand for whatever
+the actual names are (and of course you could alias or soft link to make
+these names work&mdash;in fact, some packages do this for you).</td>
+<td class="etd" >Author</td></tr>
+
+<!--
+
+<tr><td class="etd" ></td>
+<td class="etd" ></td>
+<td class="etd" ></td></tr>
+
+-->
+</table>
+</div>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>

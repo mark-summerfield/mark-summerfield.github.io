@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Using SQLite as a Custom File Format &mdash; Python article</title>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Using SQLite as a Custom File Format</h1>
+<h2 class="subtitle">First published in Micro Mart #1426, August 2016</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link-sub"><a href="pytips.html">Python Programming Tips</a></span>
+</div>
+
+<!-- Body -->
+<div class="shout">
+<p>
+When we create an application we will almost certainly need a way to
+store custom data. For small amounts of data we can use <code>.ini</code>
+files or on Windows we can use the registry, but for larger amounts of
+data (e.g., the application's notion of a “document”), we will need to
+create a storage format. Such formats can be binary or plain text,
+custom or predefined.
+</p>
+
+<p>
+For example, the SVG image format is plain text (XML markup; UTF-8
+encoding) and predefined, whereas the FLAC audio format is binary and
+predefined. In this article we will discuss custom formats, and show how
+to use SQLite as a custom binary format.
+</p>
+
+</div>
+
+<p>
+For custom data, using a plain text format is very appealing. Such
+formats are human readable and so tend to be much easier to debug than
+binary formats. And if we use an existing text format such as JSON or
+XML, libraries exist in almost every language for reading and writing
+them. For small documents, such formats work well, but for large amounts
+of data they can be quite slow to read and write, especially XML.
+</p>
+
+<p>
+Creating a custom binary format can be tricky, especially when
+debugging, but can produce very compact documents which are very fast to
+read and write.
+</p>
+
+<p>
+The main problem with custom plain text and binary formats is that it
+can be quite painful to change them. Suppose, for example, that version
+2 of our application needs to store additional data. We need to be able
+to read our version 1 files and fill in the gaps with sensible defaults
+so that they can be saved as version 2 files. Over the years I've tried
+many different solutions both plain text and binary, but nowadays I use
+a one-size-fits-all solution: every custom document type I create is a
+SQLite database.
+</p>
+
+<p>
+SQLite's “Lite” may make it sound flaky but in fact it is the most
+widely deployed database in the world (inside practically every
+smartphone), and its test suite at well over three billion automated
+tests provides 100% code coverage &mdash; so it is extremely reliable.
+SQLite is an in-process database which means that it exists inside the
+same operating system process as the application that uses it, so it is
+normally used as a single-user database. Each SQLite database is stored
+in a single file, no matter how many tables, views, and triggers it
+contains, so it is very easy to use as an application's document storage
+format.
+</p>
+
+<p>
+Let's imagine that we want to store simple card index cards, each with a
+title and a body:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">IndexCard</span>:
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, title, body<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">None</span>):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>title <span style="color: #666666">=</span> title
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>body <span style="color: #666666">=</span> body
+</pre></div>
+
+<p>
+We could, of course, store them in memory, loading and saving them all
+in one go. But if we use SQLite, we only need to read in the cards we're
+interested in and can add, delete, or update them individually with very
+little memory overhead. If our data items were a lot bigger and more
+complex and used a lot more memory per-item, this could make a big
+difference to performance.
+</p>
+
+<p>
+We'll hold our cards in a model that wraps a SQLite database and which
+uses the third-party
+<a href="https://rogerbinns.github.io/apsw/">APSW</a> library rather
+than the standard library's rather weaker sqlite3 module.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">VERSION <span style="color: #666666">=</span> <span style="color: #666666">1</span>
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">IndexCardModel</span>:
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, filename):
+        create <span style="color: #666666">=</span> <span style="color: #AA22FF; font-weight: bold">not</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>exists(filename)
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>db <span style="color: #666666">=</span> apsw<span style="color: #666666">.</span>Connection(filename)
+        cursor <span style="color: #666666">=</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>db<span style="color: #666666">.</span>cursor()
+        cursor<span style="color: #666666">.</span>execute(Sql<span style="color: #666666">.</span>Prepare)
+        pragma <span style="color: #666666">=</span> Sql<span style="color: #666666">.</span>SetVersion<span style="color: #666666">.</span>format(VERSION)
+        <span style="color: #008000; font-weight: bold">with</span> Transaction(<span style="color: #008000">self</span><span style="color: #666666">.</span>db) <span style="color: #008000; font-weight: bold">as</span> cursor:
+            <span style="color: #008000; font-weight: bold">if</span> create:
+                cursor<span style="color: #666666">.</span>execute(Sql<span style="color: #666666">.</span>Create)
+            <span style="color: #008000; font-weight: bold">else</span>:
+                version <span style="color: #666666">=</span> getfirst(Sql<span style="color: #666666">.</span>GetVersion)
+                <span style="color: #008000; font-weight: bold">if</span> version <span style="color: #666666">&lt;</span> VERSION:
+                    <span style="color: #008000; font-weight: bold">pass</span> <span style="color: #408080; font-style: italic"># Update Database structure here</span>
+            cursor<span style="color: #666666">.</span>execute(pragma)
+</pre></div>
+
+<p>
+A model must be created with a filename which may be an existing
+database of cards or a non-existent file that must be created. The
+Transaction class is from our <a href="pyautoclean.html#trans">Automated
+Cleanup with Python</a> article. SQLite allows us to set and get a
+<code>user_version</code> from a database. We use it here to set our
+database version when creating a new database and to check if an
+existing database is up-to-date.
+</p>
+
+<p>
+The <code>Sql</code> namespace is one we have created like this:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">Sql <span style="color: #666666">=</span> types<span style="color: #666666">.</span>SimpleNamespace()
+Sql<span style="color: #666666">.</span>GetVersion <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;PRAGMA user_version;&quot;</span>
+Sql<span style="color: #666666">.</span>SetVersion <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;PRAGMA user_version = {};&quot;</span>
+Sql<span style="color: #666666">.</span>Prepare <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;&quot;&quot;PRAGMA foreign_keys = 1;</span>
+<span style="color: #BA2121">                 PRAGMA temp_store = MEMORY;&quot;&quot;&quot;</span>
+Sql<span style="color: #666666">.</span>Create <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;&quot;&quot;CREATE TABLE cards (</span>
+<span style="color: #BA2121">                cid INTEGER PRIMARY KEY NOT NULL,</span>
+<span style="color: #BA2121">                title TEXT NOT NULL, body TEXT);&quot;&quot;&quot;</span>
+Sql<span style="color: #666666">.</span>Add <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;&quot;&quot;INSERT INTO cards (title, body)</span>
+<span style="color: #BA2121">             VALUES (:title, :body);</span>
+<span style="color: #BA2121">             SELECT LAST_INSERT_ROWID();&quot;&quot;&quot;</span>
+Sql<span style="color: #666666">.</span>Insert <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;&quot;&quot;INSERT INTO cards (cid, title, body)</span>
+<span style="color: #BA2121">                VALUES (:cid, :title, :body);&quot;&quot;&quot;</span>
+Sql<span style="color: #666666">.</span>Update <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;&quot;&quot;UPDATE cards SET title = :title, body = :body</span>
+<span style="color: #BA2121">                WHERE cid = :cid;&quot;&quot;&quot;</span>
+Sql<span style="color: #666666">.</span>Delete <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;DELETE FROM cards WHERE cid = :cid;&quot;</span>
+Sql<span style="color: #666666">.</span>Get <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;SELECT title, body FROM cards WHERE cid = :cid;&quot;</span>
+Sql<span style="color: #666666">.</span>Select <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;&quot;&quot;SELECT cid, title, body FROM cards</span>
+<span style="color: #BA2121">                ORDER BY LOWER(title);&quot;&quot;&quot;</span>
+Sql<span style="color: #666666">.</span>Count <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;SELECT COUNT(*) FROM cards;&quot;</span>
+Sql<span style="color: #666666">.</span>Exists <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;SELECT COUNT(*) FROM cards WHERE cid = :cid;&quot;</span>
+</pre></div>
+
+<p>
+In this particular case we could have used a
+<code>collections.namedtuple</code>
+since the values aren't changed, but using a
+<code>types.SimpleNamespace</code> makes
+for an easier syntax in this case.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">getfirst</span>(cursor, sql, params<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">None</span>, Class<span style="color: #666666">=</span><span style="color: #008000">int</span>):
+    params <span style="color: #666666">=</span> {} <span style="color: #008000; font-weight: bold">if</span> params <span style="color: #AA22FF; font-weight: bold">is</span> <span style="color: #008000; font-weight: bold">None</span> <span style="color: #008000; font-weight: bold">else</span> params
+    first <span style="color: #666666">=</span> cursor<span style="color: #666666">.</span>execute(sql, params)<span style="color: #666666">.</span>fetchone()[<span style="color: #666666">0</span>]
+    <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">bool</span>(<span style="color: #008000">int</span>(first)) <span style="color: #008000; font-weight: bold">if</span> <span style="color: #008000">isinstance</span>(Class, <span style="color: #008000">bool</span>) <span style="color: #008000; font-weight: bold">else</span> Class(first)
+</pre></div>
+
+<p>
+This is a helper function for extracting the first field from the first
+record produced by a query and returning it with the correct type. We
+have to special case Booleans because <code>bool("0")</code> is
+<code>True</code> (because it is a
+non-empty string), but <code>bool(int("0"))</code> is <code>False</code> since
+<code>bool(0)</code> is <code>False</code>.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">close</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>db<span style="color: #666666">.</span>close()
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>db <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">None</span>
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__enter__</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span>
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__exit__</span>(<span style="color: #008000">self</span>, exc_type, exc_val, exc_tb):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>db<span style="color: #666666">.</span>close() 
+</pre></div>
+
+<p>
+These methods allow a model instance to be used in a <code>with</code> statement, or
+in a <code>try</code> ... <code>finally</code> block with an explicit call to
+<code>close()</code> to guarantee
+finalization.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">add</span>(<span style="color: #008000">self</span>, card): <span style="color: #408080; font-style: italic"># cid = model.add(card)</span>
+        <span style="color: #008000; font-weight: bold">with</span> Transaction(<span style="color: #008000">self</span><span style="color: #666666">.</span>db) <span style="color: #008000; font-weight: bold">as</span> cursor:
+            <span style="color: #008000; font-weight: bold">return</span> getfirst(cursor, Sql<span style="color: #666666">.</span>Add, <span style="color: #008000">vars</span>(card))
+</pre></div>
+
+<p>
+This method adds a new card and returns its <code>cid</code> (Card ID). Python's
+built-in <code>vars()</code> function returns a key-value dictionary of the object it
+is given, i.e., a copy of the object's <code>__dict__</code>, if it has one. So for
+<code>IndexCards</code> it returns a <code>{"title": "card title", "body":
+"card body"}</code>
+<code>dict</code>. APSW's <code>cursor.execute()</code> method takes a SQL query string and
+optionally a <code>dict</code> where the values are substituted for the corresponding
+keys in the query. The <code>Sql.Add</code> query has two separate statements, the
+second returning the newly inserted card's <code>cid</code>.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__getitem__</span>(<span style="color: #008000">self</span>, cid): <span style="color: #408080; font-style: italic"># card = model[cid]</span>
+        <span style="color: #008000; font-weight: bold">with</span> Transaction(<span style="color: #008000">self</span><span style="color: #666666">.</span>db) <span style="color: #008000; font-weight: bold">as</span> cursor:
+            row <span style="color: #666666">=</span> cursor<span style="color: #666666">.</span>execute(Sql<span style="color: #666666">.</span>Get, <span style="color: #008000">dict</span>(cid<span style="color: #666666">=</span>cid))<span style="color: #666666">.</span>fetchone()
+        <span style="color: #008000; font-weight: bold">return</span> IndexCard(<span style="color: #666666">*</span>row) <span style="color: #008000; font-weight: bold">if</span> row <span style="color: #AA22FF; font-weight: bold">is</span> <span style="color: #AA22FF; font-weight: bold">not</span> <span style="color: #008000; font-weight: bold">None</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #008000; font-weight: bold">None</span>
+</pre></div>
+
+<p>
+This special method allows us to retrieve a card by its <code>cid</code>. We've
+chosen to fail safe by returning <code>None</code> for an invalid
+<code>cid</code>, but perhaps a
+better alternative would be to raise a custom <code>InvalidCidError</code> exception.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__delitem__</span>(<span style="color: #008000">self</span>, cid): <span style="color: #408080; font-style: italic"># del model[cid]</span>
+        <span style="color: #008000; font-weight: bold">with</span> Transaction(<span style="color: #008000">self</span><span style="color: #666666">.</span>db) <span style="color: #008000; font-weight: bold">as</span> cursor:
+            cursor<span style="color: #666666">.</span>execute(Sql<span style="color: #666666">.</span>Delete, <span style="color: #008000">dict</span>(cid<span style="color: #666666">=</span>cid))
+</pre></div>
+
+<p>
+This method allows a card identified by its cid to be deleted.
+Strictly speaking we don't need a transaction for this method or the
+previous one since they are both single statements, but using a
+transaction is safer since if the SQL was changed to be two or more
+statements they would still work correctly.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__setitem__</span>(<span style="color: #008000">self</span>, cid, card): <span style="color: #408080; font-style: italic"># model[cid] = card</span>
+        d <span style="color: #666666">=</span> <span style="color: #008000">vars</span>(card)
+        d[<span style="color: #BA2121">&quot;cid&quot;</span>] <span style="color: #666666">=</span> cid
+        <span style="color: #008000; font-weight: bold">with</span> Transaction(<span style="color: #008000">self</span><span style="color: #666666">.</span>db) <span style="color: #008000; font-weight: bold">as</span> cursor:
+            exists <span style="color: #666666">=</span> getfirst(cursor, Sql<span style="color: #666666">.</span>Exists, d, <span style="color: #008000">bool</span>)
+            sql <span style="color: #666666">=</span> Sql<span style="color: #666666">.</span>Update <span style="color: #008000; font-weight: bold">if</span> exists <span style="color: #008000; font-weight: bold">else</span> Sql<span style="color: #666666">.</span>Insert
+            cursor<span style="color: #666666">.</span>execute(sql, d)
+</pre></div>
+
+<p>
+The transaction is needed here because we do two separate statements
+both of which must succeed or fail. The first statment is used to tell
+us if we're updating an existing card or replacing (really, inserting)
+with a new card, and the second to perform the update or insert.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__iter__</span>(<span style="color: #008000">self</span>): <span style="color: #408080; font-style: italic"># for cid, card in model:</span>
+        <span style="color: #008000; font-weight: bold">with</span> Transaction(<span style="color: #008000">self</span><span style="color: #666666">.</span>db) <span style="color: #008000; font-weight: bold">as</span> cursor:
+            <span style="color: #008000; font-weight: bold">for</span> row <span style="color: #AA22FF; font-weight: bold">in</span> cursor<span style="color: #666666">.</span>execute(Sql<span style="color: #666666">.</span>Select):
+                cid <span style="color: #666666">=</span> row[<span style="color: #666666">0</span>]
+                card <span style="color: #666666">=</span> IndexCard(row[<span style="color: #666666">1</span>], row[<span style="color: #666666">2</span>])
+                <span style="color: #008000; font-weight: bold">yield</span> cid, card
+</pre></div>
+
+<p>
+Users of our model can iterate over all the cards using this method.
+If we wanted to allow a constraint (e.g., all cards with an empty body
+or all cards with a title containing a specific word), we would have to
+provide a separate method, perhaps with the signature <code>iterate(self,
+where="", orderby="ORDER BY LOWER(title)")</code>.
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__len__</span>(<span style="color: #008000">self</span>): <span style="color: #408080; font-style: italic"># size = len(model)</span>
+        <span style="color: #008000; font-weight: bold">with</span> Transaction(<span style="color: #008000">self</span><span style="color: #666666">.</span>db) <span style="color: #008000; font-weight: bold">as</span> cursor:
+            <span style="color: #008000; font-weight: bold">return</span> getfirst(cursor, Sql<span style="color: #666666">.</span>Count)
+</pre></div>
+
+<p>
+This method returns the number of cards in the database, and completes
+our implementation.</p>
+
+<p>
+You might like to consider raising a custom <code>InvalidCidError</code> if
+a non-existent <code>cid</code> is passed to <code>__getitem__()</code>,
+<code>__delitem__()</code>, or <code>__setitem__()</code>. And more
+interestingly, you might like to add support for undo/redo, although
+doing so is quite a bit of work.
+</p>
+
+<p>
+For those who don't much like writing raw SQL, an excellent alternative
+is to use an Object-Relational Mapper (ORM) such as <a
+href="https://www.sqlalchemy.org/">SQLAlchemy</a> or sqlobject.org's
+SQLObject. These make it possible to create Python classes such that a
+class maps to a database table and an instance to a database record with
+all the underlying SQL handled by the ORM.
+</p>
+
+<p>For more see <a href="pytips.html">Python Programming Tips</a></p>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>
+

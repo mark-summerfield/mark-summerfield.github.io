@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Programming in Python 3 (Second Edition) &mdash; book errata</title>
+    <meta name="description" content="Programming in Python 3 textbook,
+errata"/>
+    <meta name="keywords" content="Programmin in Python 3, textbook,
+errata"/>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Programming in Python 3 (Second Edition)</h1>
+<h2 class="subtitle2">Errata</h2>
+<h3 class="subsubtitle">ISBN-10: 0321680561&nbsp;&ndash;&nbsp;ISBN-13: 978-0321680563</h3>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link"><a href="py3book.html">Programming in
+Python&nbsp;3</a></span> &bull;
+<span class="nav-link-sub"><a
+href="py3book.html#toc">Contents</a></span> &bull;
+<span class="nav-link-sub"><a href="py3book.html#cover">Cover</a></span>
+&bull;
+<span class="nav-link-sub"><a
+href="py3book.html#eg">Downloads</a></span> &bull;
+<span class="nav-link-sub"><a
+href="py3book.html#reviews">Reviews</a></span> &bull;
+<span class="nav-here-sub">Errata</span> &bull;
+<span class="nav-link-sub"><a
+href="py3book-translations.html">Translations</a></span> &bull;
+<span class="nav-link-sub"><a href="py3book1.html">First Edition</a></span>
+</div>
+
+<!-- Body -->
+<p>
+This book covers Python&nbsp;3.0 and 3.1 and should work with all
+Python&nbsp;3.<i>x</i> versions. After reading the book we recommend
+reading the “<a
+href="https://docs.python.org/3.2/whatsnew/3.2.html">What's New in
+Python</a>” documents for 3.2, 3.3, etc., to learn about new features and
+improvements that have been made since the book was published.
+</p>
+
+<p style="background-color: pink; text-align:center;">Second Edition:
+Errata for Second Printing</p>
+<div style="overflow-x:auto; display: block; border-collapse: collapse;">
+<table class="eth">
+<tr>
+<td class="sectionheading, eth">Issue</td>
+<td class="sectionheading, eth">Resolution</td>
+<td class="sectionheading, eth">Reporter</td>
+</tr>
+
+<tr><td class="etd" >Pages 495 and 499. Factual error.</td>
+<td class="etd" >I have been persuaded that the footnote on page 495 is
+wrong and that backreferences do not work inside character classes. The
+example at the start of page 499 does work but only by serendipity. In
+particular, <span class="tt">[^\1&gt;]</span> can be replaced with <span
+class="tt">[^&gt;]</span>
+without changing the semantics. One possible solution for matching the
+same quote is to use negative lookahead; see for example, this answer on
+<a href="https://stackoverflow.com/a/8057827/3392504">stackoverflow</a>.</td>
+<td class="etd" >Alexey Zinger</td></tr>
+
+</table>
+</div>
+
+<p style="background-color: pink; text-align:center;">Second Edition:
+Errata for All Printings</p>
+<div style="overflow-x:auto; display: block; border-collapse: collapse;">
+<table class="eth">
+<tr>
+<td class="sectionheading, eth">Issue</td>
+<td class="sectionheading, eth">Resolution</td>
+<td class="sectionheading, eth">Reporter</td>
+</tr>
+
+<tr><td class="etd" >Page 21. Factual error.</td>
+<td class="etd" >In the second paragraph replace "and
+<code>remove()</code> which removes an item at a given index position." with
+"and <code>remove()</code> which removes the given item." Later references
+to the <code>list.remove()</code> method are correct.</td>
+<td class="etd" >Daniel Wójcik</td></tr>
+
+<tr><td class="etd" >Page 61. Na&iuml;ve floating-point comparison.</td>
+<td class="etd" >The <code>equal_float()</code> function shown on
+this page is simple and standard, but it doesn't work well when the
+numbers compared have very different magnitudes. Here's an improved
+version:
+<pre><code>
+def equal_float(a, b):
+    return abs(a - b) &lt;= (sys.float_info.epsilon * min(abs(a), abs(b)))
+</code></pre>
+The examples' <code>Util</code> module has an <code>equal_float()</code>
+function that takes an optional third argument&mdash;the number of
+decimal places to compare to.
+</td>
+<td class="etd" >William Jones</td></tr>
+
+<tr><td class="etd" >Page 68. Mistake re `&auml;' ordering.</td>
+<td class="etd" >The second from last paragraph says that in German
+`&auml;' is sorted as if spelled `&aelig;': this should be qualified
+since it is only true of German phonebooks; in German dictionaries it is
+sorted as plain `a'.</td>
+<td class="etd" >Jasmin Blanchette</td></tr>
+
+<tr><td class="etd" >Page 73. Incorrect method description.</td>
+<td class="etd" >Change the last three words in table 2.8's
+<code>s.isdigit()</code> description to “a Unicode digit”.</td>
+<td class="etd" >Ross Burnett</td></tr>
+
+<tr><td class="etd" >Page 83. Duplicate word.</td>
+<td class="etd" >The last sentence of the first paragraph of
+the Format Specifications subsection begins “The the”&mdash;this should
+simply be “The”.</td>
+<td class="etd" >Michael Bernt</td></tr>
+
+<tr><td class="etd" >Page 134. Code error in the text.</td>
+<td class="etd" >In the second paragraph (immediately after the
+<code>greens</code> example), I say: "Here, using mapping unpacking
+(<code>**</code>) has exactly the same effect as
+writing <code>.format(green=greens.green, olive=greens.olive,
+lime=greens.lime)</code>". That would be true if <code>greens</code> was an
+object with those attributes, but in fact it is simply a <code>dict</code>
+with those keys, so the correct code is: 
+<code>.format(green=greens["green"], olive=greens["olive"],
+lime=greens["lime"])</code>.</td>
+<td class="etd" >Clemens Kaposi</td></tr>
+
+<tr><td class="etd" >Page 144. Wrong word.</td>
+<td class="etd" >The first line on this page contains the
+phrase "a number that cannot be less than"; change "less" to "more" to
+correct the meaning.</td>
+<td class="etd" >Iama Netizen</td></tr>
+
+<tr><td class="etd" >Page 202. Subtle code error.</td>
+<td class="etd" >The relative import shown in the right hand
+code snippet is incorrect&mdash;but unfortunately, due to a bug in
+Python&nbsp;3.0.0&ndash;3.1.2, it actually works. It doesn't work from
+Python&nbsp;3.1.3 though, so should be replaced with <code>from
+.. import Png</code> (which means import the <code>Png</code> module from the
+module two directories&mdash;because there are two dots&mdash;above this
+one, i.e., from the <code>Graphics</code> module). This correction has been
+applied to the downloadable archives.</td>
+<td class="etd" >Author</td></tr>
+
+<tr><td class="etd" >Page 215. Additional note.</td>
+<td class="etd" >The <code>optparse</code> module discussed here is
+deprecated in Python&nbsp;3.2; it has been superceded by the
+<code>argparse</code> module. The book's examples continue to use
+<code>optparse</code> so that they work with all Python&nbsp;3.<i>x</i>
+versions. Stick with <code>optparse</code> if you need to maintain backward
+compatibility with Python&nbsp;3.1; otherwise switch to
+<code>argparse</code> which is better (and easy to switch to).</td>
+<td class="etd" >Jim Johnston</td></tr>
+
+<tr><td class="etd" >Page 235. Spurious word.</td>
+<td class="etd" >In the section “Object-Oriented Concepts and
+Terminology”'s first paragraph's third sentence, replace
+the phrase “data type in later in this section,” with
+“data type later in this section,”</td>
+<td class="etd" >Joshua Lusk</td></tr>
+
+<tr><td class="etd" >Page 238. Typo.</td>
+<td class="etd" >The last sentence should end “is shown here:”,
+not “is show here:”.</td>
+<td class="etd" >Binshuo Hu</td></tr>
+
+<tr><td class="etd" >Pages 270&ndash;275. Subtle bug.</td>
+<td class="etd" >The <code>SortedList.py</code> module (and various
+alternative versions such as <code>SortedListAbc.py</code>), have a subtle
+bug that causes incorrect behavior if the key function folds case (e.g.,
+<code>lambda x: x.lower()</code>) <i>and</i> there are multiple values which
+have the same keys (e.g., <code>"abc"</code> and <code>"ABC"</code>). The
+algorithms used in the methods shown in the book are correct, but many
+of the methods must be changed to account for this use case. The
+necessary corrections have been applied to the downloadable
+archives.</td>
+<td class="etd" >Kahn Fusion</td></tr>
+
+<tr><td class="etd" >Page 377. Subtle code and explanation
+error.</td>
+<td class="etd" >Replace the penultimate paragraph's last
+sentence (beginning "It stores the setter method"), with<br />
+"It stores the setter method it has been given
+(which can now be used in the <code>__set__()</code> method), and returns the
+descriptor itself, since it is the descriptor through which the instance
+data is accessed."
+<br />
+Also, replace the last line of the <code>setter()</code> method (<code>return
+self.__setter</code>) with <code>return self</code>.
+</td>
+<td class="etd" >Luca Boasso</td></tr>
+
+<tr><td class="etd" >Pages 446&ndash;449. The <code>grepword-t.py</code> and
+<code>grepword-m.py</code> examples.</td>
+<td class="etd" >In modern versions of Python these examples can produce
+inconsistent results on different runs. This problem can be solved for
+both programs by using a result queue instead of printing as we go. This
+requires the following changes:
+
+<ol>
+<li>
+Create a results queue in the
+<code>main()</code>method by adding one of these lines after creating the
+<code>work_queue</code>:<br>
+<code>result_queue = queue.Queue() # grepword-t.py</code><br>
+<code>result_queue = multiprocessing.SimpleQueue() # grepword-m.py</code>
+</li>
+
+<li>In both examples, change the <code>Worker</code> class'
+<code>__init__()</code> method's signature to:<br>
+<code>&nbsp;&nbsp;def __init__(self, work_queue, result_queue, word,
+number):</code><br>
+And store the <code>result_queue</code> in the instance by adding this
+line in the <code>__init__()</code> method's body:<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;self.result_queue = result_queue</code><br>
+</li>
+
+<li>In both examples, change the <code>Worker</code> class'
+<code>run()</code> method, replacing the <code>print()</code> statement
+with:<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.result_queue.put(f'{self.number}{filename}')</code>
+</li>
+
+<li>And finally, again in both examples, add the
+following two lines at the end of the <code>main()</code> method after
+the <code>work_queue.join()</code> call:
+<br>
+<code>
+<pre>
+    while not result_queue.empty():
+        print(result_queue.get())
+</pre>
+</code>
+</li>
+
+</ol>
+</td>
+<td class="etd" >Tigran Aivazian</td></tr>
+
+<tr><td class="etd" >Page 481. SQLite syntax variation.</td>
+<td class="etd" >The SQLite SQL used to create the tables shown
+on this page uses the keyword <code>AUTOINCREMENT</code>. For <i>some</i>
+versions of SQLite this keyword is a syntax error. If this is the case
+for your version of SQLite simply delete the keyword&mdash;you will
+still get autoincrementing since for versions of SQLite that don't
+accept <code>AUTOINCREMENT</code>, the use of <code>INTEGER PRIMARY KEY</code>
+implies autoincrement.</td>
+<td class="etd" >Florian Rämisch</td></tr>
+
+<tr><td class="etd" >Pages 534&ndash;553. PyParsing update.</td>
+<td class="etd" >The book uses PyParsing version 1.5.2 which
+was current at the time of writing. Version 1.5.5 has introduced some
+changes&mdash;for example, the module is now <code>pyparsing</code> for both
+Python&nbsp;2 and Python&nbsp;3 (before it was <code>pyparsing_py3</code>
+for Python&nbsp;3). The other changes are bug fixes, enhancements, and
+additional examples, so apart from the import, everything in the book
+remains valid.</td>
+<td class="etd" >Author</td></tr>
+</table>
+</div>
+
+<p style="background-color: pink; text-align:center;">Second Edition: Errata
+for the First Printing only (additional to the errata
+above&mdash;these are all fixed in the Second and subsequent
+printings)</p>
+
+<div style="overflow-x:auto; display: block; border-collapse: collapse;">
+<table class="eth">
+<tr>
+<td class="sectionheading, eth">Issue</td>
+<td class="sectionheading, eth">Resolution</td>
+<td class="sectionheading, eth">Reporter</td>
+</tr>
+
+<tr><td class="etd" >Page 34. Incorrect output.</td>
+<td class="etd" >At the bottom of the page,
+change each occurrence of "number" in the output to "integer".</td>
+<td class="etd" >Algis Kabaila</td></tr>
+
+<tr><td class="etd" >Pages 89 &amp; 95. Update to footnote
+info.</td>
+<td class="etd" >The footnotes on these pages point out the
+Window's console's poor UTF-8 support and notes that alternative
+examples (<code>print_unicode_uni.py</code> and <code>quadratic_uni.py</code>)
+are provided to work around this. Now Glenn Linderman has found a
+solution (that I've tested successfully with Python&nbsp;3.1); see
+<a href="https://bugs.python.org/issue1602#msg94445">Python Bug
+1602/message #94445</a>. If the
+solution is followed, Windows users can use the same
+<code>print_unicode.py</code> and <code>quadratic.py</code> programs as Linux
+and Mac&nbsp;OS&nbsp;X users and see the same characters output. (Be
+aware though, that this may cause problems executing other programs in
+the console, so for anything else it is probably best to use a separate
+console.)
+</td>
+<td class="etd" >Author</td></tr>
+
+<tr><td class="etd" >Page 90. Bug fix.</td>
+<td class="etd" >The <code>print_unicode()</code> function has a
+subtle bug. Replace the line:
+<pre><code>    end = sys.maxunicode</code></pre>
+with the line:
+<pre><code>    end = min(0xD800, sys.maxunicode) # Stop at surrogate pairs</code></pre>
+This is because Python can't handle surrogate pairs and some of them
+start at code point U+D800. This correction has been applied to the downloadable archives.
+</td>
+<td class="etd" >Hugo Gagnon</td></tr>
+
+<tr><td class="etd" >Page 258. Clarification.</td>
+<td class="etd" >In the description of the reimplementation of
+the <code>__repr__()</code> method I say that it is necessary to call
+<code>super().__repr__()</code> to access the base class's
+<code>__repr__()</code> method without causing infinite recursion. That
+reason is true in general, but not in this particular case. Nonetheless,
+the code shown is correct. What I should have said is this:
+<br />
+"For the <code>str.format()</code>'s second argument we cannot just pass
+<code>self</code>. There are two reasons for this. First, if we use
+<code>self</code>, Python will format it using the <code>__str__()</code> method
+if that is present in this class or (as in this case) in one of its base
+classes, whereas we want the representational format rather than the
+string format. And second, if there is no <code>__str__()</code>
+implementation, Python will fall back to using <code>__repr__()</code>, thus
+leading to infinite recursion. By calling the base class's
+<code>__repr__()</code> method we ensure that we get the representational
+format and at the same time avoid depending on whether or not a
+<code>__str__()</code> method happens to be implemented."
+</td>
+<td class="etd" >Luca Boasso</td></tr>
+
+<tr><td class="etd" >Page 454. Incorrect URL.</td>
+<td class="etd" >In the second paragraph, change the URL to
+<a href="https://code.google.com/p/python-safethread/">code.google.com/p/python-safethread</a>.</td>
+<td class="etd" >Takahiro Nagao</td></tr>
+
+<!--
+
+<tr><td class="etd" ></td>
+<td class="etd" ></td>
+<td class="etd" ></td></tr>
+
+-->
+</table>
+</div>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>

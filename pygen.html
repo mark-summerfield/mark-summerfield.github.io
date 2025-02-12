@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <title>Generators &mdash; Python article</title>
+</head>
+<body>
+
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Python Generators</h1>
+<h2 class="subtitle">First published in Micro Mart #1423, July 2016</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<div class="navbar2">
+<span class="nav-link-sub"><a href="pytips.html">Python Programming Tips</a></span>
+</div>
+
+<!-- Body -->
+<div class="shout">
+<p>
+In this article we'll see what generators are, why Python 3 favours
+them, and how to create our own. Incidentally, Python 2 methods that
+returned sequences (e.g., <code>dict.keys()</code>), generally returned
+lists, while in Python 3 they return generators. Let's start with a
+couple of Python 3 examples:
+</p>
+</div>
+
+<div class="highlight"><pre style="line-height: 125%">N <span
+style="color: #666666">=</span> <span style="color:
+#666666">1000000</span> <span style="color: #408080; font-style:
+italic"># 1_000_000 allowed in Python 3.6</span>
+lst <span style="color: #666666">=</span> <span style="color: #008000">list</span>(<span style="color: #008000">range</span>(N))
+gen <span style="color: #666666">=</span> <span style="color: #008000">range</span>(N)
+<span style="color: #008000">print</span>(sys<span style="color: #666666">.</span>getsizeof(lst)) <span style="color: #408080; font-style: italic"># 9000112</span>
+<span style="color: #008000">print</span>(sys<span style="color: #666666">.</span>getsizeof(gen)) <span style="color: #408080; font-style: italic">#      48</span>
+</pre></div>
+
+<p>
+So the list occupies almost 9MB while the generator consumes a mere 48
+bytes! Clearly generators can save a lot of memory. And it gets better.
+If we change <code>N</code> to, say, 20 million, the list will occupy 180MB,
+while the generator still consumes just 48 bytes.
+</p>
+
+<p>
+A list stores object references, so if we want to store a million
+numbers, the list will contain a million objects. But a generator stores
+a tiny bit of code&mdash;the code needed to generate each item on demand.
+When I timed the code with twenty million numbers, it took 0.36 seconds
+to create the list, and 1.1 seconds to iterate over it using a for loop,
+for a total of 1.4 seconds. For the generator it took no time to create
+(well, less than 0.000004 seconds), and 1.3 seconds to iterate.
+</p>
+
+<p>
+For lists, we pay an up-front cost in processing and memory to create
+the list, and get fast iteration. For generators there's effectively no
+setup cost and no memory overhead, but there is a tiny processing cost
+per item we iterate over. In practice, we normally do some per-item
+processing which is usually so much more expensive than the tiny cost of
+generating each item, that generators are just as fast in practical use
+as lists. For these reasons, Python 3 always provides generators rather
+than lists when sequences of items are required. And, of course, we can
+always get a list (or tuple) simply by wrapping the generator in
+<code>list()</code> or <code>tuple()</code>&mdash;as shown in the example.
+</p>
+
+<p>
+Like lists, generators have a literal syntax, for example:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">odd_lst <span style="color: #666666">=</span> [x <span style="color: #008000; font-weight: bold">for</span> x <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #666666">1000</span>) <span style="color: #008000; font-weight: bold">if</span> x <span style="color: #666666">%</span> <span style="color: #666666">2</span>]
+odd_gen <span style="color: #666666">=</span> (x <span style="color: #008000; font-weight: bold">for</span> x <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">range</span>(<span style="color: #666666">1000</span>) <span style="color: #008000; font-weight: bold">if</span> x <span style="color: #666666">%</span> <span style="color: #666666">2</span>)
+</pre></div>
+
+<p>
+The <code>odd_lst</code> list's size varies proportionally (e.g., 528 bytes
+for odd numbers less than 100, 4272 bytes for less than 1000, and so
+on), while the generator is a fixed size of 72 bytes. This generator is
+slightly bigger than the previous one because the generating code is a
+bit more complex.
+</p>
+
+<p>
+Using the built-in <code>range()</code> function, or the literal syntax with
+parentheses is straightforward and useful. Furthermore, many of Python's
+built in types return a generator rather than a list: for example,
+<code>dict.keys()</code>, <code>dict.values()</code>, and <code>dict.items()</code>.
+One other distinction between lists and generators is worth pointing
+out: lists are always either empty or of finite length, but a generator
+may be of any length&mdash;even infinite. Naturally, we would like to be
+able to make our own generators when appropriate. Let's start with a
+simple generator function that returns odd numbers:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">odds</span>():
+    start <span style="color: #666666">=</span> <span style="color: #666666">1</span>
+    <span style="color: #008000; font-weight: bold">while</span> <span style="color: #008000; font-weight: bold">True</span>:
+        <span style="color: #008000; font-weight: bold">yield</span> start
+        start <span style="color: #666666">+=</span> <span style="color: #666666">2</span>
+</pre></div>
+
+<p>
+Although tiny, this function is quite sophisticated. When it is called
+it creates a local variable called <code>start</code> with value 1. It then
+immediately begins an infinite loop whose first statement is <code>yield
+start</code>. When a yield statement is reached, the function returns the
+value of the yield statement (or <code>None</code> if there isn't a value
+given), and then suspends execution of the function. This means that all
+the function's state (in this case the value of <code>start</code>), is
+stored. The second time the function is called it resumes from the
+statement following the <code>yield</code>, so in this case <code>start</code>
+is incremented to value 3, then the loop continues, and again the
+<code>yield</code> is reached, so this time 3 is returned (yielded), and the
+state of <code>start</code> is stored as 3 and the function is again
+suspended. Here's how we can use the function:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">for</span> x <span style="color: #AA22FF; font-weight: bold">in</span> odds():
+    <span style="color: #008000">print</span>(x, end<span style="color: #666666">=</span><span style="color: #BA2121">&quot; &quot;</span>)
+    <span style="color: #008000; font-weight: bold">if</span> x <span style="color: #666666">&gt;</span> <span style="color: #666666">20</span>:
+        <span style="color: #008000; font-weight: bold">break</span>
+<span style="color: #008000">print</span>()
+<span style="color: #408080; font-style: italic"># 1 3 5 7 9 11 13 15 17 19 21</span>
+</pre></div>
+
+<p>
+The <code>odds()</code> generator function contains an infinite loop, so we
+must only ever call it a finite number of times or else it will never
+stop. Here's an improved version:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">odds</span>(start<span style="color: #666666">=1</span>, end<span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">None</span>):
+    <span style="color: #008000; font-weight: bold">while</span> <span style="color: #008000; font-weight: bold">True</span>:
+        <span style="color: #008000; font-weight: bold">if</span> end <span style="color: #AA22FF; font-weight: bold">is</span> <span style="color: #AA22FF; font-weight: bold">not</span> <span style="color: #008000; font-weight: bold">None</span> <span style="color: #AA22FF; font-weight: bold">and</span> start <span style="color: #666666">&gt;=</span> end:
+            <span style="color: #008000; font-weight: bold">break</span>
+        <span style="color: #008000; font-weight: bold">yield</span> start
+        start <span style="color: #666666">+=</span> <span style="color: #666666">2</span>
+</pre></div>
+
+<p>
+We can call this with optional start and end values. If we give neither
+it will behave like the original version producing 1, 3, 5, .... If we
+give a start and end, or just an end (e.g., <code>odds(end=40)</code>), then
+we will get a finite generator:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">for</span> x <span style="color: #AA22FF; font-weight: bold">in</span> odds(<span style="color: #666666">20</span>, <span style="color: #666666">40</span>):
+    <span style="color: #008000">print</span>(x, end<span style="color: #666666">=</span><span style="color: #BA2121">&quot; &quot;</span>)
+<span style="color: #008000">print</span>()
+<span style="color: #408080; font-style: italic"># 20 22 24 26 28 30 32 34 36 38</span>
+</pre></div>
+
+<p>
+The two <code>odds()</code> functions are sufficient to show how to create
+generator functions. But what if we want to use a generator in a class?
+We might, for instance, have a class that contains multiple items for
+which we want to provide an iterator (like <code>dict.keys()</code>). Here
+is a simple Polygon class whose instances store a sequence of integers
+representing pairs of (x, y) coordinates:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">Polygon</span>:
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, <span style="color: #666666">*</span>points):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_points <span style="color: #666666">=</span> array<span style="color: #666666">.</span>array(<span style="color: #BA2121">&quot;i&quot;</span>, points)
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">x</span>(<span style="color: #008000">self</span>, index<span style="color: #666666">=0</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_points[index <span style="color: #666666">*</span> <span style="color: #666666">2</span>]
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">setX</span>(<span style="color: #008000">self</span>, index, value):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_points[index <span style="color: #666666">*</span> <span style="color: #666666">2</span>] <span style="color: #666666">=</span> value
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">y</span>(<span style="color: #008000">self</span>, index<span style="color: #666666">=0</span>):
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_points[<span style="color: #666666">1</span> <span style="color: #666666">+</span> (index <span style="color: #666666">*</span> <span style="color: #666666">2</span>)]
+    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">setY</span>(<span style="color: #008000">self</span>, index, value):
+        <span style="color: #008000">self</span><span style="color: #666666">.</span>_points[<span style="color: #666666">1</span> <span style="color: #666666">+</span> (index <span style="color: #666666">*</span> <span style="color: #666666">2</span>)] <span style="color: #666666">=</span> value
+</pre></div>
+
+<p>
+This class uses the array module's array class to store the points in a
+very compact form (e.g., 56 bytes for 20 points vs. 472 bytes for a list
+of 40 integers), but at the price of some tiny processing overhead to
+get and set points. The <code>*points</code> syntax means that the
+constructor will accept zero or more arguments, so if none are given the
+polygon will be created with an empty array. What if we want to iterate
+over all the points in a polygon? We could easily add a
+<code>points()</code> method:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">points</span>(<span style="color: #008000">self</span>):
+        points <span style="color: #666666">=</span> []
+        x <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">None</span>
+        <span style="color: #008000; font-weight: bold">for</span> coord <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">self</span><span style="color: #666666">.</span>_points:
+            <span style="color: #008000; font-weight: bold">if</span> x <span style="color: #AA22FF; font-weight: bold">is</span> <span style="color: #008000; font-weight: bold">None</span>:
+                x <span style="color: #666666">=</span> coord
+            <span style="color: #008000; font-weight: bold">else</span>:
+                points<span style="color: #666666">.</span>append((x, coord))
+                x <span style="color: #666666">=</span> <span style="color: #008000; font-weight: bold">None</span>
+        <span style="color: #008000; font-weight: bold">return</span> points
+</pre></div>
+
+<p>
+The <code>points()</code> method can be used as follows:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">polygon <span style="color: #666666">=</span> Polygon(<span style="color: #008000">range</span>(<span style="color: #666666">40</span>))
+<span style="color: #008000; font-weight: bold">for</span> point <span style="color: #AA22FF; font-weight: bold">in</span> polygon<span style="color: #666666">.</span>points():
+    <span style="color: #008000">print</span>(point)
+    <span style="color: #408080; font-style: italic"># (0, 1)\n(2, 3) etc.</span>
+<span style="color: #008000; font-weight: bold">for</span> x, y <span style="color: #AA22FF; font-weight: bold">in</span> polygon<span style="color: #666666">.</span>points():
+    <span style="color: #008000">print</span>(x, y)
+    <span style="color: #408080; font-style: italic"># 0 1\n2 3 etc.</span>
+</pre></div>
+
+<p>
+The <code>points()</code> method has three disadvantages. First, users of
+our <code>Polygon</code> class must learn it, when really they expect to be
+able to iterate the same as with any other class, e.g., for point in
+polygon. Second, the class creates a (possibly big) list of integers
+rather than returning each pair on demand. Third, although correct, the
+code is inelegant.
+</p>
+
+<p>
+Integrating our <code>Polygon</code> class so that it supports iteration is
+really easy. We simply rename the <code>points()</code> method to
+<code>__iter__()</code>, and make it return an iterator&mdash;and while
+we're at it, we'll improve the code too:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__iter__</span>(<span style="color: #008000">self</span>):
+        points <span style="color: #666666">=</span> []
+        <span style="color: #008000; font-weight: bold">for</span> x, y <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">zip</span>(<span style="color: #008000">self</span><span style="color: #666666">.</span>_points[::<span style="color: #666666">2</span>], <span style="color: #008000">self</span><span style="color: #666666">.</span>_points[<span style="color: #666666">1</span>::<span style="color: #666666">2</span>]):
+            points<span style="color: #666666">.</span>append((x, y))
+        <span style="color: #008000; font-weight: bold">return</span> <span style="color: #008000">iter</span>(points)
+</pre></div>
+
+<p>
+Python's built-in <code>zip()</code> function takes two or more iterables
+and returns a two-(or more)-tuple of the first items, then the second
+items, and so on, until one of the iterators runs out of items. Here,
+we've used slicing syntax <code>[::2]</code> which means step from the first
+(zeroth) to the last in steps of two (i.e.,
+<code>[0:len(_self.points):2]</code>), and <code>[1::2]</code> which means step
+from the second to the last in steps of two (i.e.,
+<code>[1:len(self_points):2]</code>). Once we have this code in place we can
+write <code>for point in polygon:</code> or <code>for x, y in polygon:</code>.
+Here's our final refinement:
+</p>
+
+<div class="highlight"><pre style="line-height: 125%">    <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__iter__</span>(<span style="color: #008000">self</span>):
+        <span style="color: #008000; font-weight: bold">for</span> x, y <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #008000">zip</span>(<span style="color: #008000">self</span><span style="color: #666666">.</span>_points[::<span style="color: #666666">2</span>], <span style="color: #008000">self</span><span style="color: #666666">.</span>_points[<span style="color: #666666">1</span>::<span style="color: #666666">2</span>]):
+            <span style="color: #008000; font-weight: bold">yield</span> (x, y)
+</pre></div>
+
+<p>
+This version of the method doesn't store any data at all, simply
+yielding each x, y coordinate pair in turn. The built-in <code>zip()</code>
+function is also a generator, so that doesn't create any overhead
+either. And this new <code>__iter__()</code> can be used with exactly the
+same <code>for point in polygon:</code> or <code>for x, y in polygon:</code>
+syntax as before. And if we ever needed a tuple or list of a polygon's
+points we would simply write <code>tuple(polygon)</code> or
+<code>list(polygon)</code> and under the hood Python would automatically use
+the <code>Polygon.__iter__()</code> method.
+</p>
+
+<p>
+In general, it is better to provide functions or methods that return a
+generator than ones which return lists. Generators consume hardly any
+memory, and users of our functions or methods have the choice of using
+the generator as-is, or if they really need a tuple or list, forcing the
+generator to generate all its values.
+</p>
+
+<p>For more see <a href="pytips.html">Python Programming Tips</a></p>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="about.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>
+
