@@ -55,18 +55,84 @@ testing, quality assurance, and scripted comparisons.
 
 <h2 id="foss">Free Open Source Software</h2>
 
-<ul id="freesoftware">
+<ol id="freesoftware">
 
 <li>
 <a
 href="https://github.com/mark-summerfield/accelhint">accelhint</a>&mdash;a
 Go library for inserting keyboard Alt-key accelerators (i.e., '&amp;'s)
 in a sequence of items (e.g., menu items or dialog labels). There's also
-a Linux GUI application. (Passively maintained.)
+a Linux GUI application.
 </li>
 
+<li><a href="https://github.com/mark-summerfield/clip">clip</a>—a Go library
+providing a command line parser.</li>
+
+<li><a href="https://github.com/mark-summerfield/cx">cx</a>—a C library
+providing some basic collections and conveniences. (For self-education;
+passively maintained.)</li>
+
+<li><a href="https://github.com/mark-summerfield/diff">diff</a>—a Go library
+for finding the differences between two sequences based on the Python
+<code>difflib</code> algorithm. I've also done one in
+D <a href="https://github.com/mark-summerfield/ddiff">ddiff</a>, and
+Nim <a href="https://github.com/mark-summerfield/diff-nim">diff-nim</a>, and
+in Rust <a href="https://github.com/mark-summerfield/differ">differ</a>.
+(Go version is passively maintained; the D, Nim, and Rust versions are
+unmaintained.)</li>
+
+<li><a
+href="https://github.com/mark-summerfield/editabletuple">editabletuple</a>—this
+Python module provides the editabletuple() and editableobject()
+functions for creating classes with a fixed sequence of fields, similar
+to a namedtuple, except editable. (Unmaintained.)
+</li>
 <li><a href="gravitate.html">Gravitate</a> &mdash; an online 
-tilefall/samegame-like game.  (Passively maintained.)</li>
+tilefall/samegame-like game. Some unmaintained desktop versions are also
+available written in 
+<a href="https://github.com/mark-summerfield/gravitate-d">D/Gtk</a>,
+<a href="https://github.com/mark-summerfield/gravitate-nim">Nim/NiGui</a>,
+<a href="https://github.com/mark-summerfield/gravitate-rs">Rust/FLTK</a>
+(the version I use),
+<a href="https://github.com/mark-summerfield/gravitate-tcl">Tcl/Tk</a>,
+and
+<a href="https://github.com/mark-summerfield/gravitate-wx">C++/wxWidgets</a>.
+</li>
+
+<li><a href="https://github.com/mark-summerfield/ini">ini</a>—a Go library
+providing simple <code>.ini</code> configuration file reading and
+writing.</li>
+
+<li><a href="https://github.com/mark-summerfield/minicalc">MiniCalc</a>—a
+little GUI tool (expression evaluator, regex evaluator, accel hints,
+etc.)
+</li>
+
+<li><a href="https://github.com/mark-summerfield/murmur">murmur</a>—an
+Unlimited Register Machine (URM) emulator with optional extensions
+(indirect addressing and some extra convenience commands).</li>
+
+<li><a href="https://github.com/mark-summerfield/set">set</a>—a Go library
+providing a Set type using generics based on a <code>map[E]struct{}</code>
+</li>
+
+<li><a
+href="https://github.com/mark-summerfield/sortedmap">sortedmap</a>—a Go
+library providing a SortedMap type using generics based on a
+red-black tree.</code>
+</li>
+
+<li><a
+href="https://github.com/mark-summerfield/sortedset">sortedset</a>—a Go
+library providing a SortedSet type using generics based on a
+red-black tree.</code>
+</li>
+
+<li><a
+href="https://github.com/mark-summerfield/ufunc">ufunc</a>—a Go library
+providing generic range functions including Map, Reduce, Zip, and
+ZipLongest.</code>
+</li>
 
 <li><a href="https://github.com/mark-summerfield/uxf">UXF (Uniform
 eXchange Format)</a>&mdash;a plain text human readable optionally
@@ -76,13 +142,16 @@ toml, and yaml formats. One key advantage of UXF is that it supports
 custom (i.e., user-defined) types. This can result in more compact, more
 readable, and easier to parse data. And in some contexts it may prove to
 be a convenient alternative to sqlite or xml. Python and Rust
-libraries are available. (Passively maintained.)
+libraries are available. (Unmaintained.)
 </li>
 
 <li><a href="https://github.com/mark-summerfield/xindex">XindeX</a> is
 an easy to learn and use cross-platform GUI application for creating,
 editing, and outputting indexes (e.g., for books). (Unmaintained.)</li>
-</ul>
+
+</ol>
+
+All the above are passively maintained unless stated otherwise.
 
 <h2 id="books">Books</h2>
 <ol>
@@ -239,14 +308,9 @@ a basic audio player GUI application. For a player than can also manage
 playlists, see TLM (Track List Manager)</li>
 <li>CharFind&mdash;
 An application for finding Unicode characters.</li>
-<li>clip&mdash;yet
-another Go command line interface parser. Uses bold and italics.
-</li>
 <li><span><i>comparepdf</i>, a
 command line tool for comparing PDF files, either textually or by their
 appearance.</span></li>
-<li>Diff libraries (all implementing Python's difflib sequence matcher algorithm): go-diff (Go); differ (Rust); ddiff (D); diff (nim)
-</li>
 <li><span>diffpdf, a GUI
 application for comparing PDF files page by page, either textually or by
 their appearance.</span></li>
@@ -254,19 +318,6 @@ their appearance.</span></li>
 music&mdash;it is simple to use and remembers the current track in every
 playlist, so it is easy to go from playlist to playlist from where you left
 off.</span></li>
-<li>editabletuple&mdash;this
-Python module provides the editabletuple() and editableobject()
-functions for creating classes with a fixed sequence of fields, similar
-to a namedtuple, except editable.
-</li>
-<li>MiniCalc&mdash;a
-little GUI tool (expression evaluator, regex evaluator, accel hints,
-etc.)
-</li>
-<li>murmur&mdash;an
-Unlimited Register Machine (URM) emulator with optional extensions
-(indirect addressing and some extra convenience commands).
-</li>
 <li><span>Notebox &mdash; a simple GUI
 application for creating, editing, and finding notes.</span></li>
 <li>retest &mdash; a console
