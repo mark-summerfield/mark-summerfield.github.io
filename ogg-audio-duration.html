@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="images/favicon.png" type="image/png" />
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+<title>Code Tip: Determining Ogg Audio Duration</title>
+<style>
+pre.pygments .hll { background-color: #ffffcc }
+pre.pygments { background: #ffffff; }
+pre.pygments .tok-c { color: #888 } /* Comment */
+pre.pygments .tok-err { color: #A61717; background-color: #E3D2D2 } /* Error */
+pre.pygments .tok-k { color: #080; font-weight: bold } /* Keyword */
+pre.pygments .tok-ch { color: #888 } /* Comment.Hashbang */
+pre.pygments .tok-cm { color: #888 } /* Comment.Multiline */
+pre.pygments .tok-cp { color: #C00; font-weight: bold } /* Comment.Preproc */
+pre.pygments .tok-cpf { color: #888 } /* Comment.PreprocFile */
+pre.pygments .tok-c1 { color: #888 } /* Comment.Single */
+pre.pygments .tok-cs { color: #C00; font-weight: bold; background-color: #FFF0F0 } /* Comment.Special */
+pre.pygments .tok-gd { color: #000; background-color: #FDD } /* Generic.Deleted */
+pre.pygments .tok-ge { font-style: italic } /* Generic.Emph */
+pre.pygments .tok-ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+pre.pygments .tok-gr { color: #A00 } /* Generic.Error */
+pre.pygments .tok-gh { color: #333 } /* Generic.Heading */
+pre.pygments .tok-gi { color: #000; background-color: #DFD } /* Generic.Inserted */
+pre.pygments .tok-go { color: #888 } /* Generic.Output */
+pre.pygments .tok-gp { color: #555 } /* Generic.Prompt */
+pre.pygments .tok-gs { font-weight: bold } /* Generic.Strong */
+pre.pygments .tok-gu { color: #666 } /* Generic.Subheading */
+pre.pygments .tok-gt { color: #A00 } /* Generic.Traceback */
+pre.pygments .tok-kc { color: #080; font-weight: bold } /* Keyword.Constant */
+pre.pygments .tok-kd { color: #080; font-weight: bold } /* Keyword.Declaration */
+pre.pygments .tok-kn { color: #080; font-weight: bold } /* Keyword.Namespace */
+pre.pygments .tok-kp { color: #080 } /* Keyword.Pseudo */
+pre.pygments .tok-kr { color: #080; font-weight: bold } /* Keyword.Reserved */
+pre.pygments .tok-kt { color: #888; font-weight: bold } /* Keyword.Type */
+pre.pygments .tok-m { color: #00D; font-weight: bold } /* Literal.Number */
+pre.pygments .tok-s { color: #D20; background-color: #FFF0F0 } /* Literal.String */
+pre.pygments .tok-na { color: #369 } /* Name.Attribute */
+pre.pygments .tok-nb { color: #038 } /* Name.Builtin */
+pre.pygments .tok-nc { color: #B06; font-weight: bold } /* Name.Class */
+pre.pygments .tok-no { color: #036; font-weight: bold } /* Name.Constant */
+pre.pygments .tok-nd { color: #555 } /* Name.Decorator */
+pre.pygments .tok-ne { color: #B06; font-weight: bold } /* Name.Exception */
+pre.pygments .tok-nf { color: #06B; font-weight: bold } /* Name.Function */
+pre.pygments .tok-nl { color: #369; font-style: italic } /* Name.Label */
+pre.pygments .tok-nn { color: #B06; font-weight: bold } /* Name.Namespace */
+pre.pygments .tok-py { color: #369; font-weight: bold } /* Name.Property */
+pre.pygments .tok-nt { color: #B06; font-weight: bold } /* Name.Tag */
+pre.pygments .tok-nv { color: #369 } /* Name.Variable */
+pre.pygments .tok-ow { color: #080 } /* Operator.Word */
+pre.pygments .tok-w { color: #BBB } /* Text.Whitespace */
+pre.pygments .tok-mb { color: #00D; font-weight: bold } /* Literal.Number.Bin */
+pre.pygments .tok-mf { color: #00D; font-weight: bold } /* Literal.Number.Float */
+pre.pygments .tok-mh { color: #00D; font-weight: bold } /* Literal.Number.Hex */
+pre.pygments .tok-mi { color: #00D; font-weight: bold } /* Literal.Number.Integer */
+pre.pygments .tok-mo { color: #00D; font-weight: bold } /* Literal.Number.Oct */
+pre.pygments .tok-sa { color: #D20; background-color: #FFF0F0 } /* Literal.String.Affix */
+pre.pygments .tok-sb { color: #D20; background-color: #FFF0F0 } /* Literal.String.Backtick */
+pre.pygments .tok-sc { color: #D20; background-color: #FFF0F0 } /* Literal.String.Char */
+pre.pygments .tok-dl { color: #D20; background-color: #FFF0F0 } /* Literal.String.Delimiter */
+pre.pygments .tok-sd { color: #D20; background-color: #FFF0F0 } /* Literal.String.Doc */
+pre.pygments .tok-s2 { color: #D20; background-color: #FFF0F0 } /* Literal.String.Double */
+pre.pygments .tok-se { color: #04D; background-color: #FFF0F0 } /* Literal.String.Escape */
+pre.pygments .tok-sh { color: #D20; background-color: #FFF0F0 } /* Literal.String.Heredoc */
+pre.pygments .tok-si { color: #33B; background-color: #FFF0F0 } /* Literal.String.Interpol */
+pre.pygments .tok-sx { color: #2B2; background-color: #F0FFF0 } /* Literal.String.Other */
+pre.pygments .tok-sr { color: #080; background-color: #FFF0FF } /* Literal.String.Regex */
+pre.pygments .tok-s1 { color: #D20; background-color: #FFF0F0 } /* Literal.String.Single */
+pre.pygments .tok-ss { color: #A60; background-color: #FFF0F0 } /* Literal.String.Symbol */
+pre.pygments .tok-bp { color: #038 } /* Name.Builtin.Pseudo */
+pre.pygments .tok-fm { color: #06B; font-weight: bold } /* Name.Function.Magic */
+pre.pygments .tok-vc { color: #369 } /* Name.Variable.Class */
+pre.pygments .tok-vg { color: #D70 } /* Name.Variable.Global */
+pre.pygments .tok-vi { color: #33B } /* Name.Variable.Instance */
+pre.pygments .tok-vm { color: #369 } /* Name.Variable.Magic */
+pre.pygments .tok-il { color: #00D; font-weight: bold } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<!-- Header -->
+<div class="captiondiv">
+<h1 id="top" class="title">Code Tip: Determining Ogg Audio Duration</h1>
+<h2 class="subtitle">Transliterating Go to Tcl with Improvements</h2>
+</div>
+
+<!-- Navigation -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<!-- Body -->
+<div id="content">
+<div class="paragraph">
+<p>While developing a couple of Tcl/Tk audio players I wanted to be able to
+determine the duration (in seconds) of <code>.ogg</code> audio files.</p>
+</div>
+<div class="paragraph">
+<p>An internet search turned up two articles containing source code. The first
+used
+<a href="https://dev.to/mmvergara/calculating-ogg-audio-duration-in-go-a-step-by-step-guide-1igh">Go</a>
+and was based on another article&#8217;s source that used
+<a href="https://stackoverflow.com/questions/20794204/how-to-determine-length-of-ogg-file/20816180#20816180">Java</a>.</p>
+</div>
+<div class="paragraph">
+<p>Since I&#8217;m more familiar with Go than Java, I first ported the Go version to
+Tcl. I noted three inefficiencies in the Go code. First, after finding the
+length, instead of breaking out of the loop that searched for the length, it
+just kept looping until it ran out of data. Second, it did the same thing
+when searching for the (sample) rate. Third, it read in the entire <code>.ogg</code>
+file (typically many megabytes), just to find and read two strings (of 4 and
+6 ASCII bytes), and a 32-bit unsigned integer, and a 64-bit unsigned
+integer.</p>
+</div>
+<div class="listingblock">
+<h3>Go Source</h3>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="go"><span></span><span class="tok-kd">func</span><span class="tok-w"> </span><span class="tok-nx">getOggDurationMs</span><span class="tok-p">(</span><span class="tok-nx">reader</span><span class="tok-w"> </span><span class="tok-nx">io</span><span class="tok-p">.</span><span class="tok-nx">Reader</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kt">int64</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kt">error</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-c1">// For simplicity, we read the entire Ogg file into a byte slice</span>
+<span class="tok-w">    </span><span class="tok-nx">data</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">err</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-nx">io</span><span class="tok-p">.</span><span class="tok-nx">ReadAll</span><span class="tok-p">(</span><span class="tok-nx">reader</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-nx">err</span><span class="tok-w"> </span><span class="tok-o">!=</span><span class="tok-w"> </span><span class="tok-kc">nil</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Errorf</span><span class="tok-p">(</span><span class="tok-s">&quot;error reading Ogg file: %w&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">err</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// Search for the &quot;OggS&quot; signature and calculate the length</span>
+<span class="tok-w">    </span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">length</span><span class="tok-w"> </span><span class="tok-kt">int64</span>
+<span class="tok-w">    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-nb">len</span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-mi">14</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-w"> </span><span class="tok-o">&gt;=</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">length</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-o">--</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-p">[</span><span class="tok-nx">i</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-sc">&#39;O&#39;</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-p">[</span><span class="tok-nx">i</span><span class="tok-o">+</span><span class="tok-mi">1</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-sc">&#39;g&#39;</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-p">[</span><span class="tok-nx">i</span><span class="tok-o">+</span><span class="tok-mi">2</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-sc">&#39;g&#39;</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-p">[</span><span class="tok-nx">i</span><span class="tok-o">+</span><span class="tok-mi">3</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-sc">&#39;S&#39;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">length</span><span class="tok-w"> </span><span class="tok-p">=</span><span class="tok-w"> </span><span class="tok-nb">int64</span><span class="tok-p">(</span><span class="tok-nx">readLittleEndianInt</span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">[</span><span class="tok-nx">i</span><span class="tok-o">+</span><span class="tok-mi">6</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-o">+</span><span class="tok-mi">14</span><span class="tok-p">]))</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-c1">// Search for the &quot;vorbis&quot; signature and calculate the rate</span>
+<span class="tok-w">    </span><span class="tok-kd">var</span><span class="tok-w"> </span><span class="tok-nx">rate</span><span class="tok-w"> </span><span class="tok-kt">int64</span>
+<span class="tok-w">    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-w"> </span><span class="tok-p">&lt;</span><span class="tok-w"> </span><span class="tok-nb">len</span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">)</span><span class="tok-o">-</span><span class="tok-mi">14</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">rate</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-o">++</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-p">[</span><span class="tok-nx">i</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-sc">&#39;v&#39;</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-p">[</span><span class="tok-nx">i</span><span class="tok-o">+</span><span class="tok-mi">1</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-sc">&#39;o&#39;</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-p">[</span><span class="tok-nx">i</span><span class="tok-o">+</span><span class="tok-mi">2</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-sc">&#39;r&#39;</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-p">[</span><span class="tok-nx">i</span><span class="tok-o">+</span><span class="tok-mi">3</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-sc">&#39;b&#39;</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-p">[</span><span class="tok-nx">i</span><span class="tok-o">+</span><span class="tok-mi">4</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-sc">&#39;i&#39;</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nx">data</span><span class="tok-p">[</span><span class="tok-nx">i</span><span class="tok-o">+</span><span class="tok-mi">5</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-sc">&#39;s&#39;</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">            </span><span class="tok-nx">rate</span><span class="tok-w"> </span><span class="tok-p">=</span><span class="tok-w"> </span><span class="tok-nb">int64</span><span class="tok-p">(</span><span class="tok-nx">readLittleEndianInt</span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">[</span><span class="tok-nx">i</span><span class="tok-o">+</span><span class="tok-mi">11</span><span class="tok-w"> </span><span class="tok-p">:</span><span class="tok-w"> </span><span class="tok-nx">i</span><span class="tok-o">+</span><span class="tok-mi">15</span><span class="tok-p">]))</span>
+<span class="tok-w">        </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-nx">length</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-nx">rate</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">        </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-nx">fmt</span><span class="tok-p">.</span><span class="tok-nx">Errorf</span><span class="tok-p">(</span><span class="tok-s">&quot;could not find necessary information in Ogg file&quot;</span><span class="tok-p">)</span>
+<span class="tok-w">    </span><span class="tok-p">}</span>
+<span class="tok-w">    </span><span class="tok-nx">durationMs</span><span class="tok-w"> </span><span class="tok-o">:=</span><span class="tok-w"> </span><span class="tok-nx">length</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-mi">1000</span><span class="tok-w"> </span><span class="tok-o">/</span><span class="tok-w"> </span><span class="tok-nx">rate</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nx">durationMs</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">nil</span>
+<span class="tok-p">}</span>
+
+<span class="tok-kd">func</span><span class="tok-w"> </span><span class="tok-nx">readLittleEndianInt</span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-w"> </span><span class="tok-p">[]</span><span class="tok-kt">byte</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-kt">int64</span><span class="tok-w"> </span><span class="tok-p">{</span>
+<span class="tok-w">    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-nb">int64</span><span class="tok-p">(</span><span class="tok-nb">uint32</span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">])</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nb">uint32</span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">])</span><span class="tok-o">&lt;&lt;</span><span class="tok-mi">8</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nb">uint32</span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">[</span><span class="tok-mi">2</span><span class="tok-p">])</span><span class="tok-o">&lt;&lt;</span><span class="tok-mi">16</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-nb">uint32</span><span class="tok-p">(</span><span class="tok-nx">data</span><span class="tok-p">[</span><span class="tok-mi">3</span><span class="tok-p">])</span><span class="tok-o">&lt;&lt;</span><span class="tok-mi">24</span><span class="tok-p">)</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Go&#8217;s standard library has support for searching raw bytes, so neither of the
+loops shown here are necessary. (My guess is that this code is itself a
+straight transliteration from some even more naïve Java.) Nor is there any
+need for the <code>readLittleEndianInt</code> function, since Go&#8217;s library already
+provides a suitable function.</p>
+</div>
+<div class="paragraph">
+<p>The moral might be to be very wary of the poor quality code that turns up on
+the internet. However, in this case, I found the Ogg/Vorbis documentation so
+difficult to navigate, that although the Go and Java code are poor, they did
+provide sufficient information to know what data I needed and how to locate
+it in an <code>.ogg</code> file.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a naïve Tcl transliteration of the Go algorithm. Since I have all the
+data in memory I simply search for the markers (<code>vorbis</code> and <code>OggS</code>) and use
+Tcl&#8217;s <code>binary scan</code> subcommand to interpret the numbers. I return seconds
+rather than milliseconds, and return <code>0</code> on failure.</p>
+</div>
+<div class="listingblock">
+<h3>Tcl Transliteration Version (slow)</h3>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="tcl"><span></span><span class="tok-k">proc</span><span class="tok-w"> </span>ogglen::secs<span class="tok-w"> </span>filename<span class="tok-w"> </span><span class="tok-k">{</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-o">!</span><span class="tok-k">[</span><span class="tok-nb">regexp</span><span class="tok-w"> </span><span class="tok-o">-</span>nocase<span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-o">^</span><span class="tok-nv">.</span><span class="tok-o">*</span>.<span class="tok-k">(</span><span class="tok-o">?:</span><span class="tok-nv">ogg</span><span class="tok-o">|</span>oga<span class="tok-k">)</span><span class="tok-err">$</span><span class="tok-k">}</span><span class="tok-w"> </span><span class="tok-nv">$filename</span><span class="tok-k">]}</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-k">}</span>
+<span class="tok-w">    </span><span class="tok-k">set</span><span class="tok-w"> </span>data<span class="tok-w"> </span><span class="tok-k">[</span><span class="tok-nv">readFile</span><span class="tok-w"> </span><span class="tok-nv">$filename</span><span class="tok-w"> </span>binary<span class="tok-k">]</span>
+<span class="tok-w">    </span><span class="tok-k">set</span><span class="tok-w"> </span>i<span class="tok-w"> </span><span class="tok-k">[</span><span class="tok-nb">string</span><span class="tok-w"> </span>first<span class="tok-w"> </span><span class="tok-s2">&quot;vorbis&quot;</span><span class="tok-w"> </span><span class="tok-nv">$data</span><span class="tok-k">]</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-nv">$i</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-nv">-1</span><span class="tok-k">}</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-k">}</span>
+<span class="tok-w">    </span><span class="tok-nb">binary</span><span class="tok-w"> </span>scan<span class="tok-w"> </span><span class="tok-k">[</span><span class="tok-nb">string</span><span class="tok-w"> </span>range<span class="tok-w"> </span><span class="tok-nv">$data</span><span class="tok-w"> </span><span class="tok-nv">$i</span><span class="tok-o">+</span><span class="tok-mi">11</span><span class="tok-w"> </span><span class="tok-nv">$i</span><span class="tok-o">+</span><span class="tok-mi">14</span><span class="tok-k">]</span><span class="tok-w"> </span>iu<span class="tok-w"> </span>rate
+<span class="tok-w">    </span><span class="tok-k">set</span><span class="tok-w"> </span>i<span class="tok-w"> </span><span class="tok-k">[</span><span class="tok-nb">string</span><span class="tok-w"> </span>last<span class="tok-w"> </span><span class="tok-s2">&quot;OggS&quot;</span><span class="tok-w"> </span><span class="tok-nv">$data</span><span class="tok-k">]</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-nv">$i</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-nv">-1</span><span class="tok-k">}</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-k">}</span>
+<span class="tok-w">    </span><span class="tok-nb">binary</span><span class="tok-w"> </span>scan<span class="tok-w"> </span><span class="tok-k">[</span><span class="tok-nb">string</span><span class="tok-w"> </span>range<span class="tok-w"> </span><span class="tok-nv">$data</span><span class="tok-w"> </span><span class="tok-nv">$i</span><span class="tok-o">+</span><span class="tok-mi">6</span><span class="tok-w"> </span><span class="tok-nv">$i</span><span class="tok-o">+</span><span class="tok-mi">13</span><span class="tok-k">]</span><span class="tok-w"> </span>wu<span class="tok-w"> </span>length
+<span class="tok-w">    </span><span class="tok-k">expr</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-nv">int</span><span class="tok-k">(</span><span class="tok-nv">round</span><span class="tok-k">(</span><span class="tok-nv">$length</span><span class="tok-w"> </span><span class="tok-o">/</span><span class="tok-w"> </span><span class="tok-nv">double</span><span class="tok-k">(</span><span class="tok-nv">$rate</span><span class="tok-k">)))}</span>
+<span class="tok-k">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Unfortunately, when reading thousands of files, this approach turns out to
+be very time consuming. Also, it seems wasteful to read in the whole file
+when we need only concern ourselves with a couple of very short byte
+sequences and a couple of integers.</p>
+</div>
+<div class="paragraph">
+<p>So, here is the version I actually use.</p>
+</div>
+<div class="listingblock">
+<h3>Tcl Working Version (Fast)</h3>
+<div class="content">
+<pre class="pygments highlight"><code data-lang="tcl"><span></span><span class="tok-k">proc</span><span class="tok-w"> </span>ogg::duration_in_secs<span class="tok-w"> </span>filename<span class="tok-w"> </span><span class="tok-k">{</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-o">!</span><span class="tok-k">[</span><span class="tok-nb">regexp</span><span class="tok-w"> </span><span class="tok-o">-</span>nocase<span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-o">^</span><span class="tok-nv">.</span><span class="tok-o">*</span>.<span class="tok-k">(</span><span class="tok-o">?:</span><span class="tok-nv">ogg</span><span class="tok-o">|</span>oga<span class="tok-k">)</span><span class="tok-err">$</span><span class="tok-k">}</span><span class="tok-w"> </span><span class="tok-nv">$filename</span><span class="tok-k">]}</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-k">}</span>
+<span class="tok-w">    </span><span class="tok-k">set</span><span class="tok-w"> </span>rate<span class="tok-w"> </span><span class="tok-mi">0</span>
+<span class="tok-w">    </span><span class="tok-k">set</span><span class="tok-w"> </span>length<span class="tok-w"> </span><span class="tok-mi">0</span>
+<span class="tok-w">    </span><span class="tok-k">set</span><span class="tok-w"> </span>fh<span class="tok-w"> </span><span class="tok-k">[</span><span class="tok-nb">open</span><span class="tok-w"> </span><span class="tok-nv">$filename</span><span class="tok-w"> </span>rb<span class="tok-k">]</span>
+<span class="tok-w">    </span><span class="tok-nv">try</span><span class="tok-w"> </span><span class="tok-k">{</span>
+<span class="tok-w">        </span><span class="tok-k">while</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-nv">1</span><span class="tok-k">}</span><span class="tok-w"> </span><span class="tok-k">{</span>
+<span class="tok-w">            </span><span class="tok-k">set</span><span class="tok-w"> </span>data<span class="tok-w"> </span><span class="tok-k">[</span><span class="tok-nb">chan</span><span class="tok-w"> </span>read<span class="tok-w"> </span><span class="tok-nv">$fh</span><span class="tok-w"> </span><span class="tok-mi">4080</span><span class="tok-k">]</span>
+<span class="tok-w">            </span><span class="tok-k">set</span><span class="tok-w"> </span>size<span class="tok-w"> </span><span class="tok-k">[</span><span class="tok-nb">string</span><span class="tok-w"> </span>length<span class="tok-w"> </span><span class="tok-nv">$data</span><span class="tok-k">]</span>
+<span class="tok-w">            </span><span class="tok-k">set</span><span class="tok-w"> </span>i<span class="tok-w"> </span><span class="tok-k">[</span><span class="tok-nb">string</span><span class="tok-w"> </span>first<span class="tok-w"> </span><span class="tok-s2">&quot;vorbis&quot;</span><span class="tok-w"> </span><span class="tok-nv">$data</span><span class="tok-k">]</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-nv">$i</span><span class="tok-w"> </span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nv">-1</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nv">$i</span><span class="tok-o">+</span><span class="tok-mi">14</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-nv">$size</span><span class="tok-k">}</span><span class="tok-w"> </span><span class="tok-k">{</span>
+<span class="tok-w">                </span><span class="tok-nb">binary</span><span class="tok-w"> </span>scan<span class="tok-w"> </span><span class="tok-k">[</span><span class="tok-nb">string</span><span class="tok-w"> </span>range<span class="tok-w"> </span><span class="tok-nv">$data</span><span class="tok-w"> </span><span class="tok-nv">$i</span><span class="tok-o">+</span><span class="tok-mi">11</span><span class="tok-w"> </span><span class="tok-nv">$i</span><span class="tok-o">+</span><span class="tok-mi">14</span><span class="tok-k">]</span><span class="tok-w"> </span>iu<span class="tok-w"> </span>rate
+<span class="tok-w">                </span><span class="tok-k">break</span>
+<span class="tok-w">            </span><span class="tok-k">}</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-nv">$size</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-nv">4080</span><span class="tok-k">}</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-w"> </span><span class="tok-k">break</span><span class="tok-w"> </span><span class="tok-k">}</span>
+<span class="tok-w">            </span><span class="tok-nb">seek</span><span class="tok-w"> </span><span class="tok-nv">$fh</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-mi">20</span><span class="tok-w"> </span>current
+<span class="tok-w">        </span><span class="tok-k">}</span>
+<span class="tok-w">        </span><span class="tok-nb">seek</span><span class="tok-w"> </span><span class="tok-nv">$fh</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-mi">4020</span><span class="tok-w"> </span>end
+<span class="tok-w">        </span><span class="tok-k">while</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-nv">1</span><span class="tok-k">}</span><span class="tok-w"> </span><span class="tok-k">{</span>
+<span class="tok-w">            </span><span class="tok-k">set</span><span class="tok-w"> </span>data<span class="tok-w"> </span><span class="tok-k">[</span><span class="tok-nb">chan</span><span class="tok-w"> </span>read<span class="tok-w"> </span><span class="tok-nv">$fh</span><span class="tok-w"> </span><span class="tok-mi">4020</span><span class="tok-k">]</span>
+<span class="tok-w">            </span><span class="tok-k">set</span><span class="tok-w"> </span>size<span class="tok-w"> </span><span class="tok-k">[</span><span class="tok-nb">string</span><span class="tok-w"> </span>length<span class="tok-w"> </span><span class="tok-nv">$data</span><span class="tok-k">]</span>
+<span class="tok-w">            </span><span class="tok-k">set</span><span class="tok-w"> </span>i<span class="tok-w"> </span><span class="tok-k">[</span><span class="tok-nb">string</span><span class="tok-w"> </span>last<span class="tok-w"> </span><span class="tok-s2">&quot;OggS&quot;</span><span class="tok-w"> </span><span class="tok-nv">$data</span><span class="tok-k">]</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-nv">$i</span><span class="tok-w"> </span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-nv">-1</span><span class="tok-w"> </span><span class="tok-o">&amp;&amp;</span><span class="tok-w"> </span><span class="tok-nv">$i</span><span class="tok-o">+</span><span class="tok-mi">13</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-nv">$size</span><span class="tok-k">}</span><span class="tok-w"> </span><span class="tok-k">{</span>
+<span class="tok-w">                </span><span class="tok-nb">binary</span><span class="tok-w"> </span>scan<span class="tok-w"> </span><span class="tok-k">[</span><span class="tok-nb">string</span><span class="tok-w"> </span>range<span class="tok-w"> </span><span class="tok-nv">$data</span><span class="tok-w"> </span><span class="tok-nv">$i</span><span class="tok-o">+</span><span class="tok-mi">6</span><span class="tok-w"> </span><span class="tok-nv">$i</span><span class="tok-o">+</span><span class="tok-mi">13</span><span class="tok-k">]</span><span class="tok-w"> </span>wu<span class="tok-w"> </span>length
+<span class="tok-w">                </span><span class="tok-k">break</span>
+<span class="tok-w">            </span><span class="tok-k">}</span>
+<span class="tok-w">            </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-nv">$size</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-nv">4020</span><span class="tok-k">}</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-w"> </span><span class="tok-k">break</span><span class="tok-w"> </span><span class="tok-k">}</span>
+<span class="tok-w">            </span><span class="tok-nb">seek</span><span class="tok-w"> </span><span class="tok-nv">$fh</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-mi">8000</span><span class="tok-w"> </span>current
+<span class="tok-w">        </span><span class="tok-k">}</span>
+<span class="tok-w">    </span><span class="tok-k">}</span><span class="tok-w"> </span>finally<span class="tok-w"> </span><span class="tok-k">{</span>
+<span class="tok-w">        </span><span class="tok-nb">close</span><span class="tok-w"> </span><span class="tok-nv">$fh</span>
+<span class="tok-w">    </span><span class="tok-k">}</span>
+<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-o">!</span><span class="tok-nv">$rate</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-o">!</span><span class="tok-nv">$length</span><span class="tok-k">}</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-k">}</span>
+<span class="tok-w">    </span><span class="tok-k">expr</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-nv">int</span><span class="tok-k">(</span><span class="tok-nv">round</span><span class="tok-k">(</span><span class="tok-nv">$length</span><span class="tok-w"> </span><span class="tok-o">/</span><span class="tok-w"> </span><span class="tok-nv">double</span><span class="tok-k">(</span><span class="tok-nv">$rate</span><span class="tok-k">)))}</span>
+<span class="tok-k">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In timings the fast version has <em>always</em> been at least 200 times faster than
+the naïve approach shown earlier. For example, on a relatively old laptop,
+the Tcl Transliteration Version took about 23 minutes to read the durations
+of 3,265 <code>.ogg</code> files; whereas the Tcl Fast Version took about 7 seconds.</p>
+</div>
+</div>
+
+<!-- Footer -->
+<div class="navbar">
+<span class="nav-link"><a href="index.html">Home</a></span> &bull;
+<span class="nav-link"><a href="diffpdf.html">DiffPDF</a></span> &bull;
+<span class="nav-link"><a href="comparepdfcmd.html">com&shy;pare&shy;pdf&shy;cmd</a></span> &bull;
+<span class="nav-link"><a href="biblio.html">Books</a></span> &bull;
+<span class="nav-link"><a href="sitemap.html">Site Map</a></span>
+</div>
+
+<p class="copyright">
+<a href="privacy.html">Your Privacy</a> &bull;
+Copyright &copy; <span id="year">2006</span> <a href="marksummerfield.html">Mark Summerfield.</a>
+All&nbsp;Rights&nbsp;Reserved.
+<a href="https://endsoftwarepatents.org/innovating-without-patents"><img 
+style="height: 1.125em;" alt="Patent Free"
+src="https://static.fsf.org/nosvn/esp/logos/patent-free.svg"></a>
+</p>
+
+<p><a href="#top">Top</a></p>
+<script src="Year.js"></script>
+<script>
+Year();
+</script>
+</body>
+</html>
