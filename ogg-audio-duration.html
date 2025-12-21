@@ -199,7 +199,7 @@ sequences and a couple of integers.</p>
 <p>So, here is the version I actually use.</p>
 </div>
 <div class="listingblock">
-<h3>Tcl Working Version (Fast)</h3>
+<h3>Tcl Working Version (fast)</h3>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="tcl"><span></span><span class="tok-k">proc</span><span class="tok-w"> </span>ogg::duration_in_secs<span class="tok-w"> </span>filename<span class="tok-w"> </span><span class="tok-k">{</span>
 <span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-o">!</span><span class="tok-k">[</span><span class="tok-nb">regexp</span><span class="tok-w"> </span><span class="tok-o">-</span>nocase<span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-o">^</span><span class="tok-nv">.</span><span class="tok-o">*</span>.<span class="tok-k">(</span><span class="tok-o">?:</span><span class="tok-nv">ogg</span><span class="tok-o">|</span>oga<span class="tok-k">)</span><span class="tok-err">$</span><span class="tok-k">}</span><span class="tok-w"> </span><span class="tok-nv">$filename</span><span class="tok-k">]}</span><span class="tok-w"> </span><span class="tok-k">{</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-k">}</span>
