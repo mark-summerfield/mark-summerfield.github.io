@@ -434,3 +434,6 @@ dt {
     margin: auto;
     vertical-align: top;
 }
+
+.row { display: flex; }
+.column { flex: 50%; padding: 0em; }
